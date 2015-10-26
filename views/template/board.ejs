@@ -1,0 +1,148 @@
+<%layout('../layout')%>
+
+<div id="page-wrapper">
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header">DASHBOARD</h1>
+        </div>
+        <!-- /.col-lg-12 -->
+    </div>
+	<!-- /.row -->
+	<div class="row">
+		<div class="col-lg-6">
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					공격자 IP TOP 10
+				</div>
+				<div class="panel-body">
+					<div class="table-responsive">
+						<table class="table table-bordered table-hover table-striped">
+							<thead>
+								<tr>
+									<th>공격자 IP</th>
+									<th>목적지 IP</th>
+									<th>공격 일시</th>
+									<th>시도 횟수</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td>74.125.23.125</td>
+									<td>125.131.189.28</td>
+									<td>10/10 14:29</td>
+									<td>312</td>
+								</tr>
+								<tr>
+									<td>74.125.23.128</td>
+									<td>125.131.189.28</td>
+									<td>10/10 13:20 </td>
+									<td>288</td>
+								</tr>
+								<tr>
+									<td>74.125.23.230</td>
+									<td>125.131.189.28</td>
+									<td>10/10 14:03 </td>
+									<td>230</td>
+								</tr>
+								<tr>
+									<td>74.125.23.240</td>
+									<td>125.131.189.28</td>
+									<td>10/10 13:50 </td>
+									<td>211</td>
+								</tr>
+								<tr>
+									<td>52.165.148.210</td>
+									<td>125.131.189.125</td>
+									<td>10/10 12:49 </td>
+									<td>198</td>
+								</tr>
+								<tr>
+									<td>65.74.32.12</td>
+									<td>125.131.189.169</td>
+									<td>10/10 12:23 </td>
+									<td>177</td>
+								</tr>
+								<tr>
+									<td>52.165.148.188</td>
+									<td>125.131.189.5</td>
+									<td>10/10 12:15 </td>
+									<td>159</td>
+								</tr>
+								<tr>
+									<td>65.74.32.13</td>
+									<td>125.131.189.254</td>
+									<td>10/10 12:13 </td>
+									<td>130</td>
+								</tr>
+								<tr>
+									<td>32.122.21.78</td>
+									<td>125.131.189.245</td>
+									<td>10/10 12:13 </td>
+									<td>113</td>
+								</tr>
+								<tr>
+									<td>65.74.32.12</td>
+									<td>125.131.189.125</td>
+									<td>10/10 12:13 </td>
+									<td>87</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+                            
+				</div>
+			</div>
+		</div>
+		
+		<div class="col-lg-6 ">
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					공격 시도
+				</div>
+				<div class="panel-body">
+					<div class="d-chart"></div>
+				</div>
+			</div>
+		</div>
+		<div class="col-lg-6">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+					시간대별 공격 시도 건수
+                </div>
+                <div class="panel-body">
+					<div class="bar-chart"></div> 
+                </div>
+            </div>
+        </div>
+		<div class="col-lg-6">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    패킷 유입 흐름도
+                </div>
+                <div class="panel-body">
+					<div id="main">
+					  <div id="sequence"></div>
+					  <div id="chart">
+						<div id="explanation" style="visibility: hidden;">
+						  <span id="percentage"></span><br/>
+						  of visits begin with this sequence of pages
+						</div>
+					  </div>
+					</div>
+					<div id="sidebar">
+					  <input type="checkbox" id="togglelegend"> Legend<br/>
+					  <div id="legend" style="visibility: hidden;"></div>
+					</div> 
+                </div>
+            </div>
+        </div>
+	</div>    
+	<!-- /.row -->
+</div>
+<!-- /#page-wrapper -->
+<% include ../d3/bar %> 
+<% include ../d3/sequences %>
+<% include ../d3/donut %>
+<!-- d3 -->
+<script type="text/javascript" src="../d3/d3.v3.js"></script>
+<script type="text/javascript" src="../d3/d3.min.js"></script>
