@@ -1,4 +1,6 @@
 var Bbs= require('../persister/bbs');
+var mongoose = require('mongoose');
+var flash = require('connect-flash');
 
 module.exports = function(app, passport){
 
@@ -80,11 +82,19 @@ module.exports = function(app, passport){
 	   res.render('template/blank', {});
 	});
 	app.get('/report',isAuthenticated, function(req, res) {
-		 //require('../persister/table_data');
-	   //res.render('template/report', {info : tmp_data});
-		 res.render('template/report', {});
+		 var report_file = require('../persister/dbtest_data');
+		 report_file.table_Data.find(function(err,data){
+			  req.flash('table_data',data);
+		 		res.redirect('/report2');
+		 }).sort({'number':-1});
 	});
-
+	app.get('/report2',isAuthenticated, function(req, res) {
+		var report_file = require('../persister/dbtest_data');
+		report_file.sequence_Data.find(function(err,data){
+			 //console.log(req.flash('table_data'),data);
+			 res.render('template/report', {table_data:req.flash('table_data'),sequence_data:data});
+		});
+});
 	app.get('/bbs/list',isAuthenticated, function(req, res) {
 		 Bbs.find({},
 	      function(err, bbs) {

@@ -10,27 +10,25 @@ var db= mongoose.connection;
 db.on("error",function(){
    console.log("DB ERROR: ", err);
 });
+
+// tableSchema
 var tableSchema = mongoose.Schema({
    "source_ip": String,
    "destination_ip": String,
    "time": String,
    "number": Number
 });
-var Data= mongoose.model('table', tableSchema);
 
-var a= Data.find(function(err,data){
-   if(err) return console.log("Data Error: ",err);
-   if(!data){
-     console.log("Empty");
-   }
-   //console.log(data);
+exports.table_Data= mongoose.model('table', tableSchema);
+
+// sequenceSchema
+var sequenceSchema = mongoose.Schema({
+  "first-second": Number,
+  "second-third": Number,
+  "third-fourth": Number,
+  "first-third": Number,
+  "first-fourth": Number,
+  "second-fourth": Number
 });
 
-console.log();
-
-/* create test : OK
-Data.create({'first-second':500, 'second-third':300}, function(err){
-   if(err) throw err;
-   console.log("mongoose success");
-});
-*/
+exports.sequence_Data= mongoose.model('test_sequence', sequenceSchema);
