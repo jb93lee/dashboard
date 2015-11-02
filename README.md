@@ -2,7 +2,6 @@
 Famous bootstrap template + Node.js + mongoDB + D3.js
 
 
-
 ## Getting Started  ( for developers )
 
 #### 1. Install node.js
