@@ -1,5 +1,5 @@
-# SB Admin 2 Node.js 
-Famous bootstrap template + Node.js + mongoDB + D3.js
+# SB Admin 2 Node.js
+Famous bootstrap template + Node.js + MongoDB & MySQL + D3.js
 
 
 
@@ -33,5 +33,3 @@ Install and start mongoDB. (http://www.mongodb.org)
 
 ## License
 MIT
-
-

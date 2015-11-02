@@ -82,12 +82,18 @@ module.exports = function(app, passport){
 	   res.render('template/blank', {});
 	});
 	app.get('/report',isAuthenticated, function(req, res) {
-		 var report_file = require('../persister/dbtest_data');
-		 report_file.table_Data.find(function(err,data){
-			  req.flash('table_data',data);
-		 		res.redirect('/report2');
-		 }).sort({'number':-1});
+		 var report_file = require('./mysql');
+		 report_file.pool.getConnection(function(err, connection){
+		   var query_sql= 'select * from tables order by number desc';
+		   connection.query(query_sql, function(err, results){
+				 var tmp= (JSON.stringify(results));
+				 var tmp2= JSON.parse(tmp);
+				 res.render('template/report', {table_data:tmp2});
+		     connection.release();
+		   });
+		 });
 	});
+
 	app.get('/report2',isAuthenticated, function(req, res) {
 		var report_file = require('../persister/dbtest_data');
 		report_file.sequence_Data.find(function(err,data){
