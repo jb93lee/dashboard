@@ -78,9 +78,62 @@ module.exports = function(app, passport){
   	app.get('/bbs',isAuthenticated, function(req, res) {
 	   res.render('template/bbs', {});
 	});
+
 	app.get('/blank',isAuthenticated, function(req, res) {
-	   res.render('template/blank', {});
+		var report_file = require('./mysql2');
+		report_file.pool.getConnection(function(err, connection){
+			var query_sql= 'select ip, count(ip) as count from sessions group by ip order by count(ip) desc limit 10';
+			connection.query(query_sql, function(err, results){
+				var tmp= (JSON.stringify(results));
+				var tmp2= JSON.parse(tmp);
+				req.flash('table_data',tmp2);
+		 		res.redirect('/blank2');
+				//res.render('template/blank', {table_data:tmp2});
+				connection.release();
+			});
+		});
 	});
+	app.get('/blank2',isAuthenticated, function(req, res) {
+		var report_file = require('./mysql2');
+		report_file.pool.getConnection(function(err, connection){
+			var query_sql= 'select username, count(username) as count from auth group by username order by count(username) desc limit 10';
+			connection.query(query_sql, function(err, results){
+				var tmp= (JSON.stringify(results));
+				var tmp2= JSON.parse(tmp);
+				req.flash('table_data2',tmp2);
+		 		res.redirect('/blank3');
+				//res.render('template/blank', {table_data:tmp2});
+				connection.release();
+			});
+		});
+	});
+	app.get('/blank3',isAuthenticated, function(req, res) {
+		var report_file = require('./mysql2');
+		report_file.pool.getConnection(function(err, connection){
+			var query_sql= 'select password, count(password) as count from auth group by password order by count(username) desc limit 10';
+			connection.query(query_sql, function(err, results){
+				var tmp= (JSON.stringify(results));
+				var tmp2= JSON.parse(tmp);
+				req.flash('table_data3',tmp2);
+				res.redirect('/blank4');
+				connection.release();
+			});
+		});
+	});
+	app.get('/blank4',isAuthenticated, function(req, res) {
+		var report_file = require('./mysql2');
+		report_file.pool.getConnection(function(err, connection){
+			var query_sql= 'SELECT username, password, COUNT(username) as count FROM auth WHERE username <> "" AND password <> "" GROUP BY username, password ORDER BY COUNT(username) DESC limit 10;';
+			connection.query(query_sql, function(err, results){
+				var tmp= (JSON.stringify(results));
+				var tmp2= JSON.parse(tmp);
+				res.render('template/blank', {table_data:req.flash('table_data'),table_data2:req.flash('table_data2'),table_data3:req.flash('table_data3'),table_data4:tmp2});
+				connection.release();
+			});
+		});
+	});
+
+
 	app.get('/report',isAuthenticated, function(req, res) {
 		 var report_file = require('./mysql');
 		 report_file.pool.getConnection(function(err, connection){

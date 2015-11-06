@@ -4,20 +4,15 @@ exports.pool= mysql.createPool({
   port: "3306",
   user: "username",
   password: "password",
-  database: "dashboard",
+  database: "kippo",
   connectionLimit: 20,
   queueLimit: 100,
   waitForConnections: true
 });
-
 exports.pool.getConnection(function(err, connection){
-/*  var query_sql= 'select * from tables';
+//;
+  var query_sql= 'SELECT username, password, COUNT(username) FROM auth WHERE username <> "" AND password <> "" GROUP BY username, password ORDER BY COUNT(username) DESC';
   connection.query(query_sql, function(err, results){
     console.log(JSON.stringify(results,null,2));
-    var tmp= (JSON.stringify(results,null,2));
-    var tmp2= JSON.parse(tmp);
-//    res.render('template/report', {table_data:JSON.stringify(results,null,2)});
-    connection.release();
-    console.log(tmp2[0]);
-  }); */
+  });
 });
