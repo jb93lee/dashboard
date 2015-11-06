@@ -1,6 +1,6 @@
 var mysql= require('mysql');
 exports.pool= mysql.createPool({
-  host:"192.168.32.197",
+  host:"192.168.32.2",
   port: "3306",
   user: "username",
   password: "password",
