@@ -3,7 +3,7 @@
 
 .d-chart {
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  width: 550px;
+  width: 600px;
   height: 420px;
   position: relative;
 }
@@ -43,7 +43,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
 	var width = 460,
 		height = 500,
-		radius = Math.min(width, height) / 1.7;
+		radius = Math.min(width, height) / 1.8;
 
 	var pie = d3.layout.pie()
 		.sort(null)
@@ -56,25 +56,51 @@ document.addEventListener("DOMContentLoaded", function(event) {
 		.innerRadius(radius * 0.3);
 
 	var outerArc = d3.svg.arc()
-		.innerRadius(radius * 0.55)
-		.outerRadius(radius * 0.5);
+		.innerRadius(radius * 0.8)
+		.outerRadius(radius * 0.4);
 
 	svg.attr("transform", "translate(" + width / 2 + "," + height / 2.5 + ")");
 
 	var key = function(d){ return d.data.label; };
 
 	var color = d3.scale.ordinal()
-		.domain(["File Upload Attack", "Reverse Telnet", "Attack", "Attack2", "Attack3", "Attack4","Attack5","Attack6","Attack7", "Other"])
+		.domain(["ICMP Destination Unreachable", "ICMP Echo", "CoDeSys Industrial Automation Stack Overru",
+    "Secure Shell Brute Force", "SIP Missing Required Contact Header Fields", "UDP Flooding",
+    "ICMP Time Exceeded","Windows TCP Small Window DoS","RPC Port Map Dump", "UDP Invalid Data Size"])
 		.range(["#98abc5", "#8a89a6", "#7b6888", "#6b486b", "#a05d56", "#d0743c", "#ff8c00"]);
 
 	function randomData (){
 		var labels = color.domain();
 		return labels.map(function(label){
-			if(label == "Other"){
-				return { label: label, value: 10}
+      if(label == "ICMP Destination Unreachable"){
+				return { label: label, value: 2000}
+			}
+      if(label == "ICMP Echo"){
+				return { label: label, value: 781}
+			}
+      if(label == "CoDeSys Industrial Automation Stack Overru"){
+				return { label: label, value: 723}
+			}
+      if(label == "Secure Shell Brute Force"){
+				return { label: label, value: 388}
+			}
+      if(label == "ICMP Time Exceeded"){
+				return { label: label, value: 261}
+			}
+      if(label == "SIP Missing Required Contact Header Fields"){
+				return { label: label, value: 187}
+			}
+      if(label == "UDP Flooding"){
+				return { label: label, value: 128}
+			}
+      if(label == "Windows TCP Small Window DoS"){
+				return { label: label, value: 69}
+			}
+      if(label == "RPC Port Map Dump"){
+				return { label: label, value: 66}
 			}
 			else{
-				return { label: label, value: 10 }
+				return { label: label, value: 46 }
 			}
 		});
 	}

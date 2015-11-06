@@ -14,10 +14,13 @@
           <div class="col-lg-5">
             <div class="panel panel-default">
               <div class="panel-heading">
-                 ATTACK TOP 10
+                 ATTACK NAME TOP 10
               </div>
               <div class="panel-body">
-      					<div class="d-chart"></div>
+      					<!--div class="d-chart"></div-->
+                <div class="morris-tmp">
+                  <div id="morris-donut-chart"></div>
+                </div>
     			    </div>
             </div>
           </div>
@@ -25,10 +28,14 @@
           <div class="col-lg-7">
             <div class="panel panel-default">
               <div class="panel-heading">
-                 지도
+                 ATTACKER MAP
               </div>
               <div class="panel-body">
-                <div id="map" class="display"></div>
+                <!--div id="map" class="display"></div-->
+                <div class="tmp">
+                  <div class="map"></div>
+                  <% include ../d3/map3 %>
+                </div>
     			    </div>
             </div>
           </div>
@@ -122,30 +129,6 @@
             </div>
           </div>
 
-<!--
-          <div class="col-lg-6">
-            <div class="panel panel-default">
-              <div class="panel-heading">
-                  패킷 유입 흐름도
-              </div>
-              <div class="panel-body">
-                <div id="main">
-                  <div id="sequence"></div>
-                  <div id="chart">
-                  <div id="explanation" style="visibility: hidden;">
-                    <span id="percentage"></span><br/>
-                    of visits begin with this sequence of pages
-                  </div>
-                  </div>
-                </div>
-                <div id="sidebar">
-                  <input type="checkbox" id="togglelegend"> Legend<br/>
-                  <div id="legend" style="visibility: hidden;"></div>
-                </div>
-              </div>
-            </div>
-          </div>
--->
     		</div>
         <!-- row -->
     </div>
@@ -154,6 +137,9 @@
 <!-- /#page-wrapper -->
 <% include ../d3/donut2 %>
 <% include ../d3/map2 %>
+<% include ../d3/morris %>
 <!-- script -->
+<script src="/bower_components/jquery/dist/jquery.min.js"></script>
+<script src="/bower_components/morrisjs/morris.min.js"></script>
 <script type="text/javascript" src="../d3/d3.v3.js"></script>
 <script type="text/javascript" src="../d3/d3.min.js"></script>

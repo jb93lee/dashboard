@@ -113,7 +113,7 @@ $(function() {
         hideHover: 'auto',
         resize: true
     });
-	
+
 	Morris.Donut({
 	  element: 'morris-donut-graph',
 	  data: [
@@ -126,5 +126,5 @@ $(function() {
 	}).on('click', function(i, row){
 	  console.log(i, row);
 	});
-	
+
 });
