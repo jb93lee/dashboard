@@ -8,6 +8,15 @@
 <script type="text/javascript" src="/d3/d3.v3.js"></script>
 <script src="/d3/map/lib/topojson.js"></script>
 <script>
+$(document).ready(function(){
+  $('.tmp text').hide();
+  $('.tmp circle').mouseover(function(){
+    $('.tmp text').show();
+  }).mouseleave(function() {
+    $('.tmp text').hide();
+  });
+});
+
 var width = 900,
     height = 470;
 
@@ -33,10 +42,11 @@ var projection = d3.geo.mercator()
         g.selectAll("circle")
            .data(data)
            .enter()
-         .append("a")
-    				  .attr("xlink:href", function(d) {
-    					  return "https://www.google.com/search?q="+d.city;}
-    				  )
+
+//         .append("a")
+//    				  .attr("xlink:href", function(d) {
+//    					  return "https://www.google.com/search?q="+d.city;}
+//    				  )
          .append("circle")
            .attr("cx", function(d) {
                    return projection([d.lon, d.lat])[0];
