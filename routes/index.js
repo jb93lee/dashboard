@@ -82,7 +82,7 @@ module.exports = function(app, passport){
 	app.get('/blank',isAuthenticated, function(req, res) {
 		var report_file = require('./mysql2');
 		report_file.pool.getConnection(function(err, connection){
-			var query_sql= 'select ip, count(ip) as count from sessions group by ip order by count(ip) desc limit 10';
+			var query_sql= 'select ip, count(ip) as count from kippo.sessions group by ip order by count(ip) desc limit 10';
 			connection.query(query_sql, function(err, results){
 				var tmp= (JSON.stringify(results));
 				var tmp2= JSON.parse(tmp);
@@ -96,7 +96,7 @@ module.exports = function(app, passport){
 	app.get('/blank2',isAuthenticated, function(req, res) {
 		var report_file = require('./mysql2');
 		report_file.pool.getConnection(function(err, connection){
-			var query_sql= 'select username, count(username) as count from auth group by username order by count(username) desc limit 10';
+			var query_sql= 'select username, count(username) as count from kippo.auth group by username order by count(username) desc limit 10';
 			connection.query(query_sql, function(err, results){
 				var tmp= (JSON.stringify(results));
 				var tmp2= JSON.parse(tmp);
@@ -110,7 +110,7 @@ module.exports = function(app, passport){
 	app.get('/blank3',isAuthenticated, function(req, res) {
 		var report_file = require('./mysql2');
 		report_file.pool.getConnection(function(err, connection){
-			var query_sql= 'select password, count(password) as count from auth group by password order by count(username) desc limit 10';
+			var query_sql= 'select password, count(password) as count from kippo.auth group by password order by count(username) desc limit 10';
 			connection.query(query_sql, function(err, results){
 				var tmp= (JSON.stringify(results));
 				var tmp2= JSON.parse(tmp);
@@ -123,16 +123,28 @@ module.exports = function(app, passport){
 	app.get('/blank4',isAuthenticated, function(req, res) {
 		var report_file = require('./mysql2');
 		report_file.pool.getConnection(function(err, connection){
-			var query_sql= 'SELECT username, password, COUNT(username) as count FROM auth WHERE username <> "" AND password <> "" GROUP BY username, password ORDER BY COUNT(username) DESC limit 10;';
+			var query_sql= 'SELECT username, password, COUNT(username) as count FROM kippo.auth WHERE username <> "" AND password <> "" GROUP BY username, password ORDER BY COUNT(username) DESC limit 10;';
 			connection.query(query_sql, function(err, results){
 				var tmp= (JSON.stringify(results));
 				var tmp2= JSON.parse(tmp);
-				res.render('template/blank', {table_data:req.flash('table_data'),table_data2:req.flash('table_data2'),table_data3:req.flash('table_data3'),table_data4:tmp2});
+				req.flash('table_data4',tmp2);
+				res.redirect('/blank5');
 				connection.release();
 			});
 		});
 	});
-
+	app.get('/blank5',isAuthenticated, function(req, res) {
+		var report_file = require('./mysql2');
+		report_file.pool.getConnection(function(err, connection){
+			var query_sql ='select atackName as attack_name, count(atackName) as number from app_log.IPS group by atackname order by count(atackName) desc limit 10';
+			connection.query(query_sql, function(err, results){
+				var tmp= (JSON.stringify(results));
+				var tmp2= JSON.parse(tmp);
+				res.render('template/blank', {table_data:req.flash('table_data'),table_data2:req.flash('table_data2'),table_data3:req.flash('table_data3'),table_data4:req.flash('table_data4'),donut_data:tmp2});
+				connection.release();
+			});
+		});
+	});
 
 	app.get('/report',isAuthenticated, function(req, res) {
 		 var report_file = require('./mysql');

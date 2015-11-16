@@ -11,10 +11,12 @@
 $(document).ready(function(){
   $('.tmp text').hide();
   $('.tmp circle').mouseover(function(){
-    $('.tmp text').show();
+   	var idx = $('.tmp circle').index(this);
+      $('.tmp text').eq(idx).show();
   }).mouseleave(function() {
-    $('.tmp text').hide();
+      $('.tmp text').hide();
   });
+
 });
 
 var width = 900,
@@ -38,7 +40,7 @@ var projection = d3.geo.mercator()
     d3.json("/d3/world-110m2.json", function(error, topology) {
 
     // load and display the cities
-    d3.csv("/d3/cities.csv", function(error, data) {
+    d3.csv("http://192.168.33.26/cities.csv", function(error, data) {
         g.selectAll("circle")
            .data(data)
            .enter()
