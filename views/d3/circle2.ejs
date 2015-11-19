@@ -1,0 +1,75 @@
+<style>
+.circle_body2 {
+  margin: 0px 45px;
+}
+
+circle {
+  fill: rgb(31, 119, 180);
+  fill-opacity: .25;
+  stroke: rgb(31, 119, 180);
+  stroke-width: 1px;
+}
+
+.leaf circle {
+  fill: #ff7f0e;
+  fill-opacity: 1;
+}
+
+text {
+  font: 6px sans-serif;
+}
+
+</style>
+<script>
+document.addEventListener("DOMContentLoaded", function(event) {
+
+  var diameter = 550,
+      format = d3.format(",d");
+
+  var pack = d3.layout.pack()
+      .size([diameter - 4, diameter - 4])
+      .value(function(d) { return d.size; });
+
+  var svg = d3.select(".circle_body2").append("svg")
+      .attr("width", diameter)
+      .attr("height", diameter)
+    .append("g")
+      .attr("transform", "translate(2,2)");
+
+  d3.json("flare2.json", function(error, root) {
+    if (error) throw error;
+
+    var node = svg.datum(root).selectAll(".node")
+        .data(pack.nodes)
+      .enter().append("g")
+        .attr("class", function(d) { return d.children ? "node" : "leaf node"; })
+        .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+
+    node.append("title")
+        .text(function(d) { return d.name + (d.children ? "" : ": " + format(d.size)); });
+
+    node.append("circle")
+        .attr("r", function(d) { return d.r; });
+
+    node.filter(function(d) { return !d.children; }).append("text")
+        .attr("dy", ".3em")
+        .style("text-anchor", "middle")
+        .text(function(d) { return d.name.substring(0, d.r / 3); });
+  });
+
+  d3.select(self.frameElement).style("height", diameter + "px");
+
+  // zoom and pan
+  var zoom = d3.behavior.zoom()
+      .on("zoom",function() {
+          svg.attr("transform","translate("+
+              d3.event.translate.join(",")+")scale("+d3.event.scale+")");
+          svg.selectAll("circle")
+              .attr("d", path.projection(projection));
+          svg.selectAll("path")
+              .attr("d", path.projection(projection));
+
+    });
+    svg.call(zoom);
+});
+</script>

@@ -147,25 +147,10 @@ module.exports = function(app, passport){
 	});
 
 	app.get('/report',isAuthenticated, function(req, res) {
-		 var report_file = require('./mysql');
-		 report_file.pool.getConnection(function(err, connection){
-		   var query_sql= 'select * from tables order by number desc';
-		   connection.query(query_sql, function(err, results){
-				 var tmp= (JSON.stringify(results));
-				 var tmp2= JSON.parse(tmp);
-				 res.render('template/report', {table_data:tmp2});
-		     connection.release();
-		   });
-		 });
+				 res.render('template/report');
 	});
 
-	app.get('/report2',isAuthenticated, function(req, res) {
-		var report_file = require('../persister/dbtest_data');
-		report_file.sequence_Data.find(function(err,data){
-			 //console.log(req.flash('table_data'),data);
-			 res.render('template/report', {table_data:req.flash('table_data'),sequence_data:data});
-		});
-});
+
 	app.get('/bbs/list',isAuthenticated, function(req, res) {
 		 Bbs.find({},
 	      function(err, bbs) {

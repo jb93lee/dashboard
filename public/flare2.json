@@ -1,0 +1,12 @@
+{"name":"flare","children":[{"name":"IPS","children":[ 		{"name":"cluster","children":[
+{"name": "(0351)ICMP Destination Unreachable (type-3)", "size":5160},
+{"name": "(0014)Host Sweep", "size":176},
+{"name": "(0355)ICMP Echo (type-8)", "size":160},
+{"name": "(30251)CoDeSys Industrial Automation Stack Overrun", "size":132},
+{"name": "(0350)ICMP Echo Reply (type-0)", "size":98},
+{"name": "(30008)HTTP Invalid Parameter Value(HEX)", "size":54},
+{"name": "(0358)ICMP Time Exceeded (type-11)", "size":54},
+{"name": "(33463)SIP Missing Required Contact Header Fields", "size":45},
+{"name": "(33466)SIP Missing Required To Header Fields", "size":45},
+{"name": "(33465)SIP Missing Required From Header Fields", "size":45}
+]}]}]}
