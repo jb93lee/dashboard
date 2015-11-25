@@ -8,23 +8,25 @@
 <script type="text/javascript" src="/d3/d3.v3.js"></script>
 <script src="/d3/map/lib/topojson.js"></script>
 <script>
+
+document.addEventListener("DOMContentLoaded", function(event) {
+
 $(document).ready(function(){
   $('.tmp text').hide();
   $('.tmp circle').mouseover(function(){
-   	var idx = $('.tmp circle').index(this);
+    var idx = $('.tmp circle').index(this);
       $('.tmp text').eq(idx).show();
   }).mouseleave(function() {
       $('.tmp text').hide();
   });
-
 });
 
-var width = 900,
-    height = 470;
+var width = 800,
+    height = 420;
 
 var projection = d3.geo.mercator()
-    .center([30, 0 ])
-    .scale(800)
+    .center([0,0])
+    .scale(125)
     .rotate([-160,0]);
 
     var svg = d3.select(".map").append("svg")
@@ -34,7 +36,8 @@ var projection = d3.geo.mercator()
     var path = d3.geo.path()
         .projection(projection);
 
-    var g = svg.append("g");
+    var g = svg.append("g")
+        .attr("transform","translate(-90,0)scale(1)");
 
     // load and display the World
     d3.json("/d3/world-110m2.json", function(error, topology) {
@@ -45,10 +48,7 @@ var projection = d3.geo.mercator()
            .data(data)
            .enter()
 
-//         .append("a")
-//    				  .attr("xlink:href", function(d) {
-//    					  return "https://www.google.com/search?q="+d.city;}
-//    				  )
+
          .append("circle")
            .attr("cx", function(d) {
                    return projection([d.lon, d.lat])[0];
@@ -62,6 +62,10 @@ var projection = d3.geo.mercator()
         g.selectAll("text")
            .data(data)
            .enter()
+           .append("a")
+      				  .attr("xlink:href", function(d) {
+      					  return "http://localhost:3000/search?q="+d.city;}
+      				  )
          .append("text") // append text
            .attr("x", function(d) {
                    return projection([d.lon, d.lat])[0];
@@ -97,4 +101,7 @@ var projection = d3.geo.mercator()
       });
 
     svg.call(zoom);
+
+
+});
 </script>

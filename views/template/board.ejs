@@ -25,27 +25,27 @@
     <div class="col-lg-3 ">
 			<div class="panel panel-default">
 				<div class="panel-heading">
-					전일 대비 공격 상태
+					보안 장비 연동 상태
 				</div>
 				<div class="panel-body">
-              <div id="div2"></div>
+              <div id="div3"></div>
 				</div>
 			</div>
 		</div>
     <div class="col-lg-3 ">
 			<div class="panel panel-default">
 				<div class="panel-heading">
-					공격 방어률
+					전일 대비 공격 상태
 				</div>
 				<div class="panel-body">
-					<div id="div3"></div>
+					<div id="div2"></div>
 				</div>
 			</div>
 		</div>
     <div class="col-lg-3 ">
       <div class="panel panel-default">
         <div class="panel-heading">
-          APT 탐지률
+          APT 공격 상태
         </div>
         <div class="panel-body">
           <div id="div4"></div>
@@ -65,71 +65,17 @@
 								<tr>
 									<th>공격자 IP</th>
 									<th>목적지 IP</th>
-									<th>공격 일시</th>
 									<th>시도 횟수</th>
 								</tr>
 							</thead>
 							<tbody>
-								<tr>
-									<td>74.125.23.125</td>
-									<td>125.131.189.28</td>
-									<td>10/10 14:29</td>
-									<td>312</td>
-								</tr>
-								<tr>
-									<td>74.125.23.128</td>
-									<td>125.131.189.28</td>
-									<td>10/10 13:20 </td>
-									<td>288</td>
-								</tr>
-								<tr>
-									<td>74.125.23.230</td>
-									<td>125.131.189.28</td>
-									<td>10/10 14:03 </td>
-									<td>230</td>
-								</tr>
-								<tr>
-									<td>74.125.23.240</td>
-									<td>125.131.189.28</td>
-									<td>10/10 13:50 </td>
-									<td>211</td>
-								</tr>
-								<tr>
-									<td>52.165.148.210</td>
-									<td>125.131.189.125</td>
-									<td>10/10 12:49 </td>
-									<td>198</td>
-								</tr>
-								<tr>
-									<td>65.74.32.12</td>
-									<td>125.131.189.169</td>
-									<td>10/10 12:23 </td>
-									<td>177</td>
-								</tr>
-								<tr>
-									<td>52.165.148.188</td>
-									<td>125.131.189.5</td>
-									<td>10/10 12:15 </td>
-									<td>159</td>
-								</tr>
-								<tr>
-									<td>65.74.32.13</td>
-									<td>125.131.189.254</td>
-									<td>10/10 12:13 </td>
-									<td>130</td>
-								</tr>
-								<tr>
-									<td>32.122.21.78</td>
-									<td>125.131.189.245</td>
-									<td>10/10 12:13 </td>
-									<td>113</td>
-								</tr>
-								<tr>
-									<td>65.74.32.12</td>
-									<td>125.131.189.125</td>
-									<td>10/10 12:13 </td>
-									<td>87</td>
-								</tr>
+                <% for(var i in table_data){%>
+                  <tr>
+                    <td><%=table_data[i].srcip%></td>
+                    <td><%=table_data[i].dstip%></td>
+                    <td><%=table_data[i].count%></td>
+                  </tr>
+                <%}%>
 							</tbody>
 						</table>
 					</div>
@@ -138,27 +84,29 @@
 			</div>
 		</div>
 
-		<div class="col-lg-6 ">
+		<!--div class="col-lg-6 ">
 			<div class="panel panel-default">
 				<div class="panel-heading">
-					공격 시도
+					     공격 시도
 				</div>
 				<div class="panel-body">
 					<div class="d-chart"></div>
 				</div>
 			</div>
-		</div>
+		</div-->
+
 		<div class="col-lg-6">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-					시간대별 공격 시도 건수
-                </div>
-                <div class="panel-body">
-					          <div class="bar-chart"></div>
-                </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+			            시간대별 공격 시도 건수
+            </div>
+            <div class="panel-body">
+			          <div class="bar-chart"></div>
             </div>
         </div>
-		<div class="col-lg-6">
+    </div>
+
+		<!--div class="col-lg-6">
             <div class="panel panel-default">
                 <div class="panel-heading">
                     패킷 유입 흐름도
@@ -179,14 +127,14 @@
 					</div>
                 </div>
             </div>
-        </div>
+      </div-->
 	</div>
 	<!-- /.row -->
 </div>
 <!-- /#page-wrapper -->
 <% include ../d3/radial %>
 <% include ../d3/bar %>
-<% include ../d3/sequences %>
+<!--% include ../d3/sequences %-->
 <% include ../d3/donut %>
 <!-- d3 -->
 <script type="text/javascript" src="../d3/d3.v3.js"></script>

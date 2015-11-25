@@ -2,8 +2,8 @@
 <style>
 
 .bar-chart{
-  width: 550px;
-  height: 500px;
+  width: 710px;
+  height: 430px;
 }
 
 .bar {
@@ -32,9 +32,9 @@
 </style>
 <script>
 		document.addEventListener("DOMContentLoaded", function(event) {
-		var margin = {top: 20, right: 20, bottom: 30, left: 40},
-			width = 550 - margin.left - margin.right,
-			height = 450 - margin.top - margin.bottom;
+		var margin = {top: 10, right: 20, bottom: 30, left: 23},
+			width = 710 - margin.left - margin.right,
+			height = 430 - margin.top - margin.bottom;
 
 		var x = d3.scale.ordinal()
 			.rangeRoundBands([0, width], .1);
@@ -76,7 +76,7 @@
 			  .attr("y", 6)
 			  .attr("dy", ".71em")
 			  .style("text-anchor", "end")
-			  .text("Connect");
+			  .text("count");
 
 		  svg.selectAll(".bar")
 			  .data(data)

@@ -1,0 +1,127 @@
+<%layout('../layout')%>
+
+<style>
+.input-group-addon:first-child {
+    border-right: 0px none;
+    min-width: 123px;
+    text-align: -moz-left;
+}
+
+.btn-default {
+    color: #333;
+    background-color: #FFF;
+    border-color: #CCC;
+    min-width: 149px;
+}
+</style>
+<script>
+function submit(){
+    document.forms["aform"].submit();
+}
+</script>
+
+<!-- Page Content -->
+<div id="page-wrapper">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header">Search Report</h1>
+            </div>
+            <!-- /.col-lg-12 -->
+        </div>
+        <!-- /.row -->
+    		<div class="row">
+
+          <div class="col-lg-3">
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                Search Form
+              </div>
+              <div class="panel-body">
+
+                <form id="aform" role="form" action="/search" method="post">
+                    <div class="form-group input-group">
+                        <span class="input-group-addon">Attack Name</span>
+                        <input type="text" name="attack_name" class="form-control" placeholder="Enter Text">
+                    </div>
+                    <div class="form-group input-group">
+                        <span class="input-group-addon">Source IP</span>
+                        <input type="text" name="source_ip" class="form-control" placeholder="Enter Text">
+                    </div>
+                    <div class="form-group input-group">
+                        <span class="input-group-addon">Destination IP</span>
+                        <input type="text" name="destination_ip" class="form-control" placeholder="Enter Text">
+                    </div>
+                    <div class="form-group input-group">
+                        <span class="input-group-addon">Source Port</span>
+                        <input type="text" name="source_port" class="form-control" placeholder="Enter Text">
+                    </div>
+                    <div class="form-group input-group">
+                        <span class="input-group-addon">Destination Port</span>
+                        <input type="text" name="destination_port" class="form-control" placeholder="Enter Text">
+                    </div>
+                    <div class="form-group input-group">
+                        <span class="input-group-addon">Date From</span>
+                        <input class="form-control" id="disabledInput" type="text" placeholder="Disabled input" disabled>
+                    </div>
+                    <div class="form-group input-group">
+                        <span class="input-group-addon">Date To</span>
+                        <input class="form-control" id="disabledInput" type="text" placeholder="Disabled input" disabled>
+                    </div>
+                    <div class="form-group input-group">
+                        <span class="input-group-addon">Limit</span>
+                        <input type="text" name="limit" class="form-control" placeholder="Default : 10">
+                    </div>
+                    <a href="#"  onclick="submit();" class="btn btn-default">Submit Button</a>
+                    <button type="reset" class="btn btn-default">Reset Button</button>
+
+                </form>
+
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-9">
+              <div class="panel panel-default">
+                <div class="panel-heading">
+                  Search Results
+                </div>
+                <div class="panel-body">
+                  <table class="table table-bordered table-hover table-striped">
+                    <thead>
+                      <tr>
+                        <th>Attack Name</th>
+                        <th>Time</th>
+                        <th>Source IP</th>
+                        <th>Destination IP</th>
+                        <th>Source Port</th>
+                        <th>Destination Port</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <% for(var i in table_data){%>
+                        <tr>
+                          <td><%=table_data[i].atackName%></td>
+                          <td><%=table_data[i].time2%></td>
+                          <td><%=table_data[i].srcip%></td>
+                          <td><%=table_data[i].dstip%></td>
+                          <td><%=table_data[i].srcport%></td>
+                          <td><%=table_data[i].dstport%></td>
+                        </tr>
+                      <%}%>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+    		</div>
+        <!-- row -->
+    </div>
+    <!-- /.container-fluid -->
+</div>
+<!-- /#page-wrapper -->
+<!-- script -->
+<script type="text/javascript" src="../d3/d3.v3.js"></script>
+<script type="text/javascript" src="../d3/d3.min.js"></script>

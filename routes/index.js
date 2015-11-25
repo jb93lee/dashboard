@@ -4,6 +4,46 @@ var flash = require('connect-flash');
 
 module.exports = function(app, passport){
 
+	app.get('/search',isAuthenticated, function(req, res) {
+			if (req.query.q!= null){
+				var report_file = require('./mysql2');
+			  report_file.pool.getConnection(function(err, connection){
+				 var query_sql= "select atackName, time2, srcip, dstip, srcport, dstport from app_log.IPS where srcip like '"+ req.query.q+ "' order by time2 desc";
+				 	console.log(query_sql);
+				 connection.query(query_sql, function(err, results){
+					 var tmp= (JSON.stringify(results));
+					 var tmp2= JSON.parse(tmp);
+					 res.render('template/search', {table_data:tmp2});
+					 connection.release();
+				 });
+			 });
+			}else {
+				 res.render('template/search',{table_data:{}});
+			}
+	});
+
+	app.post('/search', function(req,res){
+		if(req.body.limit == ''){
+				req.body.limit= '10';
+		}
+		if(req.body.source_port == ''){
+				req.body.source_port= '%';
+		}
+		if(req.body.destination_port == ''){
+				req.body.destination_port= '%';
+		}
+		var report_file = require('./mysql2');
+		report_file.pool.getConnection(function(err, connection){
+			var query_sql= "select atackName, time2, srcip, dstip, srcport, dstport from app_log.IPS where atackName like '%"+ req.body.attack_name +"%' and srcip like '%"+ req.body.source_ip+ "%' and dstip like '%"+ req.body.destination_ip + "%' and srcport like '"+ req.body.source_port+ "' and dstport like '"+ req.body.destination_port+ "' order by time2 desc limit " + req.body.limit ;
+			connection.query(query_sql, function(err, results){
+				var tmp= (JSON.stringify(results));
+				var tmp2= JSON.parse(tmp);
+				res.render('template/search', {table_data:tmp2});
+				connection.release();
+			});
+		});
+	});
+
 	 /* GET home page. */
 	app.get('/',isAuthenticated, function(req, res) {
 	   res.redirect('/board');
@@ -21,9 +61,8 @@ module.exports = function(app, passport){
 
 	app.get('/logout', function(req, res) {
 	   req.logout();
-  	   res.redirect('/');
+	   res.redirect('/');
 	});
-
 
 	app.get('/signup', function(req, res){
 		res.render('template/signup',{ message: req.flash('message') });
@@ -71,15 +110,25 @@ module.exports = function(app, passport){
 	app.get('/grid',isAuthenticated, function(req, res) {
 	   res.render('template/grid', {});
 	});
+
 	app.get('/board',isAuthenticated, function(req, res) {
-	   res.render('template/board', {});
+		 var report_file = require('./mysql2');
+		 report_file.pool.getConnection(function(err, connection){
+			 var query_sql= "select srcip, dstip, count(srcip) as count from app_log.IPS where srcip not like '192.168.%' and srcip not like '0.0.0.0' group by srcip,dstip order by count(srcip) desc limit 10";
+			 connection.query(query_sql, function(err, results){
+				 var tmp= (JSON.stringify(results));
+				 var tmp2= JSON.parse(tmp);
+				 res.render('template/board', {table_data:tmp2});
+				 connection.release();
+			 });
+		 });
 	});
 
   	app.get('/bbs',isAuthenticated, function(req, res) {
 	   res.render('template/bbs', {});
 	});
 
-	app.get('/blank',isAuthenticated, function(req, res) {
+	app.get('/honeypot',isAuthenticated, function(req, res) {
 		var report_file = require('./mysql2');
 		report_file.pool.getConnection(function(err, connection){
 			var query_sql= 'select ip, count(ip) as count from kippo.sessions group by ip order by count(ip) desc limit 10';
@@ -87,67 +136,53 @@ module.exports = function(app, passport){
 				var tmp= (JSON.stringify(results));
 				var tmp2= JSON.parse(tmp);
 				req.flash('table_data',tmp2);
-		 		res.redirect('/blank2');
-				//res.render('template/blank', {table_data:tmp2});
 				connection.release();
-			});
-		});
-	});
-	app.get('/blank2',isAuthenticated, function(req, res) {
-		var report_file = require('./mysql2');
-		report_file.pool.getConnection(function(err, connection){
-			var query_sql= 'select username, count(username) as count from kippo.auth group by username order by count(username) desc limit 10';
-			connection.query(query_sql, function(err, results){
-				var tmp= (JSON.stringify(results));
-				var tmp2= JSON.parse(tmp);
-				req.flash('table_data2',tmp2);
-		 		res.redirect('/blank3');
-				//res.render('template/blank', {table_data:tmp2});
-				connection.release();
-			});
-		});
-	});
-	app.get('/blank3',isAuthenticated, function(req, res) {
-		var report_file = require('./mysql2');
-		report_file.pool.getConnection(function(err, connection){
-			var query_sql= 'select password, count(password) as count from kippo.auth group by password order by count(username) desc limit 10';
-			connection.query(query_sql, function(err, results){
-				var tmp= (JSON.stringify(results));
-				var tmp2= JSON.parse(tmp);
-				req.flash('table_data3',tmp2);
-				res.redirect('/blank4');
-				connection.release();
-			});
-		});
-	});
-	app.get('/blank4',isAuthenticated, function(req, res) {
-		var report_file = require('./mysql2');
-		report_file.pool.getConnection(function(err, connection){
-			var query_sql= 'SELECT username, password, COUNT(username) as count FROM kippo.auth WHERE username <> "" AND password <> "" GROUP BY username, password ORDER BY COUNT(username) DESC limit 10;';
-			connection.query(query_sql, function(err, results){
-				var tmp= (JSON.stringify(results));
-				var tmp2= JSON.parse(tmp);
-				req.flash('table_data4',tmp2);
-				res.redirect('/blank5');
-				connection.release();
-			});
-		});
-	});
-	app.get('/blank5',isAuthenticated, function(req, res) {
-		var report_file = require('./mysql2');
-		report_file.pool.getConnection(function(err, connection){
-			var query_sql ='select atackName as attack_name, count(atackName) as number from app_log.IPS group by atackname order by count(atackName) desc limit 10';
-			connection.query(query_sql, function(err, results){
-				var tmp= (JSON.stringify(results));
-				var tmp2= JSON.parse(tmp);
-				res.render('template/blank', {table_data:req.flash('table_data'),table_data2:req.flash('table_data2'),table_data3:req.flash('table_data3'),table_data4:req.flash('table_data4'),donut_data:tmp2});
-				connection.release();
+				report_file.pool.getConnection(function(err, connection){
+					var query_sql= 'select username, count(username) as count from kippo.auth group by username order by count(username) desc limit 10';
+					connection.query(query_sql, function(err, results){
+						var tmp= (JSON.stringify(results));
+						var tmp2= JSON.parse(tmp);
+						req.flash('table_data2',tmp2);
+						connection.release();
+						report_file.pool.getConnection(function(err, connection){
+							var query_sql= 'select password, count(password) as count from kippo.auth group by password order by count(username) desc limit 10';
+							connection.query(query_sql, function(err, results){
+								var tmp= (JSON.stringify(results));
+								var tmp2= JSON.parse(tmp);
+								req.flash('table_data3',tmp2);
+								connection.release();
+								report_file.pool.getConnection(function(err, connection){
+									var query_sql= 'SELECT username, password, COUNT(username) as count FROM kippo.auth WHERE username <> "" AND password <> "" GROUP BY username, password ORDER BY COUNT(username) DESC limit 10;';
+									connection.query(query_sql, function(err, results){
+										var tmp= (JSON.stringify(results));
+										var tmp2= JSON.parse(tmp);
+										req.flash('table_data4',tmp2);
+										connection.release();
+									});
+										report_file.pool.getConnection(function(err, connection){
+										var query_sql ='select atackName as attack_name, count(atackName) as number from app_log.IPS group by atackname order by count(atackName) desc limit 10';
+										connection.query(query_sql, function(err, results){
+											var tmp= (JSON.stringify(results));
+											var tmp2= JSON.parse(tmp);
+											res.render('template/honeypot', {table_data:req.flash('table_data'),table_data2:req.flash('table_data2'),table_data3:req.flash('table_data3'),table_data4:req.flash('table_data4'),donut_data:tmp2});
+											connection.release();
+										});
+									});
+								});
+							});
+						});
+					});
+				});
 			});
 		});
 	});
 
 	app.get('/report',isAuthenticated, function(req, res) {
 				 res.render('template/report');
+	});
+
+	app.get('/blank',isAuthenticated, function(req, res) {
+				 res.render('template/blank');
 	});
 
 
