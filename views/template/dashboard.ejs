@@ -1,0 +1,35 @@
+<%layout('../layout')%>
+<style>
+#page-wrapper {
+  background-color: #222;
+}
+a {
+  color: #e1e1e1;
+}
+</style>
+<div id="page-wrapper">
+  <br>
+  <div class="row">
+    <section class="col-lg-6 connectedSortable">
+      <% include ../highchart/line1 %>
+    </section>
+    <section class="col-lg-6 connectedSortable">
+      <% include ../highchart/map1 %>
+    </section>
+  </div>
+  <br>
+  <div class="row">
+    <section class="col-lg-4 connectedSortable">
+      <% include ../highchart/pie1 %>
+    </section>
+    <section class="col-lg-4 connectedSortable">
+      <% include ../highchart/pie2 %>
+    </section>
+    <section class="col-lg-4 connectedSortable">
+      <% include ../highchart/bar1 %>
+    </section>
+  </div>
+  <br><br>
+	<!-- /.row -->
+</div>
+<!-- d3 -->

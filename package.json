@@ -1,6 +1,6 @@
 {
   "name": "DASHBOARD",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "start": "node ./bin/www"
@@ -19,6 +19,9 @@
     "mongoose":"*",
     "express-session":"*",
     "bcrypt-nodejs":"*",
-    "connect-flash":"*"
+    "connect-flash":"*",
+    "mysql":"*",
+    "async":"~1.5.0",
+    "date-utils":"~1.2.17"
   }
 }

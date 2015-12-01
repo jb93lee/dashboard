@@ -1,0 +1,146 @@
+<style>
+.highcharts-title * {
+  font-family: "Dotum";
+}
+
+.highcharts-drilldown-data-label * {
+  fill: #aaa;
+}
+
+</style>
+
+<script src="highchart/drilldown.js"></script>
+
+<div id="container3" style="min-width: 320px; max-width: 610px; height: 320px; margin: 0 auto"></div>
+
+<!-- Data from www.netmarketshare.com. Select Browsers => Desktop share by version. Download as tsv. -->
+
+<script>
+
+document.addEventListener("DOMContentLoaded", function(event) {
+    $('#container3').highcharts({
+        chart: {
+            type: 'pie'
+        },
+        title: {
+            text: 'IP 및 공격 분석 결과'
+        },
+        subtitle: {
+            text: ''
+        },
+        plotOptions: {
+            series: {
+                dataLabels: {
+                    enabled: true,
+                    format: '{point.name}<br>{point.country}'
+                }
+            }
+        },
+
+        tooltip: {
+            headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
+            pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y:f}</b>번의 공격 시도<br/>'
+        },
+        series: [{
+            name: 'IP',
+            colorByPoint: true,
+            data: [
+              <% for (i in ip_data){ %>
+              {
+                name: '<%= ip_data[i].srcip%>',
+                y: <%= ip_data[i].count%>,
+                drilldown: '<%= ip_data[i].srcip%>',
+                country: '<%= ip_data[i].country%>'
+              },
+              <%}%>
+        ]}],
+        drilldown: {
+            series: [
+              {
+                name: '<%= attack1_data[0].srcip%>',
+                id: '<%= attack1_data[0].srcip%>',
+                data: [
+                  <% for(i in attack1_data){ %>
+                    ['<%=attack1_data[i].attack_name%>', <%=attack1_data[i].count%> ],
+                  <%}%>
+                ]
+              },{
+                name: '<%= attack2_data[0].srcip%>',
+                id: '<%= attack2_data[0].srcip%>',
+                data: [
+                  <% for(i in attack2_data){ %>
+                    ['<%=attack2_data[i].attack_name%>', <%=attack2_data[i].count%> ],
+                  <%}%>
+                ]
+              },{
+                name: '<%= attack3_data[0].srcip%>',
+                id: '<%= attack3_data[0].srcip%>',
+                data: [
+                  <% for(i in attack3_data){ %>
+                    ['<%=attack3_data[i].attack_name%>', <%=attack3_data[i].count%> ],
+                  <%}%>
+                ]
+              },{
+                name: '<%= attack4_data[0].srcip%>',
+                id: '<%= attack4_data[0].srcip%>',
+                data: [
+                  <% for(i in attack4_data){ %>
+                    ['<%=attack4_data[i].attack_name%>', <%=attack4_data[i].count%> ],
+                  <%}%>
+                ]
+              },{
+                name: '<%= attack5_data[0].srcip%>',
+                id: '<%= attack5_data[0].srcip%>',
+                data: [
+                  <% for(i in attack5_data){ %>
+                    ['<%=attack5_data[i].attack_name%>', <%=attack5_data[i].count%> ],
+                  <%}%>
+                ]
+              },{
+                name: '<%= attack6_data[0].srcip%>',
+                id: '<%= attack6_data[0].srcip%>',
+                data: [
+                  <% for(i in attack6_data){ %>
+                    ['<%=attack6_data[i].attack_name%>', <%=attack6_data[i].count%> ],
+                  <%}%>
+                ]
+              },{
+                name: '<%= attack7_data[0].srcip%>',
+                id: '<%= attack7_data[0].srcip%>',
+                data: [
+                  <% for(i in attack7_data){ %>
+                    ['<%=attack7_data[i].attack_name%>', <%=attack7_data[i].count%> ],
+                  <%}%>
+                ]
+              },{
+                name: '<%= attack8_data[0].srcip%>',
+                id: '<%= attack8_data[0].srcip%>',
+                data: [
+                  <% for(i in attack8_data){ %>
+                    ['<%=attack8_data[i].attack_name%>', <%=attack8_data[i].count%> ],
+                  <%}%>
+                ]
+              },{
+                name: '<%= attack9_data[0].srcip%>',
+                id: '<%= attack9_data[0].srcip%>',
+                data: [
+                  <% for(i in attack9_data){ %>
+                    ['<%=attack9_data[i].attack_name%>', <%=attack9_data[i].count%> ],
+                  <%}%>
+                ]
+              },{
+                name: '<%= attack10_data[0].srcip%>',
+                id: '<%= attack10_data[0].srcip%>',
+                data: [
+                  <% for(i in attack10_data){ %>
+                    ['<%=attack10_data[i].attack_name%>', <%=attack10_data[i].count%> ],
+                  <%}%>
+                ]
+              },
+            ]
+        }
+    });
+});
+
+</script>
+<script src="highchart/dark-unica.js"></script>

@@ -9,7 +9,6 @@ exports.pool= mysql.createPool({
   waitForConnections: true
 });
 exports.pool.getConnection(function(err, connection){
-  console.log('mysql2.js');
 //;
 //  var query_sql= 'SELECT username, password, COUNT(username) FROM auth WHERE username <> "" AND password <> "" GROUP BY username, password ORDER BY COUNT(username) DESC';
 //  connection.query(query_sql, function(err, results){

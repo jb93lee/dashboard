@@ -1,0 +1,69 @@
+<style>
+.highcharts-data-labels text *{
+  fill: #aaa;
+}
+</style>
+
+<div id="bar1" style="max-width: 740px; height: 320px; margin: 0 auto"></div>
+
+<script>
+
+$(function () {
+    $('#bar1').highcharts({
+        chart: {
+            type: 'column'
+        },
+        title: {
+            text: '국가별 공격 현황 통계'
+        },
+        subtitle: {
+            text: 'Source: IPS'
+        },
+        xAxis: {
+            type: 'category',
+            labels: {
+                rotation: -45,
+                style: {
+                    fontSize: '13px',
+                    fontFamily: 'sans-serif'
+                }
+            }
+        },
+        yAxis: {
+            min: 0,
+            title: {
+                text: 'Attack attempt'
+            }
+        },
+        legend: {
+            enabled: false
+        },
+        tooltip: {
+            pointFormat: '주간 공격 횟수: <b>{point.y:.1f}</b>'
+        },
+        series: [{
+            name: 'Population',
+            data: [
+              <% for(var i in bar_data2){%>
+              ['<a href="http://192.168.32.167:3000/search?c=<%=bar_data2[i].country_code%>"><%=bar_data2[i].country%></a>',<%=bar_data2[i].count%>],
+              <%}%>
+            ],
+            dataLabels: {
+                enabled: true,
+                rotation: 0,
+                color: '#FFFFFF',
+                align: 'left',
+                format: '{point.y}', // one decimal
+                x: -7,
+                y: 0, // 10 pixels down from the top
+                style: {
+                    fontSize: '13px',
+                    fontFamily: 'sans-serif'
+                }
+            }
+        }]
+    });
+});
+
+</script>
+<script src="highchart/dark-unica.js"></script>
