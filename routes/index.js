@@ -156,7 +156,7 @@ module.exports = function(app, passport){
 			if (req.query.q!= null){
 				var report_file = require('./mysql2');
 			  report_file.pool.getConnection(function(err, connection){
-				 var query_sql= "select atackName, date_format(time2, '%Y-%m-%d %h:%i') as time2 , srcip, dstip, srcport, dstport, country_code from app_log.IPS where  srcip like '"+ req.query.q+ "' order by time2 desc";
+				 var query_sql= "select atackName, date_format(time2, '%Y-%m-%d　%h:%i') as time2 , srcip, dstip, srcport, dstport, country_code from app_log.IPS where  srcip like '"+ req.query.q+ "' order by time2 desc";
 				 connection.query(query_sql, function(err, results){
 					 var tmp= (JSON.stringify(results));
 					 var tmp2= JSON.parse(tmp);
@@ -167,7 +167,7 @@ module.exports = function(app, passport){
 		 }else if (req.query.c!= null){
 				var report_file = require('./mysql2');
 			  report_file.pool.getConnection(function(err, connection){
-				 var query_sql= "select atackName, date_format(time2, '%Y-%m-%d %h:%i') as time2 , srcip, dstip, srcport, dstport, country_code from app_log.IPS where to_days(now()) - to_days(time2) <=7 and country_code like '"+ req.query.c+ "' order by time2 desc";
+				 var query_sql= "select atackName, date_format(time2, '%Y-%m-%d　%h:%i') as time2 , srcip, dstip, srcport, dstport, country_code from app_log.IPS where to_days(now()) - to_days(time2) <=7 and country_code like '"+ req.query.c+ "' order by time2 desc";
 				 connection.query(query_sql, function(err, results){
 					 var tmp= (JSON.stringify(results));
 					 var tmp2= JSON.parse(tmp);
@@ -179,7 +179,6 @@ module.exports = function(app, passport){
 				 res.render('template/search',{table_data:{}});
 			}
 	});
-
 
 	app.post('/search', isAuthenticated, function(req,res){
 		if(req.body.limit == ''){
@@ -199,7 +198,7 @@ module.exports = function(app, passport){
 		}
 		var report_file = require('./mysql2');
 		report_file.pool.getConnection(function(err, connection){
-			var query_sql= "select atackName, date_format(time2, '%Y-%m-%d %h:%i') as time2, srcip, dstip, srcport, dstport, country_code from app_log.IPS where time2 > timestamp('"+ req.body.time_start+ "') and time2 < timestamp('"+ req.body.time_end+ "') and atackName like '%"+ req.body.attack_name +"%' and srcip like '%"+ req.body.source_ip+ "%' and dstip like '%"+ req.body.destination_ip + "%' and srcport like '"+ req.body.source_port+ "' and dstport like '"+ req.body.destination_port+ "' and country like '%" + req.body.country+ "%' order by time2 desc limit " + req.body.limit ;
+			var query_sql= "select atackName, date_format(time2, '%Y-%m-%d　%h:%i') as time2, srcip, dstip, srcport, dstport, country_code from app_log.IPS where time2 > timestamp('"+ req.body.time_start+ "') and time2 < timestamp('"+ req.body.time_end+ "') and atackName like '%"+ req.body.attack_name +"%' and srcip like '%"+ req.body.source_ip+ "%' and dstip like '%"+ req.body.destination_ip + "%' and srcport like '"+ req.body.source_port+ "' and dstport like '"+ req.body.destination_port+ "' and country like '%" + req.body.country+ "%' order by time2 desc limit " + req.body.limit ;
 			connection.query(query_sql, function(err, results){
 				var tmp= (JSON.stringify(results));
 				var tmp2= JSON.parse(tmp);
@@ -210,6 +209,132 @@ module.exports = function(app, passport){
 	});
 
 
+	app.get('/search2', function(req, res) {
+			 res.render('template/search-waf',{table_data:{},ip_data:{}});
+	});
+
+	app.post('/search2', isAuthenticated, function(req,res){
+		if(req.body.limit == ''){
+				req.body.limit= '10';
+		}
+		if(req.body.source_port == ''){
+				req.body.source_port= '%';
+		}
+		if(req.body.time_start == ''){
+				req.body.time_start= '2015-01-01';
+		}
+		if(req.body.time_end == ''){
+				req.body.time_end= '2015-12-31';
+		}
+		if(req.body.destination_port == ''){
+				req.body.destination_port= '%';
+		}
+		var report_file = require('./mysql2');
+		report_file.pool.getConnection(function(err, connection){
+			var query_sql= "select attackname as atackName, date_format(time2, '%Y-%m-%d　%h:%i') as time2, srcip, dstip, srcport, port as dstport, country_code from app_log.WAF where time2 > timestamp('"+ req.body.time_start+ "') and time2 < timestamp('"+ req.body.time_end+ "') and attackName like '%"+ req.body.attack_name +"%' and srcip like '%"+ req.body.source_ip+ "%' and dstip like '%"+ req.body.destination_ip + "%' and srcport like '"+ req.body.source_port+ "' and port like '"+ req.body.destination_port+ "' and country like '%" + req.body.country+ "%' order by time2 desc limit " + req.body.limit ;
+			connection.query(query_sql, function(err, results){
+				var tmp= (JSON.stringify(results));
+				var tmp2= JSON.parse(tmp);
+				req.flash('table_data',tmp2);
+				connection.release();
+
+				report_file.pool.getConnection(function(err, connection){
+					var query_sql= "select attackname, count(attackname) as count from app_log.WAF where time2 > timestamp('"+ req.body.time_start+ "') and time2 < timestamp('"+ req.body.time_end+ "') and attackName like '%"+ req.body.attack_name +"%' and srcip like '%"+ req.body.source_ip+ "%' and dstip like '%"+ req.body.destination_ip + "%' and srcport like '"+ req.body.source_port+ "' and port like '"+ req.body.destination_port+ "' and country like '%" + req.body.country+ "%' group by attackname order by count(attackname) desc limit " + req.body.limit ;
+					connection.query(query_sql, function(err, results){
+						var tmp= (JSON.stringify(results));
+						var tmp2= JSON.parse(tmp);
+						console.log(tmp2);
+						res.render('template/search-waf', {table_data:req.flash('table_data'),ip_data:tmp2});
+						connection.release();
+					});
+				});
+
+			});
+		});
+	});
+
+
+	app.get('/search3', function(req, res) {
+			 res.render('template/search-eq',{table_data:{},ip_data:{},top_ip_data:{},top_cd_data:{}});
+	});
+
+	app.post('/search3', isAuthenticated, function(req,res){
+		if(req.body.limit == ''){
+				req.body.limit= '100';
+		}
+		if(req.body.source_port == ''){
+				req.body.source_port= '%';
+		}
+		if(req.body.time_start == ''){
+				req.body.time_start= '2015-01-01';
+		}
+		if(req.body.time_end == ''){
+				req.body.time_end= '2015-12-31';
+		}
+		if(req.body.destination_port == ''){
+				req.body.destination_port= '%';
+		}
+		var report_file = require('./mysql2');
+		report_file.pool.getConnection(function(err, connection){
+			var query_sql= "create view app_log.temp as select attackname, date_format(time2, '%Y-%m-%d %h:%i') as time2, srcip, dstip, srcport, port as dstport, country, country_code from app_log.WAF where time2 > timestamp('"+ req.body.time_start+ "') and time2 < timestamp('"+ req.body.time_end+ "') and attackName like '%"+ req.body.attack_name +"%' and srcip like '%"+ req.body.source_ip+ "%' and dstip like '%"+ req.body.destination_ip + "%' and srcport like '"+ req.body.source_port+ "' and port like '"+ req.body.destination_port+ "' and country like '%" + req.body.country+ "%' order by time2 desc limit " + req.body.limit ;
+			connection.query(query_sql, function(err, results){
+				connection.release();
+
+				report_file.pool.getConnection(function(err, connection){
+					var query_sql= "select * from app_log.temp";
+					connection.query(query_sql, function(err, results){
+						var tmp= (JSON.stringify(results));
+						var tmp2= JSON.parse(tmp);
+						connection.release();
+						req.flash('table_data',tmp2);
+
+						report_file.pool.getConnection(function(err, connection){
+							var query_sql= "select attackname, count(attackname) as count from app_log.temp group by attackname order by count(attackname) desc";
+							connection.query(query_sql, function(err, results){
+								var tmp= (JSON.stringify(results));
+								var tmp2= JSON.parse(tmp);
+								connection.release();
+								req.flash('ip_data',tmp2);
+
+								report_file.pool.getConnection(function(err, connection){
+									var query_sql= "select srcip, count(srcip) as count, country from app_log.temp group by srcip order by count(srcip) desc limit 10";
+									connection.query(query_sql, function(err, results){
+										var tmp= (JSON.stringify(results));
+										var tmp2= JSON.parse(tmp);
+										connection.release();
+										req.flash('top_ip_data',tmp2);
+
+										report_file.pool.getConnection(function(err, connection){
+											var query_sql= "select country_code, country, count(country_code) as count from app_log.temp group by country_code order by count(country_code) desc limit 10";
+											connection.query(query_sql, function(err, results){
+												var tmp= (JSON.stringify(results));
+												var tmp2= JSON.parse(tmp);
+												connection.release();
+												req.flash('top_cd_data',tmp2);
+
+												report_file.pool.getConnection(function(err, connection){
+													var query_sql= "drop view app_log.temp";
+													connection.query(query_sql, function(err, results){
+														connection.release();
+														res.render('template/search-eq', {
+															table_data:req.flash('table_data'),
+															ip_data:req.flash('ip_data'),
+															top_ip_data:req.flash('top_ip_data'),
+															top_cd_data:req.flash('top_cd_data')
+														});
+													});
+												});
+											});
+										});
+									});
+								});
+							});
+						});
+					});
+				});
+			});
+		});
+	});
 
 
 	 /* GET home page. */
@@ -218,7 +343,7 @@ module.exports = function(app, passport){
 	});
 
 	app.post('/login', passport.authenticate('login', {
-		successRedirect: '/dashboard',
+		successRedirect: '/search3',
 		failureRedirect: '/login',
 		failureFlash : true
 	}));
@@ -309,7 +434,8 @@ module.exports = function(app, passport){
 
 	app.get('/honeypot',isAuthenticated, function(req, res) {
 
-		var url = 'http://192.168.33.26/cities.csv';
+//		var url = 'http://192.168.33.26/cities.csv';
+		var url = 'http://192.168.0.110/cities.csv';
 		request(url, function(error, response, html){
 		    if (error) {throw error};
 				fs.writeFile('public/cities.csv',html,encoding='utf8',function(err){

@@ -1,0 +1,308 @@
+<%layout('../layout')%>
+<style>
+
+#page-wrapper {
+  background-color: #222;
+}
+a {
+  color: #E0E0E3;
+}
+
+.panel {
+    background-color: #222;
+    border-top-width: 0px;
+}
+
+.input-group-addon:first-child {
+    border-right: 1px none;
+    min-width: 110px;
+    text-align: -moz-left;
+    background-color: #464545;
+}
+
+.input-group-addon {
+    padding: 10px 15px;
+    font-size: 14px;
+    font-weight: normal;
+    line-height: 1;
+    text-align: center;
+    background-color: #464545;
+    border: 0px solid transparent;
+    border-radius: 4px;
+}
+
+.form-control{
+    max-width: 190px;
+    background-color: #505050;
+    color:white;
+    font-size: 14px;
+    line-height: 1;
+    border-color: white;
+    border: 1px solid transparent;
+    border-radius: 4px;
+}
+
+.btn-default {
+    background-color: #333;
+    min-width: 300px;
+}
+
+</style>
+<script>
+function submit(){
+    document.forms["aform"].submit();
+}
+</script>
+
+<!-- Page Content -->
+<div id="page-wrapper">
+
+    <div class="container-fluid">
+        <!--div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header"><font color=white>Search Report</font></h1>
+            </div>
+        </div>
+        < /.row -->
+        <br>
+    		<div class="row">
+
+<section class="col-lg-3 connectedSortable">
+<ul class="nav nav-tabs">
+  <li class="active"><a aria-expanded="false" href="#conv" data-toggle="tab">종합</a></li>
+  <li class=""><a aria-expanded="true" href="#ips" data-toggle="tab">IPS</a></li>
+  <li class=""><a aria-expanded="true" href="#waf" data-toggle="tab">WAF</a></li>
+  <li class="disabled"><a>예정</a></li>
+</ul>
+          <!--div class="col-lg-3"-->
+
+<div id="myTabContent" class="tab-content">
+  <div class="tab-pane fade active in" id="conv">
+            <div class="panel panel-default">
+              <div class="panel-body">
+                <form id="aform" role="form" action="/search3" method="post">
+                    <div class="form-group input-group">
+                        <span class="input-group-addon">공격명</span>
+                        <input type="text" name="attack_name" class="form-control" placeholder="Default : %">
+                    </div>
+                    <div class="form-group input-group">
+                        <span class="input-group-addon">출발지 IP</span>
+                        <input type="text" name="source_ip" class="form-control" placeholder="Default : %">
+                    </div>
+                    <div class="form-group input-group">
+                        <span class="input-group-addon">목적지 IP</span>
+                        <input type="text" name="destination_ip" class="form-control" placeholder="Default : %">
+                    </div>
+                    <div class="form-group input-group">
+                        <span class="input-group-addon">출발지 Port</span>
+                        <input type="text" name="source_port" class="form-control" placeholder="Default : %">
+                    </div>
+                    <div class="form-group input-group">
+                        <span class="input-group-addon">목적지 Port</span>
+                        <input type="text" name="destination_port" class="form-control" placeholder="Default : %">
+                    </div>
+                    <div class="form-group input-group">
+                        <span class="input-group-addon">시작 날짜</span>
+                        <input class="form-control" name="time_start" type="text" placeholder="Default: 2015-01-01">
+                    </div>
+                    <div class="form-group input-group">
+                        <span class="input-group-addon">종료 날짜</span>
+                        <input class="form-control" name="time_end" type="text" placeholder="Default : 2015-12-31">
+                    </div>
+                    <div class="form-group input-group">
+                        <span class="input-group-addon">국가</span>
+                        <input type="text" name="country" class="form-control" placeholder="Default : %">
+                    </div>
+                    <div class="form-group input-group">
+                        <span class="input-group-addon">Limit</span>
+                        <input type="text" name="limit" class="form-control" placeholder="Default : 100">
+                    </div>
+
+                    <a href="#"  onclick="submit();" class="btn btn-default">Submit</a>
+
+                </form>
+              </div>
+            </div>
+    </div>
+    <div class="tab-pane fade " id="ips">
+              <div class="panel panel-default">
+                <div class="panel-body">
+                  <form id="aform" role="form" action="/search2 " method="post">
+                      <div class="form-group input-group">
+                          <span class="input-group-addon">공격명</span>
+                          <input type="text" name="attack_name" class="form-control" placeholder="Default : %">
+                      </div>
+                      <div class="form-group input-group">
+                          <span class="input-group-addon">출발지 IP</span>
+                          <input type="text" name="source_ip" class="form-control" placeholder="Default : %">
+                      </div>
+                      <div class="form-group input-group">
+                          <span class="input-group-addon">목적지 IP</span>
+                          <input type="text" name="destination_ip" class="form-control" placeholder="Default : %">
+                      </div>
+                      <div class="form-group input-group">
+                          <span class="input-group-addon">출발지 Port</span>
+                          <input type="text" name="source_port" class="form-control" placeholder="Default : %">
+                      </div>
+                      <div class="form-group input-group">
+                          <span class="input-group-addon">목적지 Port</span>
+                          <input type="text" name="destination_port" class="form-control" placeholder="Default : %">
+                      </div>
+                      <div class="form-group input-group">
+                          <span class="input-group-addon">시작 날짜</span>
+                          <input class="form-control" name="time_start" type="text" placeholder="Default: 2015-01-01">
+                      </div>
+                      <div class="form-group input-group">
+                          <span class="input-group-addon">종료 날짜</span>
+                          <input class="form-control" name="time_end" type="text" placeholder="Default : 2015-12-31">
+                      </div>
+                      <div class="form-group input-group">
+                          <span class="input-group-addon">국가</span>
+                          <input type="text" name="country" class="form-control" placeholder="Default : %">
+                      </div>
+                      <div class="form-group input-group">
+                          <span class="input-group-addon">Limit</span>
+                          <input type="text" name="limit" class="form-control" placeholder="Default : 100">
+                      </div>
+
+                      <a href="#" onclick="submit();" class="btn btn-default">Submit</a>
+
+                  </form>
+                </div>
+              </div>
+      </div>
+      <div class="tab-pane fade" id="waf">
+                <div class="panel panel-default">
+                  <div class="panel-body">
+                    <form id="aform" role="form" action="/search3" method="post">
+                        <div class="form-group input-group">
+                            <span class="input-group-addon">공격명</span>
+                            <input type="text" name="attack_name" class="form-control" placeholder="Default : %">
+                        </div>
+                        <div class="form-group input-group">
+                            <span class="input-group-addon">출발지 IP</span>
+                            <input type="text" name="source_ip" class="form-control" placeholder="Default : %">
+                        </div>
+                        <div class="form-group input-group">
+                            <span class="input-group-addon">목적지 IP</span>
+                            <input type="text" name="destination_ip" class="form-control" placeholder="Default : %">
+                        </div>
+                        <div class="form-group input-group">
+                            <span class="input-group-addon">출발지 Port</span>
+                            <input type="text" name="source_port" class="form-control" placeholder="Default : %">
+                        </div>
+                        <div class="form-group input-group">
+                            <span class="input-group-addon">목적지 Port</span>
+                            <input type="text" name="destination_port" class="form-control" placeholder="Default : %">
+                        </div>
+                        <div class="form-group input-group">
+                            <span class="input-group-addon">시작 날짜</span>
+                            <input class="form-control" name="time_start" type="text" placeholder="Default: 2015-01-01">
+                        </div>
+                        <div class="form-group input-group">
+                            <span class="input-group-addon">종료 날짜</span>
+                            <input class="form-control" name="time_end" type="text" placeholder="Default : 2015-12-31">
+                        </div>
+                        <div class="form-group input-group">
+                            <span class="input-group-addon">국가</span>
+                            <input type="text" name="country" class="form-control" placeholder="Default : %">
+                        </div>
+                        <div class="form-group input-group">
+                            <span class="input-group-addon">Limit</span>
+                            <input type="text" name="limit" class="form-control" placeholder="Default : 100">
+                        </div>
+
+                        <a href="#"  onclick="submit();" class="btn btn-default">Submit</a>
+
+                    </form>
+                  </div>
+                </div>
+        </div>
+
+
+</div>
+
+          <!--/div-->
+
+</section >
+
+<section class="col-lg-13 connectedSortable">
+
+<div class="col-lg-9">
+<ul class="nav nav-tabs">
+  <li class="active"><a aria-expanded="false" href="#visualize" data-toggle="tab">검색 결과 시각화</a></li>
+  <li class=""><a aria-expanded="true" href="#table" data-toggle="tab">검색 결과 테이블</a></li>
+  <li class="disabled"><a>추가 예정</a></li>
+</ul>
+<div id="myTabContent" class="tab-content">
+  <div class="tab-pane fade  " id="table">
+
+      <div class="panel-body">
+        <table class="table table-inverse table-bordered table-hover table-striped">
+          <thead>
+            <tr>
+              <th>탐지장비</th>
+              <th>공격단계</th>
+              <th>공격명</th>
+              <th>시간</th>
+              <th>출발지 IP</th>
+              <th>목적지 IP</th>
+              <th>출발지 Port</th>
+              <th>목적지 Port</th>
+              <th>국가</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% for(var i in table_data){%>
+              <tr>
+                <td>TEMP</td>
+                <td>TEMP</td>
+                <td><%=table_data[i].atackName%></td>
+                <td><%=table_data[i].time2%></td>
+                <td><a href='http://localhost:3000/search?q=<%=table_data[i].srcip%>'><%=table_data[i].srcip%></a></td>
+                <td><%=table_data[i].dstip%></td>
+                <td><%=table_data[i].srcport%></td>
+                <td><%=table_data[i].dstport%></td>
+                <td><%=table_data[i].country_code%></td>
+              </tr>
+            <%}%>
+          </tbody>
+        </table>
+      </div>
+
+  </div>
+          <div class="tab-pane fade active in" id="visualize">
+            <br>
+            <div class="row">
+              <section class="col-lg-6 connectedSortable">
+                <% include ../highchart/bar2 %>
+              </section>
+              <section class="col-lg-6 connectedSortable">
+                <% include ../highchart/bar3 %>
+              </section>
+            </div>
+            <br>
+            <div class="row">
+              <section class="col-lg-6 connectedSortable">
+                <% include ../highchart/pie3 %>
+              </section>
+              <section class="col-lg-6 connectedSortable">
+                <% include ../highchart/pie4 %>
+              </section>
+            </div>
+          </div>
+        </div>
+      </div>
+            <!--/div-->
+</section>
+
+
+    		</div>
+        <!-- row -->
+    </div>
+    <!-- /.container-fluid -->
+</div>
+<!-- /#page-wrapper -->
+<!-- script -->
+<script type="text/javascript" src="../d3/d3.v3.js"></script>
+<script type="text/javascript" src="../d3/d3.min.js"></script>

@@ -1,0 +1,67 @@
+<style>
+.highcharts-title * {
+  font-family: "Dotum";
+}
+
+.highcharts-drilldown-data-label * {
+  fill: #aaa;
+}
+
+</style>
+
+<script src="highchart/highstock.js"></script>
+<script src="highchart/drilldown.js"></script>
+
+<div id="pie3" style="min-width: 517px; max-width: 610px; height: 320px; margin: 0 auto"></div>
+
+<!-- Data from www.netmarketshare.com. Select Browsers => Desktop share by version. Download as tsv. -->
+
+<script>
+
+document.addEventListener("DOMContentLoaded", function(event) {
+    $('#pie3').highcharts({
+        chart: {
+            type: 'pie'
+        },
+        title: {
+            text: 'IP 및 공격 분석 결과'
+        },
+        subtitle: {
+            text: ''
+        },
+        plotOptions: {
+            series: {
+                dataLabels: {
+                    enabled: true,
+                    format: '{point.name}'
+                }
+            }
+        },
+
+        tooltip: {
+            headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
+            pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y:f}</b>번의 공격 시도<br/>'
+        },
+        series: [{
+            name: 'IP',
+            colorByPoint: true,
+            data: [
+              <% for (i in ip_data){ %>
+              {
+                name: '<%= ip_data[i].attackname%>',
+                y: <%= ip_data[i].count%>,
+                drilldown: '<%= ip_data[i].attackname%>'
+              },
+              <%}%>
+        ]}],
+        drilldown: {
+            series: [
+              {
+              },
+            ]
+        }
+    });
+});
+
+</script>
+<script src="highchart/dark-unica.js"></script>

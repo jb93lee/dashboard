@@ -5,12 +5,16 @@
   background-color: #222;
 }
 a {
-  color: #e1e1e1;
+  color: #E0E0E3;
+}
+
+.panel {
+    background-color: #222;
 }
 
 .input-group-addon:first-child {
     border-right: 1px none;
-    min-width: 123px;
+    min-width: 110px;
     text-align: -moz-left;
     background-color: #464545;
 }
@@ -27,6 +31,7 @@ a {
 }
 
 .form-control{
+    max-width: 190px;
     background-color: #505050;
     color:white;
     font-size: 14px;
@@ -37,7 +42,8 @@ a {
 }
 
 .btn-default {
-    min-width: 149px;
+    background-color: #333;
+    min-width: 300px;
 }
 
 </style>
@@ -59,73 +65,71 @@ function submit(){
         < /.row -->
         <br>
     		<div class="row">
+
 <section class="col-lg-3 connectedSortable">
-  <div id="search_from">
-  </div>
+
           <!--div class="col-lg-3"-->
+
             <div class="panel panel-default">
-              <div class="panel-heading">
-                Search Form
-              </div>
               <div class="panel-body">
-                <form id="aform" role="form" action="/search" method="post">
+                <form id="aform" role="form" action="/search2" method="post">
                     <div class="form-group input-group">
                         <span class="input-group-addon">공격명</span>
-                        <input type="text" name="attack_name" class="form-control" placeholder="Enter Text">
+                        <input type="text" name="attack_name" class="form-control" placeholder="Default : %">
                     </div>
                     <div class="form-group input-group">
                         <span class="input-group-addon">출발지 IP</span>
-                        <input type="text" name="source_ip" class="form-control" placeholder="Enter Text">
+                        <input type="text" name="source_ip" class="form-control" placeholder="Default : %">
                     </div>
                     <div class="form-group input-group">
-                        <span class="input-group-addon">도착지 IP</span>
-                        <input type="text" name="destination_ip" class="form-control" placeholder="Enter Text">
+                        <span class="input-group-addon">목적지 IP</span>
+                        <input type="text" name="destination_ip" class="form-control" placeholder="Default : %">
                     </div>
                     <div class="form-group input-group">
                         <span class="input-group-addon">출발지 Port</span>
-                        <input type="text" name="source_port" class="form-control" placeholder="Enter Text">
+                        <input type="text" name="source_port" class="form-control" placeholder="Default : %">
                     </div>
                     <div class="form-group input-group">
-                        <span class="input-group-addon">도착지 Port</span>
-                        <input type="text" name="destination_port" class="form-control" placeholder="Enter Text">
+                        <span class="input-group-addon">목적지 Port</span>
+                        <input type="text" name="destination_port" class="form-control" placeholder="Default : %">
                     </div>
                     <div class="form-group input-group">
-                        <span class="input-group-addon">시작 시간</span>
+                        <span class="input-group-addon">시작 날짜</span>
                         <input class="form-control" name="time_start" type="text" placeholder="Default: 2015-01-01">
                     </div>
                     <div class="form-group input-group">
-                        <span class="input-group-addon">종료 시간</span>
+                        <span class="input-group-addon">종료 날짜</span>
                         <input class="form-control" name="time_end" type="text" placeholder="Default : 2015-12-31">
                     </div>
                     <div class="form-group input-group">
                         <span class="input-group-addon">국가</span>
-                        <input type="text" name="country" class="form-control" placeholder="Enter Text">
+                        <input type="text" name="country" class="form-control" placeholder="Default : %">
                     </div>
                     <div class="form-group input-group">
                         <span class="input-group-addon">Limit</span>
-                        <input type="text" name="limit" class="form-control" placeholder="Default : 100">
+                        <input type="text" name="limit" class="form-control" placeholder="Default : 10">
                     </div>
 
-                    <a href="#"  onclick="submit();" class="btn btn-default">Submit Button</a>
-                    <button type="reset" class="btn btn-default">Reset Button</button>
+                    <a href="#"  onclick="submit();" class="btn btn-default">Submit</a>
 
                 </form>
               </div>
-
             </div>
+
           <!--/div-->
 
 </section >
 
+<section class="col-lg-13 connectedSortable">
 
-            <div class="col-lg-9">
+<div class="col-lg-9">
 <ul class="nav nav-tabs">
   <li class="active"><a aria-expanded="false" href="#table" data-toggle="tab">검색 결과 테이블</a></li>
   <li class=""><a aria-expanded="true" href="#visualize" data-toggle="tab">검색 결과 시각화</a></li>
   <li class="disabled"><a>추가 예정</a></li>
 </ul>
 <div id="myTabContent" class="tab-content">
-  <div class="tab-pane fade active in" id="table">
+  <div class="tab-pane fade active in " id="table">
 
       <div class="panel-body">
         <table class="table table-inverse table-bordered table-hover table-striped">
@@ -145,7 +149,7 @@ function submit(){
               <tr>
                 <td><%=table_data[i].atackName%></td>
                 <td><%=table_data[i].time2%></td>
-                <td><%=table_data[i].srcip%></td>
+                <td><a href='http://localhost:3000/search?q=<%=table_data[i].srcip%>'><%=table_data[i].srcip%></a></td>
                 <td><%=table_data[i].dstip%></td>
                 <td><%=table_data[i].srcport%></td>
                 <td><%=table_data[i].dstport%></td>
@@ -157,19 +161,19 @@ function submit(){
       </div>
 
   </div>
-  <div class="tab-pane fade " id="visualize">
-    <br>
-    <p>여기에 시각화를 딱 </p>
-  </div>
-</div>
-</div>
-            <!--/div-->
-
-
-            <div class="col-lg-9">
-
-            </div>
+          <div class="tab-pane fade" id="visualize">
+            <br>
+              <section class="col-lg-6 connectedSortable">
+                <% include ../highchart/pie3 %>
+              </section>
+              <section class="col-lg-6 connectedSortable">
+                <% include ../highchart/pie4 %>
+              </section>
           </div>
+        </div>
+      </div>
+            <!--/div-->
+</section>
 
 
     		</div>

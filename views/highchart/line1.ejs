@@ -75,8 +75,8 @@ document.addEventListener("DOMContentLoaded", function(event) {
        $.each(names, function (i, name) {
 
 //           $.getJSON('https://www.highcharts.com/samples/data/jsonp.php?filename=' + name.toLowerCase() + '-c.json&callback=?',    function (data) {
-            $.getJSON('http://192.168.33.26/jsonp.php?filename=' + name.toLowerCase() + '.json&callback=?', function (data) {
-//          $.getJSON('http://192.168.32.175/jsonp.php?filename=' + name.toLowerCase() + '-c.json&callback=?', function (data) {
+//            $.getJSON('http://192.168.33.26/jsonp.php?filename=' + name.toLowerCase() + '.json&callback=?', function (data) {
+          $.getJSON('http://192.168.0.110/project/jsonp.php?filename=' + name.toLowerCase() + '.json&callback=?', function (data) {
               seriesOptions[i] = {
                    name: name,
                    data: data

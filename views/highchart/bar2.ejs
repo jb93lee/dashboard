@@ -1,0 +1,74 @@
+<style>
+.highcharts-data-labels text *{
+  fill: #aaa;
+}
+
+#bar2{
+  max-width: 517px;
+}
+
+</style>
+
+<div id="bar2" style="max-width: 517px; height: 320px; margin: 0 auto"></div>
+
+<script>
+
+$(function () {
+    $('#bar2').highcharts({
+        chart: {
+            type: 'column'
+        },
+        title: {
+            text: '공격자 IP'
+        },
+        subtitle: {
+            text: ''
+        },
+        xAxis: {
+            type: 'category',
+            labels: {
+                rotation: -45,
+                style: {
+                    fontSize: '13px',
+                    fontFamily: 'sans-serif'
+                }
+            }
+        },
+        yAxis: {
+            min: 0,
+            title: {
+                text: 'Attack attempt'
+            }
+        },
+        legend: {
+            enabled: false
+        },
+        tooltip: {
+            pointFormat: '주간 공격 횟수: <b>{point.y}</b>'
+        },
+        series: [{
+            name: 'Population',
+            data: [
+              <% for(var i in top_ip_data){%>
+              ['<a href="http://192.168.0.104:3000/search?q=<%=top_ip_data[i].srcip%>"><%=top_ip_data[i].srcip%></a>　(<%=top_ip_data[i].country%>)',<%=top_ip_data[i].count%>],
+              <%}%>
+            ],
+            dataLabels: {
+                enabled: true,
+                rotation: 0,
+                color: '#FFFFFF',
+                align: 'left',
+                format: '{point.y}', // one decimal
+                x: -7,
+                y: 0, // 10 pixels down from the top
+                style: {
+                    fontSize: '13px',
+                    fontFamily: 'sans-serif'
+                }
+            }
+        }]
+    });
+});
+
+</script>
+<script src="highchart/dark-unica.js"></script>

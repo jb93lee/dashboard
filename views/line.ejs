@@ -1,33 +1,37 @@
 <div class="nav navbar-top-links navbar-right" role="navigation">
 
-	<a class="dropdown-toggle" data-toggle="dropdown" href="#">
-			<li><i class="fa fa-dashboard fa-fw"></i>Dashboard　<i class="fa fa-caret-down"></i>
+	<a class="dropdown-toggle" data-toggle="dropdown" href="/dashboard">
+			<li> Summary　<i class="fa fa-caret-down"></i>
 				</a>
 				<ul class="dropdown-menu dropdown-dashboard">
-						<li><a href="/dashboard"> 1주 </a></li>
-						<li><a href="/dashboard?days=14"> 2주 </a></li>
+						<li><a href="/dashboard"> 1주 </a></li><li class="divider"></li>
+						<li><a href="/dashboard?days=14"> 2주 </a></li><li class="divider"></li>
 						<li><a href="/dashboard?days=30"> 1달 </a></li>
 				</ul>
 			</li>
 
-	<a class="dropdown-toggle" data-toggle="dropdown" href="#">
-			<li><i class="fa fa-search"></i> Search　<i class="fa fa-caret-down"></i>
+	<a class="dropdown-toggle" data-toggle="dropdown" href="/search">
+			<li> Search　<i class="fa fa-caret-down"></i>
 				</a>
 				<ul class="dropdown-menu dropdown-search">
-						<li><a href="/search"> IPS</a></li>
+						<li><a href="/search"> IPS </a></li>
+								<li><a href="/search2"> WAF </a></li>
+								<li class="divider"></li>
+										<li><a href="/search3"> 장비별 검색 </a></li>
+										<li><a href="/search2"> IP 기반 검색 </a></li>
 				</ul>
 			</li>
 
-<li><a href="/honeypot"><i class="fa fa-files-o fa-fw"></i> Honeypot</a></li>
-<li><a href="/report"><i class="fa fa-files-o fa-fw"></i> Report</a></li>
-<li><a href="/blank"><i class="fa fa-wrench fa-fw"></i> Setting</a></li>
+<li><a href="/honeypot"> Honeypot</a></li>
+<li><a href="/blank"> Node Visualization</a></li>
+<!--li><a href="/report"> Setting</a></li-->
 
 
         <!-- /.dropdown-user -->
 <!-- /.sidebar-collapse -->
 
 				<li class="dropdown">
-		        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+		        <a class="dropdown-toggle" data-toggle="dropdown" href="/logout">
 		            <i class="fa fa-user fa-fw"></i>  <i class="fa fa-caret-down"></i>
 		        </a>
 		        <ul class="dropdown-menu dropdown-user">
