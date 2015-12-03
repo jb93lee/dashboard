@@ -1,7 +1,7 @@
 <style>
-#container1 {
-    height: 430px;
-    width: 725px;
+#container2 {
+    height: 400px;
+    width: 700px;
     margin: 0 auto;
 }
 
@@ -25,12 +25,12 @@
 <script src="highchart/exporting.js"></script>
 
 
-<div id="container1" style="height: 400px; min-width: 310px"></div>
+<div id="container2" style="height: 400px; min-width: 310px"></div>
 <script>
 document.addEventListener("DOMContentLoaded", function(event) {
        var seriesOptions = [],
            seriesCounter = 0,
-           names = ['ips','waf'];
+           names = ['ips'];
 
        /**
         * Create the chart when all data is loaded
@@ -38,7 +38,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
         */
        function createChart() {
 
-           $('#container1').highcharts('StockChart', {
+           $('#container2').highcharts('StockChart', {
 
                rangeSelector: {
                    selected: 4
@@ -72,14 +72,17 @@ document.addEventListener("DOMContentLoaded", function(event) {
            });
        }
 
-       $.each(names, function (i, name) {
-
 //           $.getJSON('https://www.highcharts.com/samples/data/jsonp.php?filename=' + name.toLowerCase() + '-c.json&callback=?',    function (data) {
-            $.getJSON('http://192.168.33.26/jsonp.php?filename=' + name.toLowerCase() + '.json&callback=?', function (data) {
 //          $.getJSON('http://192.168.0.110/project/jsonp.php?filename=' + name.toLowerCase() + '.json&callback=?', function (data) {
-              seriesOptions[i] = {
-                   name: name,
-                   data: data
+
+var data2=[];
+<%  for (var i = 0; i < line_data.length; i++) {%>
+  data2.push([<%=line_data[i].ts%>,<%=line_data[i].num%>]);
+<% } %>
+
+              seriesOptions[0] = {
+                   name: '1',
+                   data: data2
                };
 
                // As we're loading the data asynchronously, we don't know what order it will arrive. So
@@ -89,8 +92,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
                if (seriesCounter === names.length) {
                    createChart();
                }
-           });
-       });
 });
 </script>
 <script type="text/javascript" src="highchart/dark-unica.js"></script>

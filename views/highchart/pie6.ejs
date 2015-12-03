@@ -12,19 +12,19 @@
 <script src="highchart/highstock.js"></script>
 <script src="highchart/drilldown.js"></script>
 
-<div id="pie4" style="min-width: 517px; max-width: 700px; height: 320px; margin: 0 auto"></div>
+<div id="pie6" style="min-width: 460px; max-width: 610px; height: 320px; margin: 0 auto"></div>
 
 <!-- Data from www.netmarketshare.com. Select Browsers => Desktop share by version. Download as tsv. -->
 
 <script>
 
 document.addEventListener("DOMContentLoaded", function(event) {
-    $('#pie4').highcharts({
+    $('#pie6').highcharts({
         chart: {
             type: 'pie'
         },
         title: {
-            text: 'IP 및 공격 분석 결과'
+            text: 'APT 공격 단계별 분석 결과'
         },
         subtitle: {
             text: ''
@@ -43,20 +43,39 @@ document.addEventListener("DOMContentLoaded", function(event) {
             pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y:f}</b>번의 공격 시도<br/>'
         },
         series: [{
-            name: 'IP',
+            name: 'APT 공격',
             colorByPoint: true,
-            data: [
-              <% for (i in ip_data){ %>
-              {
-                name: '<%= ip_data[i].attackname%>',
-                y: <%= ip_data[i].count%>,
-                drilldown: '<%= ip_data[i].attackname%>'
-              },
-              <%}%>
-        ]}],
+            data: [{
+                name: '1단계',
+                y: 56.33,
+                drilldown: '1'
+            }, {
+                name: '2단계',
+                y: 24.03,
+                drilldown: '2'
+            }, {
+                name: '3단계',
+                y: 10.38,
+                drilldown: '3'
+            }, {
+                name: '4단계',
+                y: 4.77,
+                drilldown: '5'
+            }, {
+                name: '5단계',
+                y: 0.91,
+                drilldown: '4'
+            }, {
+                name: '6단계',
+                y: 0.2,
+                drilldown: null
+            }]
+
+        }],
         drilldown: {
             series: [
               {
+
               },
             ]
         }

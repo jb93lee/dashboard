@@ -28,7 +28,7 @@ module.exports = function(app, passport){
 				async.series([
 					function (callback) {
 							report_file.pool.getConnection(function(err, connection){
-							var query_sql= "select srcip, atackName as attack_name, count(atackName) as count from app_log.IPS where  time2 >= '"+ sDay + "' and time2 <= '"+ dDay +"' and srcip = (select srcip from app_log.IPS where time2 >= '"+ sDay +"' and time2 <= '"+ dDay +"' and srcip not like '192.168.%' and srcip not like '0.0.0.0' group by srcip order by count(srcip) desc limit 0,1) group by atackname order by count(atackName) desc limit 10";
+							var query_sql= "select srcip, attackName as attack_name, count(attackName) as count from app_log.IPS where  time2 >= '"+ sDay + "' and time2 <= '"+ dDay +"' and srcip = (select srcip from app_log.IPS where time2 >= '"+ sDay +"' and time2 <= '"+ dDay +"' and srcip not like '192.168.%' and srcip not like '0.0.0.0' group by srcip order by count(srcip) desc limit 0,1) group by attackName order by count(attackName) desc limit 10";
 							connection.query(query_sql, function(err, results){
 								req.flash('attack1_data', results);
 								connection.release();
@@ -37,7 +37,7 @@ module.exports = function(app, passport){
 							});
 					},function (callback) {
 							report_file.pool.getConnection(function(err, connection){
-							var query_sql= "select srcip, atackName as attack_name, count(atackName) as count from app_log.IPS where  time2 >= '"+ sDay +"' and time2 <= '"+ dDay +"' and srcip = (select srcip from app_log.IPS where time2 >= '"+ sDay +"' and time2 <= '"+ dDay +"' and srcip not like '192.168.%' and srcip not like '0.0.0.0' group by srcip order by count(srcip) desc limit 1,1) group by atackname order by count(atackName) desc limit 10";
+							var query_sql= "select srcip, attackName as attack_name, count(attackName) as count from app_log.IPS where  time2 >= '"+ sDay +"' and time2 <= '"+ dDay +"' and srcip = (select srcip from app_log.IPS where time2 >= '"+ sDay +"' and time2 <= '"+ dDay +"' and srcip not like '192.168.%' and srcip not like '0.0.0.0' group by srcip order by count(srcip) desc limit 1,1) group by attackName order by count(attackName) desc limit 10";
 							connection.query(query_sql, function(err, results){
 								req.flash('attack2_data', results);
 								connection.release();
@@ -46,7 +46,7 @@ module.exports = function(app, passport){
 							});
 					},function (callback) {
 							report_file.pool.getConnection(function(err, connection){
-							var query_sql= "select srcip, atackName as attack_name, count(atackName) as count from app_log.IPS where time2 >= '"+ sDay +"' and time2 <= '"+ dDay +"' and srcip = (select srcip from app_log.IPS where time2 >= '"+ sDay +"' and time2 <= '"+ dDay +"' and srcip not like '192.168.%' and srcip not like '0.0.0.0' group by srcip order by count(srcip) desc limit 2,1) group by atackname order by count(atackName) desc limit 10";
+							var query_sql= "select srcip, attackName as attack_name, count(attackName) as count from app_log.IPS where time2 >= '"+ sDay +"' and time2 <= '"+ dDay +"' and srcip = (select srcip from app_log.IPS where time2 >= '"+ sDay +"' and time2 <= '"+ dDay +"' and srcip not like '192.168.%' and srcip not like '0.0.0.0' group by srcip order by count(srcip) desc limit 2,1) group by attackName order by count(attackName) desc limit 10";
 							connection.query(query_sql, function(err, results){
 								req.flash('attack3_data', results);
 								connection.release();
@@ -55,7 +55,7 @@ module.exports = function(app, passport){
 							});
 					},function (callback) {
 							report_file.pool.getConnection(function(err, connection){
-							var query_sql= "select srcip, atackName as attack_name, count(atackName) as count from app_log.IPS where time2 >= '"+ sDay +"' and time2 <= '"+ dDay +"' and srcip = (select srcip from app_log.IPS where time2 >= '"+ sDay +"' and time2 <= '"+ dDay +"' and srcip not like '192.168.%' and srcip not like '0.0.0.0' group by srcip order by count(srcip) desc limit 3,1) group by atackname order by count(atackName) desc limit 10";
+							var query_sql= "select srcip, attackName as attack_name, count(attackName) as count from app_log.IPS where time2 >= '"+ sDay +"' and time2 <= '"+ dDay +"' and srcip = (select srcip from app_log.IPS where time2 >= '"+ sDay +"' and time2 <= '"+ dDay +"' and srcip not like '192.168.%' and srcip not like '0.0.0.0' group by srcip order by count(srcip) desc limit 3,1) group by attackName order by count(attackName) desc limit 10";
 							connection.query(query_sql, function(err, results){
 								req.flash('attack4_data', results);
 								connection.release();
@@ -64,7 +64,7 @@ module.exports = function(app, passport){
 							});
 					},function (callback) {
 							report_file.pool.getConnection(function(err, connection){
-							var query_sql= "select srcip, atackName as attack_name, count(atackName) as count from app_log.IPS where time2 >= '"+ sDay +"' and time2 <= '"+ dDay +"' and srcip = (select srcip from app_log.IPS where time2 >= '"+ sDay +"' and time2 <= '"+ dDay +"' and srcip not like '192.168.%' and srcip not like '0.0.0.0' group by srcip order by count(srcip) desc limit 4,1) group by atackname order by count(atackName) desc limit 10";
+							var query_sql= "select srcip, attackName as attack_name, count(attackName) as count from app_log.IPS where time2 >= '"+ sDay +"' and time2 <= '"+ dDay +"' and srcip = (select srcip from app_log.IPS where time2 >= '"+ sDay +"' and time2 <= '"+ dDay +"' and srcip not like '192.168.%' and srcip not like '0.0.0.0' group by srcip order by count(srcip) desc limit 4,1) group by attackName order by count(attackName) desc limit 10";
 							connection.query(query_sql, function(err, results){
 								req.flash('attack5_data', results);
 								connection.release();
@@ -73,7 +73,7 @@ module.exports = function(app, passport){
 							});
 					},function (callback) {
 							report_file.pool.getConnection(function(err, connection){
-							var query_sql= "select srcip, atackName as attack_name, count(atackName) as count from app_log.IPS where time2 >= '"+ sDay +"' and time2 <= '"+ dDay +"' and srcip = (select srcip from app_log.IPS where time2 >= '"+ sDay +"' and time2 <= '"+ dDay +"' and srcip not like '192.168.%' and srcip not like '0.0.0.0' group by srcip order by count(srcip) desc limit 5,1) group by atackname order by count(atackName) desc limit 10";
+							var query_sql= "select srcip, attackName as attack_name, count(attackName) as count from app_log.IPS where time2 >= '"+ sDay +"' and time2 <= '"+ dDay +"' and srcip = (select srcip from app_log.IPS where time2 >= '"+ sDay +"' and time2 <= '"+ dDay +"' and srcip not like '192.168.%' and srcip not like '0.0.0.0' group by srcip order by count(srcip) desc limit 5,1) group by attackName order by count(attackName) desc limit 10";
 							connection.query(query_sql, function(err, results){
 								req.flash('attack6_data', results);
 								connection.release();
@@ -82,7 +82,7 @@ module.exports = function(app, passport){
 							});
 					},function (callback) {
 							report_file.pool.getConnection(function(err, connection){
-							var query_sql= "select srcip, atackName as attack_name, count(atackName) as count from app_log.IPS where time2 >= '"+ sDay +"' and time2 <= '"+ dDay +"' and srcip = (select srcip from app_log.IPS where time2 >= '"+ sDay +"' and time2 <= '"+ dDay +"' and srcip not like '192.168.%' and srcip not like '0.0.0.0' group by srcip order by count(srcip) desc limit 6,1) group by atackname order by count(atackName) desc limit 10";
+							var query_sql= "select srcip, attackName as attack_name, count(attackName) as count from app_log.IPS where time2 >= '"+ sDay +"' and time2 <= '"+ dDay +"' and srcip = (select srcip from app_log.IPS where time2 >= '"+ sDay +"' and time2 <= '"+ dDay +"' and srcip not like '192.168.%' and srcip not like '0.0.0.0' group by srcip order by count(srcip) desc limit 6,1) group by attackName order by count(attackName) desc limit 10";
 							connection.query(query_sql, function(err, results){
 								req.flash('attack7_data', results);
 								connection.release();
@@ -91,7 +91,7 @@ module.exports = function(app, passport){
 							});
 					},function (callback) {
 							report_file.pool.getConnection(function(err, connection){
-							var query_sql= "select srcip, atackName as attack_name, count(atackName) as count from app_log.IPS where time2 >= '"+ sDay +"' and time2 <= '"+ dDay +"' and srcip = (select srcip from app_log.IPS where time2 >= '"+ sDay +"' and time2 <= '"+ dDay +"' and srcip not like '192.168.%' and srcip not like '0.0.0.0' group by srcip order by count(srcip) desc limit 7,1) group by atackname order by count(atackName) desc limit 10";
+							var query_sql= "select srcip, attackName as attack_name, count(attackName) as count from app_log.IPS where time2 >= '"+ sDay +"' and time2 <= '"+ dDay +"' and srcip = (select srcip from app_log.IPS where time2 >= '"+ sDay +"' and time2 <= '"+ dDay +"' and srcip not like '192.168.%' and srcip not like '0.0.0.0' group by srcip order by count(srcip) desc limit 7,1) group by attackName order by count(attackName) desc limit 10";
 							connection.query(query_sql, function(err, results){
 								req.flash('attack8_data', results);
 								connection.release();
@@ -100,7 +100,7 @@ module.exports = function(app, passport){
 							});
 					},function (callback) {
 							report_file.pool.getConnection(function(err, connection){
-							var query_sql= "select srcip, atackName as attack_name, count(atackName) as count from app_log.IPS where time2 >= '"+ sDay +"' and time2 <= '"+ dDay +"' and srcip = (select srcip from app_log.IPS where time2 >= '"+ sDay +"' and time2 <= '"+ dDay +"' and srcip not like '192.168.%' and srcip not like '0.0.0.0' group by srcip order by count(srcip) desc limit 8,1) group by atackname order by count(atackName) desc limit 10";
+							var query_sql= "select srcip, attackName as attack_name, count(attackName) as count from app_log.IPS where time2 >= '"+ sDay +"' and time2 <= '"+ dDay +"' and srcip = (select srcip from app_log.IPS where time2 >= '"+ sDay +"' and time2 <= '"+ dDay +"' and srcip not like '192.168.%' and srcip not like '0.0.0.0' group by srcip order by count(srcip) desc limit 8,1) group by attackName order by count(attackName) desc limit 10";
 							connection.query(query_sql, function(err, results){
 								req.flash('attack9_data', results);
 								connection.release();
@@ -109,7 +109,7 @@ module.exports = function(app, passport){
 							});
 					},function (callback) {
 							report_file.pool.getConnection(function(err, connection){
-							var query_sql= "select srcip, atackName as attack_name, count(atackName) as count from app_log.IPS where time2 >= '"+ sDay +"' and time2 <= '"+ dDay +"' and srcip = (select srcip from app_log.IPS where time2 >= '"+ sDay +"' and time2 <= '"+ dDay +"' and srcip not like '192.168.%' and srcip not like '0.0.0.0' group by srcip order by count(srcip) desc limit 9,1) group by atackname order by count(atackName) desc limit 10";
+							var query_sql= "select srcip, attackName as attack_name, count(attackName) as count from app_log.IPS where time2 >= '"+ sDay +"' and time2 <= '"+ dDay +"' and srcip = (select srcip from app_log.IPS where time2 >= '"+ sDay +"' and time2 <= '"+ dDay +"' and srcip not like '192.168.%' and srcip not like '0.0.0.0' group by srcip order by count(srcip) desc limit 9,1) group by attackName order by count(attackName) desc limit 10";
 							connection.query(query_sql, function(err, results){
 								req.flash('attack10_data', results);
 								connection.release();
@@ -151,114 +151,85 @@ module.exports = function(app, passport){
 	});
 
 
-
-	app.get('/search', function(req, res) {
-			if (req.query.q!= null){
-				var report_file = require('./mysql2');
-			  report_file.pool.getConnection(function(err, connection){
-				 var query_sql= "select atackName, date_format(time2, '%Y-%m-%d　%h:%i') as time2 , srcip, dstip, srcport, dstport, country_code from app_log.IPS where  srcip like '"+ req.query.q+ "' order by time2 desc";
-				 connection.query(query_sql, function(err, results){
-					 var tmp= (JSON.stringify(results));
-					 var tmp2= JSON.parse(tmp);
-					 res.render('template/search', {table_data:tmp2});
-					 connection.release();
-				 });
+	app.get('/search_ip',isAuthenticated, function(req, res) {
+		if (req.query.q!= null){
+			var rand = Math.floor(Math.random() * 1000);
+			var report_file = require('./mysql2');
+			report_file.pool.getConnection(function(err, connection){
+			 var query_sql= "create view app_log.temp_"+rand.toString()+" as select (select 'IPS') as equip, attackName, date_format(time2, '%Y-%m-%d %h:%i') as time2, srcip, dstip, srcport, dstport, country_code, country, level from app_log.IPS where srcip like '"+ req.query.q+ "' union select (select 'WAF') as equip, attackName, date_format(time2, '%Y-%m-%d %h:%i') as time2 , srcip, dstip, srcport, dstport, country_code, country, level from app_log.WAF where  srcip like '"+ req.query.q+ "' order by time2 desc";
+			 connection.query(query_sql, function(err, results){
+					async.series([
+									function (callback) {
+										 report_file.pool.getConnection(function(err, connection){
+												 var query_sql= "select (unix_timestamp(date(time2))*1000+32400000) as ts, count(time2) as num from app_log.temp_"+rand.toString()+" where srcip not like '192.168.0.1' group by ts";
+												 connection.query(query_sql, function(err, results){
+													 if (results != ''){req.flash('line_data',results);}
+													 connection.release();
+													 callback(null, '0');
+												 });
+										 });
+								 },
+									function (callback) {
+											report_file.pool.getConnection(function(err, connection){
+											var query_sql= "select * from app_log.temp_"+rand.toString();
+											connection.query(query_sql, function(err, results){
+												if (results != ''){	req.flash('table_data', results);}
+												connection.release();
+												callback(null, '1');
+												});
+											});
+									},function (callback) {
+											report_file.pool.getConnection(function(err, connection){
+											var query_sql= "select attackname, count(attackName) as count from app_log.temp_"+rand.toString()+" group by attackName limit 10";
+											connection.query(query_sql, function(err, results){
+												if (results != ''){	req.flash('ip_data', results);}
+												connection.release();
+												callback(null, '2');
+												});
+											});
+									},function (callback) {
+											report_file.pool.getConnection(function(err, connection){
+											var query_sql= "select date_format(time2, '%Y-%m-%d') as date, level, count(time2) as num from app_log.temp_948 group by date,level;";
+											connection.query(query_sql, function(err, results){
+												if (results != ''){	req.flash('heat_data', results);}
+												connection.release();
+												callback(null, '3');
+												});
+											});
+									}
+								],
+								function (err, result) {
+										connection.release();
+										report_file.pool.getConnection(function(err, connection){
+											var query_sql= "drop view app_log.temp_"+rand.toString();
+											connection.query(query_sql, function(err, results){
+											 	connection.release();
+												res.render('template/search-ip',
+												 {table_data:req.flash('table_data'),
+												 ip_data:req.flash('ip_data'),
+												 line_data:req.flash('line_data'),
+												 heat_data:req.flash('heat_data')
+												});
+											});
+										});
+								});
 			 });
-		 }else if (req.query.c!= null){
-				var report_file = require('./mysql2');
-			  report_file.pool.getConnection(function(err, connection){
-				 var query_sql= "select atackName, date_format(time2, '%Y-%m-%d　%h:%i') as time2 , srcip, dstip, srcport, dstport, country_code from app_log.IPS where to_days(now()) - to_days(time2) <=7 and country_code like '"+ req.query.c+ "' order by time2 desc";
-				 connection.query(query_sql, function(err, results){
-					 var tmp= (JSON.stringify(results));
-					 var tmp2= JSON.parse(tmp);
-					 res.render('template/search', {table_data:tmp2});
-					 connection.release();
-				 });
-			 });
-			}else {
-				 res.render('template/search',{table_data:{}});
-			}
-	});
-
-	app.post('/search', isAuthenticated, function(req,res){
-		if(req.body.limit == ''){
-				req.body.limit= '10';
+		 });
+	 }else {
+			 res.render('template/search-ip',{table_data:{},ip_data:{},top_ip_data:{},top_cd_data:{}});
 		}
-		if(req.body.source_port == ''){
-				req.body.source_port= '%';
-		}
-		if(req.body.time_start == ''){
-				req.body.time_start= '2015-01-01';
-		}
-		if(req.body.time_end == ''){
-				req.body.time_end= '2015-12-31';
-		}
-		if(req.body.destination_port == ''){
-				req.body.destination_port= '%';
-		}
-		var report_file = require('./mysql2');
-		report_file.pool.getConnection(function(err, connection){
-			var query_sql= "select atackName, date_format(time2, '%Y-%m-%d　%h:%i') as time2, srcip, dstip, srcport, dstport, country_code from app_log.IPS where time2 > timestamp('"+ req.body.time_start+ "') and time2 < timestamp('"+ req.body.time_end+ "') and atackName like '%"+ req.body.attack_name +"%' and srcip like '%"+ req.body.source_ip+ "%' and dstip like '%"+ req.body.destination_ip + "%' and srcport like '"+ req.body.source_port+ "' and dstport like '"+ req.body.destination_port+ "' and country like '%" + req.body.country+ "%' order by time2 desc limit " + req.body.limit ;
-			connection.query(query_sql, function(err, results){
-				var tmp= (JSON.stringify(results));
-				var tmp2= JSON.parse(tmp);
-				res.render('template/search', {table_data:tmp2});
-				connection.release();
-			});
-		});
 	});
 
 
-	app.get('/search2', function(req, res) {
-			 res.render('template/search-waf',{table_data:{},ip_data:{}});
-	});
 
-	app.post('/search2', isAuthenticated, function(req,res){
-		if(req.body.limit == ''){
-				req.body.limit= '10';
-		}
-		if(req.body.source_port == ''){
-				req.body.source_port= '%';
-		}
-		if(req.body.time_start == ''){
-				req.body.time_start= '2015-01-01';
-		}
-		if(req.body.time_end == ''){
-				req.body.time_end= '2015-12-31';
-		}
-		if(req.body.destination_port == ''){
-				req.body.destination_port= '%';
-		}
-		var report_file = require('./mysql2');
-		report_file.pool.getConnection(function(err, connection){
-			var query_sql= "select attackname as atackName, date_format(time2, '%Y-%m-%d　%h:%i') as time2, srcip, dstip, srcport, port as dstport, country_code from app_log.WAF where time2 > timestamp('"+ req.body.time_start+ "') and time2 < timestamp('"+ req.body.time_end+ "') and attackName like '%"+ req.body.attack_name +"%' and srcip like '%"+ req.body.source_ip+ "%' and dstip like '%"+ req.body.destination_ip + "%' and srcport like '"+ req.body.source_port+ "' and port like '"+ req.body.destination_port+ "' and country like '%" + req.body.country+ "%' order by time2 desc limit " + req.body.limit ;
-			connection.query(query_sql, function(err, results){
-				var tmp= (JSON.stringify(results));
-				var tmp2= JSON.parse(tmp);
-				req.flash('table_data',tmp2);
-				connection.release();
-
-				report_file.pool.getConnection(function(err, connection){
-					var query_sql= "select attackname, count(attackname) as count from app_log.WAF where time2 > timestamp('"+ req.body.time_start+ "') and time2 < timestamp('"+ req.body.time_end+ "') and attackName like '%"+ req.body.attack_name +"%' and srcip like '%"+ req.body.source_ip+ "%' and dstip like '%"+ req.body.destination_ip + "%' and srcport like '"+ req.body.source_port+ "' and port like '"+ req.body.destination_port+ "' and country like '%" + req.body.country+ "%' group by attackname order by count(attackname) desc limit " + req.body.limit ;
-					connection.query(query_sql, function(err, results){
-						var tmp= (JSON.stringify(results));
-						var tmp2= JSON.parse(tmp);
-						console.log(tmp2);
-						res.render('template/search-waf', {table_data:req.flash('table_data'),ip_data:tmp2});
-						connection.release();
-					});
-				});
-
-			});
-		});
-	});
-
-
-	app.get('/search3', function(req, res) {
+	app.get('/search_eq',isAuthenticated, function(req, res) {
 			 res.render('template/search-eq',{table_data:{},ip_data:{},top_ip_data:{},top_cd_data:{}});
 	});
 
-	app.post('/search3', isAuthenticated, function(req,res){
+	app.post('/search_eq', isAuthenticated, function(req,res){
+		if(req.body.eq == ''){
+				req.body.eq= 'IPS';
+		}
 		if(req.body.limit == ''){
 				req.body.limit= '100';
 		}
@@ -274,46 +245,48 @@ module.exports = function(app, passport){
 		if(req.body.destination_port == ''){
 				req.body.destination_port= '%';
 		}
+		console.log(req.body.eq);
+		var rand = Math.floor(Math.random() * 1000);
 		var report_file = require('./mysql2');
 		report_file.pool.getConnection(function(err, connection){
-			var query_sql= "create view app_log.temp as select attackname, date_format(time2, '%Y-%m-%d %h:%i') as time2, srcip, dstip, srcport, port as dstport, country, country_code from app_log.WAF where time2 > timestamp('"+ req.body.time_start+ "') and time2 < timestamp('"+ req.body.time_end+ "') and attackName like '%"+ req.body.attack_name +"%' and srcip like '%"+ req.body.source_ip+ "%' and dstip like '%"+ req.body.destination_ip + "%' and srcport like '"+ req.body.source_port+ "' and port like '"+ req.body.destination_port+ "' and country like '%" + req.body.country+ "%' order by time2 desc limit " + req.body.limit ;
+			var query_sql= "create view app_log.temp"+rand+" as select attackname, date_format(time2, '%Y-%m-%d %h:%i') as time2, srcip, dstip, srcport, dstport, country, country_code from app_log."+ req.body.eq+" where time2 > timestamp('"+ req.body.time_start+ "') and time2 < timestamp('"+ req.body.time_end+ "') and attackName like '%"+ req.body.attack_name +"%' and srcip like '%"+ req.body.source_ip+ "%' and dstip like '%"+ req.body.destination_ip + "%' and srcport like '"+ req.body.source_port+ "' and dstport like '"+ req.body.destination_port+ "' and country like '%" + req.body.country+ "%' order by time2 desc limit " + req.body.limit ;
 			connection.query(query_sql, function(err, results){
 				connection.release();
 
 				report_file.pool.getConnection(function(err, connection){
-					var query_sql= "select * from app_log.temp";
+					var query_sql= "select * from app_log.temp"+rand;
 					connection.query(query_sql, function(err, results){
 						var tmp= (JSON.stringify(results));
 						var tmp2= JSON.parse(tmp);
 						connection.release();
-						req.flash('table_data',tmp2);
+						if (results != ''){req.flash('table_data',tmp2);}
 
 						report_file.pool.getConnection(function(err, connection){
-							var query_sql= "select attackname, count(attackname) as count from app_log.temp group by attackname order by count(attackname) desc";
+							var query_sql= "select attackname, count(attackname) as count from app_log.temp"+rand+" group by attackname order by count(attackname) desc";
 							connection.query(query_sql, function(err, results){
 								var tmp= (JSON.stringify(results));
 								var tmp2= JSON.parse(tmp);
 								connection.release();
-								req.flash('ip_data',tmp2);
+								if (results != ''){req.flash('ip_data',tmp2);}
 
 								report_file.pool.getConnection(function(err, connection){
-									var query_sql= "select srcip, count(srcip) as count, country from app_log.temp group by srcip order by count(srcip) desc limit 10";
+									var query_sql= "select srcip, count(srcip) as count, country from app_log.temp"+rand+" group by srcip order by count(srcip) desc limit 10";
 									connection.query(query_sql, function(err, results){
 										var tmp= (JSON.stringify(results));
 										var tmp2= JSON.parse(tmp);
 										connection.release();
-										req.flash('top_ip_data',tmp2);
+										if (results != ''){req.flash('top_ip_data',tmp2);}
 
 										report_file.pool.getConnection(function(err, connection){
-											var query_sql= "select country_code, country, count(country_code) as count from app_log.temp group by country_code order by count(country_code) desc limit 10";
+											var query_sql= "select country_code, country, count(country_code) as count from app_log.temp"+rand+" group by country_code order by count(country_code) desc limit 10";
 											connection.query(query_sql, function(err, results){
 												var tmp= (JSON.stringify(results));
 												var tmp2= JSON.parse(tmp);
 												connection.release();
-												req.flash('top_cd_data',tmp2);
+												if (results != ''){req.flash('top_cd_data',tmp2);}
 
 												report_file.pool.getConnection(function(err, connection){
-													var query_sql= "drop view app_log.temp";
+													var query_sql= "drop view app_log.temp"+rand;
 													connection.query(query_sql, function(err, results){
 														connection.release();
 														res.render('template/search-eq', {
@@ -343,7 +316,7 @@ module.exports = function(app, passport){
 	});
 
 	app.post('/login', passport.authenticate('login', {
-		successRedirect: '/search3',
+		successRedirect: '/search_eq',
 		failureRedirect: '/login',
 		failureFlash : true
 	}));
@@ -434,8 +407,8 @@ module.exports = function(app, passport){
 
 	app.get('/honeypot',isAuthenticated, function(req, res) {
 
-//		var url = 'http://192.168.33.26/cities.csv';
-		var url = 'http://192.168.0.110/cities.csv';
+		var url = 'http://192.168.33.26/cities.csv';
+//		var url = 'http://192.168.0.110/cities.csv';
 		request(url, function(error, response, html){
 		    if (error) {throw error};
 				fs.writeFile('public/cities.csv',html,encoding='utf8',function(err){
@@ -476,7 +449,7 @@ module.exports = function(app, passport){
 										connection.release();
 									});
 										report_file.pool.getConnection(function(err, connection){
-										var query_sql ='select atackName as attack_name, count(atackName) as number from app_log.IPS group by atackname order by count(atackName) desc limit 10';
+										var query_sql ='select attackName as attack_name, count(attackName) as number from app_log.IPS group by attackName order by count(attackName) desc limit 10';
 										connection.query(query_sql, function(err, results){
 											var tmp= (JSON.stringify(results));
 											var tmp2= JSON.parse(tmp);

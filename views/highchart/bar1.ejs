@@ -45,7 +45,7 @@ $(function () {
             name: 'Population',
             data: [
               <% for(var i in bar_data2){%>
-              ['<a href="http://192.168.32.167:3000/search?c=<%=bar_data2[i].country_code%>"><%=bar_data2[i].country%></a>',<%=bar_data2[i].count%>],
+              ['<a href="http://192.168.32.170:3000/search_ip?c=<%=bar_data2[i].country_code%>"><%=bar_data2[i].country%></a>',<%=bar_data2[i].count%>],
               <%}%>
             ],
             dataLabels: {

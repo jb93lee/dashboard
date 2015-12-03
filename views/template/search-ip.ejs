@@ -1,0 +1,218 @@
+<%layout('../layout')%>
+<style>
+
+#page-wrapper {
+  background-color: #222;
+}
+a {
+  color: #E0E0E3;
+}
+.inner{
+text-align: center;
+}
+.panel {
+    background-color: #222;
+}
+
+.bg-aqua, .callout.callout-info, .alert-info, .label-info, .modal-info .modal-body {
+    background-color: #333 !important;
+}
+
+.input-group-addon:first-child {
+    border-right: 1px none;
+    min-width: 80px;
+    text-align: -moz-left;
+    background-color: #464545;
+}
+
+.input-group-addon {
+    padding: 10px 15px;
+    font-size: 14px;
+    font-weight: normal;
+    line-height: 1;
+    text-align: center;
+    background-color: #464545;
+    border: 0px solid transparent;
+    border-radius: 4px;
+}
+
+.form-control{
+    max-width: 210px;
+    background-color: #505050;
+    color:white;
+    font-size: 14px;
+    line-height: 1;
+    border-color: white;
+    border: 1px solid transparent;
+    border-radius: 4px;
+}
+
+.btn-default {
+    background-color: #333;
+    min-width: 80px;
+}
+
+</style>
+<script>
+function submit(){
+    document.forms["aform"].submit();
+}
+</script>
+
+<link rel="stylesheet" type="text/css" href="highchart/flags32.css" />
+
+<!-- Page Content -->
+<div id="page-wrapper">
+    <div class="container-fluid">
+        <!--div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header"><font color=white>Search Report</font></h1>
+            </div>
+        </div>
+        < /.row -->
+        <br>
+    		<div class="row">
+
+          <!--div class="col-lg-3"-->
+
+          <div class="col-lg-3 col-xs-6">
+                <form id="aform" role="form" action="/search_ip" method="get">
+                  <table><tr><td>
+                    <div class="form-group input-group">
+                        <span class="input-group-addon">INPUT</span>
+                        <input type="text" name="q" class="form-control" placeholder="IP를 입력해주세요.">
+                    </div>
+                  </td><td>　</td><td>
+                    <div class="form-group input-group">
+                        <a href="#"  onclick="submit();" class="btn btn-default">Submit</a>
+                    </div>
+                  </td>
+                </tr></table>
+                <div >
+                  <span class="f32"><span class="flag <% var a=''; for(var i in table_data){a=table_data[0].country_code.toLowerCase(); break;}%> <%=a%>"></span></span>
+                  　<% var a='검색 결과가 없습니다.'; for(var i in table_data){a='검색한 아이피 : '+ table_data[0].srcip; break;}  %> <%=a%>　
+                </div>
+                </form>
+            </div>
+            <div class="col-lg-2 col-xs-6">
+                  <!-- small box -->
+                  <div class="small-box bg-aqua">
+                    <div class="inner">
+                      <h3> IPS : <% var a=0; for(var i in table_data){if (table_data[i].equip=='IPS')a= a+1;}  %> <%=a%>
+                        </h3>
+                    </div>
+                  </div>
+              </div><!-- ./col -->
+              <div class="col-lg-2 col-xs-6">
+                    <!-- small box -->
+                    <div class="small-box bg-aqua">
+                      <div class="inner">
+                        <h3> IPS : <% var a=0; for(var i in table_data){if (table_data[i].equip=='IPS')a= a+1;}  %> <%=a%>
+                        </h3>
+                      </div>
+                    </div>
+                </div><!-- ./col -->
+                <div class="col-lg-2 col-xs-6">
+                      <!-- small box -->
+                      <div class="small-box bg-aqua">
+                        <div class="inner">
+                          <h3> WAF : <% var a=0; for(var i in table_data){if (table_data[i].equip=='WAF')a= a+1;}  %> <%=a%>
+                             </h3>
+                        </div>
+                      </div>
+                  </div><!-- ./col -->
+                  <div class="col-lg-3 col-xs-6">
+                          <!-- small box -->
+                          <div class="small-box bg-aqua">
+                            <div class="inner">
+                              <h3><% var a='Country'; for(var i in table_data){a=table_data[0].country; break;}  %><%=a%>
+                              </h3>
+                            </div>
+                          </div>
+                    </div><!-- ./col -->
+
+          <!--/div-->
+</div>
+<br>
+<section class="col-lg-13 connectedSortable">
+
+<div class="col-lg-13">
+<ul class="nav nav-tabs">
+  <li class="active"><a aria-expanded="false" href="#table" data-toggle="tab">검색 결과 테이블</a></li>
+  <li class=""><a aria-expanded="true" href="#visualize" data-toggle="tab">검색 결과 시각화</a></li>
+  <li class="disabled"><a>추가 예정</a></li>
+</ul>
+<div id="myTabContent" class="tab-content">
+  <div class="tab-pane fade active in " id="table">
+
+      <div class="panel-body">
+        <table class="table table-inverse table-bordered table-hover table-striped">
+          <thead>
+            <tr>
+              <th>탐지장비</th>
+              <th>공격단계</th>
+              <th>공격명</th>
+              <th>시간</th>
+              <th>출발지 IP</th>
+              <th>목적지 IP</th>
+              <th>출발지 Port</th>
+              <th>목적지 Port</th>
+              <th>국가</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% for(var i in table_data){%>
+              <tr>
+                <td><%=table_data[i].equip%></td>
+                <td>TEMP</td>
+                <td><%=table_data[i].attackName%></td>
+                <td><%=table_data[i].time2%></td>
+                <td><%=table_data[i].srcip%></td>
+                <td><%=table_data[i].dstip%></td>
+                <td><%=table_data[i].srcport%></td>
+                <td><%=table_data[i].dstport%></td>
+                <td><%=table_data[i].country_code%></td>
+              </tr>
+            <%}%>
+          </tbody>
+        </table>
+      </div>
+
+  </div>
+          <div class="tab-pane fade" id="visualize">
+            <br>
+<div class="row">
+          <section class="col-lg-6 connectedSortable">
+            <% include ../highchart/line2 %>
+          </section>
+          <section class="col-lg-6 connectedSortable">
+            <% include ../highchart/heatmap1 %>
+          </section>
+</div><br>
+<div class="row">
+          <section class="col-lg-4 connectedSortable">
+            <% include ../highchart/pie5 %>
+          </section>
+          <section class="col-lg-4 connectedSortable">
+            <% include ../highchart/pie6 %>
+          </section>
+          <section class="col-lg-4 connectedSortable">
+            <% include ../highchart/pie5 %>
+          </section>
+</div>
+          </div>
+        </div>
+      </div>
+            <!--/div-->
+</section>
+
+
+    		</div>
+        <!-- row -->
+    </div>
+    <!-- /.container-fluid -->
+</div>
+<!-- /#page-wrapper -->
+<!-- script -->
+<script type="text/javascript" src="../d3/d3.v3.js"></script>
+<script type="text/javascript" src="../d3/d3.min.js"></script>

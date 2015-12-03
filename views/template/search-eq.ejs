@@ -49,8 +49,14 @@ a {
 
 </style>
 <script>
-function submit(){
-    document.forms["aform"].submit();
+function submit1(){
+    document.forms["aform1"].submit();
+}
+function submit2(){
+    document.forms["aform2"].submit();
+}
+function submit3(){
+    document.forms["aform3"].submit();
 }
 </script>
 
@@ -80,7 +86,8 @@ function submit(){
   <div class="tab-pane fade active in" id="conv">
             <div class="panel panel-default">
               <div class="panel-body">
-                <form id="aform" role="form" action="/search3" method="post">
+                <form id="aform1" role="form" action="/search_eq" method="post">
+                    <input type="hidden" name="eq" value="IPS">
                     <div class="form-group input-group">
                         <span class="input-group-addon">공격명</span>
                         <input type="text" name="attack_name" class="form-control" placeholder="Default : %">
@@ -118,7 +125,7 @@ function submit(){
                         <input type="text" name="limit" class="form-control" placeholder="Default : 100">
                     </div>
 
-                    <a href="#"  onclick="submit();" class="btn btn-default">Submit</a>
+                    <a href="#"  onclick="submit1();" class="btn btn-default">Submit</a>
 
                 </form>
               </div>
@@ -127,7 +134,8 @@ function submit(){
     <div class="tab-pane fade " id="ips">
               <div class="panel panel-default">
                 <div class="panel-body">
-                  <form id="aform" role="form" action="/search2 " method="post">
+                  <form id="aform2" role="form" action="/search_eq " method="post">
+                      <input type="hidden" name="eq" value="IPS">
                       <div class="form-group input-group">
                           <span class="input-group-addon">공격명</span>
                           <input type="text" name="attack_name" class="form-control" placeholder="Default : %">
@@ -165,7 +173,7 @@ function submit(){
                           <input type="text" name="limit" class="form-control" placeholder="Default : 100">
                       </div>
 
-                      <a href="#" onclick="submit();" class="btn btn-default">Submit</a>
+                      <a href="#" onclick="submit2();" class="btn btn-default">Submit</a>
 
                   </form>
                 </div>
@@ -174,7 +182,8 @@ function submit(){
       <div class="tab-pane fade" id="waf">
                 <div class="panel panel-default">
                   <div class="panel-body">
-                    <form id="aform" role="form" action="/search3" method="post">
+                    <form id="aform3" role="form" action="/search_eq" method="post">
+                        <input type="hidden" name="eq" value="WAF">
                         <div class="form-group input-group">
                             <span class="input-group-addon">공격명</span>
                             <input type="text" name="attack_name" class="form-control" placeholder="Default : %">
@@ -212,7 +221,7 @@ function submit(){
                             <input type="text" name="limit" class="form-control" placeholder="Default : 100">
                         </div>
 
-                        <a href="#"  onclick="submit();" class="btn btn-default">Submit</a>
+                        <a href="#"  onclick="submit3();" class="btn btn-default">Submit</a>
 
                     </form>
                   </div>
@@ -257,9 +266,9 @@ function submit(){
               <tr>
                 <td>TEMP</td>
                 <td>TEMP</td>
-                <td><%=table_data[i].atackName%></td>
+                <td><%=table_data[i].attackname%></td>
                 <td><%=table_data[i].time2%></td>
-                <td><a href='http://localhost:3000/search?q=<%=table_data[i].srcip%>'><%=table_data[i].srcip%></a></td>
+                <td><a href='http://192.168.32.200:3000/search_ip?q=<%=table_data[i].srcip%>'><%=table_data[i].srcip%></a></td>
                 <td><%=table_data[i].dstip%></td>
                 <td><%=table_data[i].srcport%></td>
                 <td><%=table_data[i].dstport%></td>
@@ -283,6 +292,7 @@ function submit(){
             </div>
             <br>
             <div class="row">
+
               <section class="col-lg-6 connectedSortable">
                 <% include ../highchart/pie3 %>
               </section>
