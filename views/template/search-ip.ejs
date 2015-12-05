@@ -75,30 +75,12 @@ function submit(){
 
           <!--div class="col-lg-3"-->
 
-          <div class="col-lg-3 col-xs-6">
-                <form id="aform" role="form" action="/search_ip" method="get">
-                  <table><tr><td>
-                    <div class="form-group input-group">
-                        <span class="input-group-addon">INPUT</span>
-                        <input type="text" name="q" class="form-control" placeholder="IP를 입력해주세요.">
-                    </div>
-                  </td><td>　</td><td>
-                    <div class="form-group input-group">
-                        <a href="#"  onclick="submit();" class="btn btn-default">Submit</a>
-                    </div>
-                  </td>
-                </tr></table>
-                <div >
-                  <span class="f32"><span class="flag <% var a=''; for(var i in table_data){a=table_data[0].country_code.toLowerCase(); break;}%> <%=a%>"></span></span>
-                  　<% var a='검색 결과가 없습니다.'; for(var i in table_data){a='검색한 아이피 : '+ table_data[0].srcip; break;}  %> <%=a%>　
-                </div>
-                </form>
-            </div>
+
             <div class="col-lg-2 col-xs-6">
                   <!-- small box -->
                   <div class="small-box bg-aqua">
                     <div class="inner">
-                      <h3> IPS : <% var a=0; for(var i in table_data){if (table_data[i].equip=='IPS')a= a+1;}  %> <%=a%>
+                      <h3> SUM : <% var a=0; for(var i in table_data){if (table_data[i].equip=='IPS' || table_data[i].equip=='WAF')a= a+1;}  %> <%=a%>
                         </h3>
                     </div>
                   </div>
@@ -130,20 +112,36 @@ function submit(){
                             </div>
                           </div>
                     </div><!-- ./col -->
-
+                    <div class="col-lg-3 col-xs-6">
+                          <form id="aform" role="form" action="/search_ip" method="get">
+                            <table><tr><td>
+                              <div class="form-group input-group">
+                                  <span class="input-group-addon">INPUT</span>
+                                  <input type="text" name="q" class="form-control" placeholder="IP를 입력해주세요.">
+                              </div>
+                            </td><td>　</td><td>
+                              <div class="form-group input-group">
+                                  <a href="#"  onclick="submit();" class="btn btn-default">Submit</a>
+                              </div>
+                            </td>
+                          </tr></table>
+                          <div >
+                            <span class="f32"><span class="flag <% var a=''; for(var i in table_data){a=table_data[0].country_code.toLowerCase(); break;}%> <%=a%>"></span></span>
+                            　<% var a='검색 결과가 없습니다.'; for(var i in table_data){a='검색한 아이피 : '+ table_data[0].srcip; break;}  %> <%=a%>　
+                          </div>
+                          </form>
+                      </div>
           <!--/div-->
 </div>
-<br>
 <section class="col-lg-13 connectedSortable">
 
 <div class="col-lg-13">
 <ul class="nav nav-tabs">
-  <li class="active"><a aria-expanded="false" href="#table" data-toggle="tab">검색 결과 테이블</a></li>
-  <li class=""><a aria-expanded="true" href="#visualize" data-toggle="tab">검색 결과 시각화</a></li>
-  <li class="disabled"><a>추가 예정</a></li>
+  <li class="active"><a aria-expanded="false" href="#table" data-toggle="tab">검색 결과 시각화</a></li>
+  <li class=""><a aria-expanded="true" href="#visualization" data-toggle="tab">검색 결과 테이블</a></li>
 </ul>
 <div id="myTabContent" class="tab-content">
-  <div class="tab-pane fade active in " id="table">
+  <div class="tab-pane fade " id="visualization">
 
       <div class="panel-body">
         <table class="table table-inverse table-bordered table-hover table-striped">
@@ -179,7 +177,7 @@ function submit(){
       </div>
 
   </div>
-          <div class="tab-pane fade" id="visualize">
+          <div class="tab-pane fade active in" id="table">
             <br>
 <div class="row">
           <section class="col-lg-6 connectedSortable">
@@ -188,17 +186,16 @@ function submit(){
           <section class="col-lg-6 connectedSortable">
             <% include ../highchart/heatmap1 %>
           </section>
+
 </div><br>
 <div class="row">
-          <section class="col-lg-4 connectedSortable">
+          <section class="col-lg-6 connectedSortable">
             <% include ../highchart/pie5 %>
           </section>
-          <section class="col-lg-4 connectedSortable">
+          <section class="col-lg-6 connectedSortable">
             <% include ../highchart/pie6 %>
           </section>
-          <section class="col-lg-4 connectedSortable">
-            <% include ../highchart/pie5 %>
-          </section>
+
 </div>
           </div>
         </div>

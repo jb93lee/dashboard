@@ -64,7 +64,7 @@ var projection = d3.geo.mercator()
            .enter()
            .append("a")
       				  .attr("xlink:href", function(d) {
-      					  return "http://localhost:3000/search?q="+d.city;}
+      					  return "http://localhost:3000/search_ip?q="+d.city;}
       				  )
          .append("text") // append text
            .attr("x", function(d) {

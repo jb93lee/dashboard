@@ -5,6 +5,7 @@ var request= require('request');
 var fs = require('fs');
 var async = require('async');
 var date= require('date-utils');
+var report_file = require('./mysql2');
 
 module.exports = function(app, passport){
 
@@ -21,7 +22,6 @@ module.exports = function(app, passport){
 			var da= dt.addDays(-7);
 			var sDay = da.toFormat('YYYY-MM-DD');
 		}
-		var report_file = require('./mysql2');
 		report_file.pool.getConnection(function(err, connection){
 			var query_sql= "select srcip, count(srcip) as count, country from app_log.IPS where time2 >= '"+ sDay +"' and time2 <= '"+ dDay +"' and srcip not like '192.168.%' and srcip not like '0.0.0.0' group by srcip order by count(srcip) desc limit 10";
 			connection.query(query_sql, function(err, results){
@@ -119,11 +119,37 @@ module.exports = function(app, passport){
 					},function (callback) {
 							report_file.pool.getConnection(function(err, connection){
 							var query_sql= "select country, country_code, count(country) as count from app_log.IPS where time2 >= '"+ sDay +"' and country not like 'null' group by country order by count(country) desc limit 10";
-							console.log(query_sql);
 							connection.query(query_sql, function(err, results){
 								req.flash('bar_data2', results);
 								connection.release();
 								callback(null, '11');
+								});
+							});
+					},function (callback) {
+							report_file.pool.getConnection(function(err, connection){
+							var query_sql= "select level, count(level) as num from app_log.IPS where time2 >= '"+ sDay +"' group by level";
+							connection.query(query_sql, function(err, results){
+								if (results != ''){	req.flash('level_data', results);}
+								connection.release();
+								callback(null, '12');
+								});
+							});
+					},function (callback) {
+							report_file.pool.getConnection(function(err, connection){
+							var query_sql= "select level, attackname, count(attackname) as num from app_log.IPS where time2 >= '"+ sDay +"' group by level,attackname order by level,num desc";
+							connection.query(query_sql, function(err, results){
+								if (results != ''){	req.flash('level_data2', results);}
+								connection.release();
+								callback(null, '13');
+								});
+							});
+					},function (callback) {
+							report_file.pool.getConnection(function(err, connection){
+							var query_sql= "select country, srcip, count(srcip) as num from app_log.IPS where time2 >=  '"+ sDay +"' group by country_code,srcip having num >= 2 order by country_code,num desc";
+							connection.query(query_sql, function(err, results){
+								if (results != ''){	req.flash('bar_data3', results);}
+								connection.release();
+								callback(null, '14');
 								});
 							});
 					}
@@ -143,7 +169,10 @@ module.exports = function(app, passport){
 							'attack9_data':req.flash('attack9_data'),
 							'attack10_data':req.flash('attack10_data'),
 							'bar_data2':req.flash('bar_data2'),
-							'date':req.query.days
+							'bar_data3':req.flash('bar_data3'),
+							'date':req.query.days,
+							level_data:req.flash('level_data'),
+							level_data2:req.flash('level_data2')
 						});
 				});
 			});
@@ -154,7 +183,6 @@ module.exports = function(app, passport){
 	app.get('/search_ip',isAuthenticated, function(req, res) {
 		if (req.query.q!= null){
 			var rand = Math.floor(Math.random() * 1000);
-			var report_file = require('./mysql2');
 			report_file.pool.getConnection(function(err, connection){
 			 var query_sql= "create view app_log.temp_"+rand.toString()+" as select (select 'IPS') as equip, attackName, date_format(time2, '%Y-%m-%d %h:%i') as time2, srcip, dstip, srcport, dstport, country_code, country, level from app_log.IPS where srcip like '"+ req.query.q+ "' union select (select 'WAF') as equip, attackName, date_format(time2, '%Y-%m-%d %h:%i') as time2 , srcip, dstip, srcport, dstport, country_code, country, level from app_log.WAF where  srcip like '"+ req.query.q+ "' order by time2 desc";
 			 connection.query(query_sql, function(err, results){
@@ -165,6 +193,7 @@ module.exports = function(app, passport){
 												 connection.query(query_sql, function(err, results){
 													 if (results != ''){req.flash('line_data',results);}
 													 connection.release();
+													 console.log(1);
 													 callback(null, '0');
 												 });
 										 });
@@ -175,6 +204,7 @@ module.exports = function(app, passport){
 											connection.query(query_sql, function(err, results){
 												if (results != ''){	req.flash('table_data', results);}
 												connection.release();
+												console.log(2);
 												callback(null, '1');
 												});
 											});
@@ -184,16 +214,38 @@ module.exports = function(app, passport){
 											connection.query(query_sql, function(err, results){
 												if (results != ''){	req.flash('ip_data', results);}
 												connection.release();
+												console.log(3);
 												callback(null, '2');
 												});
 											});
 									},function (callback) {
 											report_file.pool.getConnection(function(err, connection){
-											var query_sql= "select date_format(time2, '%Y-%m-%d') as date, level, count(time2) as num from app_log.temp_948 group by date,level;";
+											var query_sql= "select date_format(time2, '%Y-%m-%d') as date, level, count(time2) as num from app_log.temp_"+rand.toString()+" group by date,level";
 											connection.query(query_sql, function(err, results){
 												if (results != ''){	req.flash('heat_data', results);}
 												connection.release();
+												console.log(4);
 												callback(null, '3');
+												});
+											});
+									},function (callback) {
+											report_file.pool.getConnection(function(err, connection){
+											var query_sql= "select level, count(level) as num from app_log.temp_"+rand.toString()+" group by level";
+											connection.query(query_sql, function(err, results){
+												if (results != ''){	req.flash('level_data', results);}
+												connection.release();
+												console.log(5);
+												callback(null, '4');
+												});
+											});
+									},function (callback) {
+											report_file.pool.getConnection(function(err, connection){
+											var query_sql= "select level, attackname, count(attackname) as num from app_log.temp_"+rand.toString()+" group by level,attackname order by level,num desc";
+											connection.query(query_sql, function(err, results){
+												if (results != ''){	req.flash('level_data2', results);}
+												connection.release();
+												console.log(6);
+												callback(null, '4');
 												});
 											});
 									}
@@ -208,30 +260,27 @@ module.exports = function(app, passport){
 												 {table_data:req.flash('table_data'),
 												 ip_data:req.flash('ip_data'),
 												 line_data:req.flash('line_data'),
-												 heat_data:req.flash('heat_data')
+												 heat_data:req.flash('heat_data'),
+												 level_data:req.flash('level_data'),
+												 level_data2:req.flash('level_data2')
 												});
 											});
 										});
 								});
-			 });
-		 });
+						 });
+					 });
 	 }else {
-			 res.render('template/search-ip',{table_data:{},ip_data:{},top_ip_data:{},top_cd_data:{}});
+			 res.render('template/search-ip',{table_data:{},ip_data:{},top_ip_data:{},top_cd_data:{},line_data:{},heat_data:{},level_data:{},level_data2:{}});
 		}
 	});
-
-
 
 	app.get('/search_eq',isAuthenticated, function(req, res) {
 			 res.render('template/search-eq',{table_data:{},ip_data:{},top_ip_data:{},top_cd_data:{}});
 	});
 
 	app.post('/search_eq', isAuthenticated, function(req,res){
-		if(req.body.eq == ''){
-				req.body.eq= 'IPS';
-		}
 		if(req.body.limit == ''){
-				req.body.limit= '100';
+				req.body.limit= '1000';
 		}
 		if(req.body.source_port == ''){
 				req.body.source_port= '%';
@@ -245,11 +294,16 @@ module.exports = function(app, passport){
 		if(req.body.destination_port == ''){
 				req.body.destination_port= '%';
 		}
-		console.log(req.body.eq);
+		if(req.body.level == ''){
+				req.body.level= '%';
+		}
 		var rand = Math.floor(Math.random() * 1000);
-		var report_file = require('./mysql2');
 		report_file.pool.getConnection(function(err, connection){
-			var query_sql= "create view app_log.temp"+rand+" as select attackname, date_format(time2, '%Y-%m-%d %h:%i') as time2, srcip, dstip, srcport, dstport, country, country_code from app_log."+ req.body.eq+" where time2 > timestamp('"+ req.body.time_start+ "') and time2 < timestamp('"+ req.body.time_end+ "') and attackName like '%"+ req.body.attack_name +"%' and srcip like '%"+ req.body.source_ip+ "%' and dstip like '%"+ req.body.destination_ip + "%' and srcport like '"+ req.body.source_port+ "' and dstport like '"+ req.body.destination_port+ "' and country like '%" + req.body.country+ "%' order by time2 desc limit " + req.body.limit ;
+			if(req.body.eq.toString() == 'ALL'){
+				var query_sql= "create view app_log.temp"+rand+" as select (select 'IPS') as equip, level, attackname, date_format(time2, '%Y-%m-%d %h:%i') as time2, srcip, dstip, srcport, dstport, country, country_code from app_log.IPS where time2 > timestamp('"+ req.body.time_start+ "') and level like '%"+ req.body.level+ "%' and time2 < timestamp('"+ req.body.time_end+ "') and attackName like '%"+ req.body.attack_name +"%' and srcip like '%"+ req.body.source_ip+ "%' and dstip like '%"+ req.body.destination_ip + "%' and srcport like '"+ req.body.source_port+ "' and dstport like '"+ req.body.destination_port+ "' and country like '%" + req.body.country+ "%' union select (select 'WAF') as equip, level, attackname, date_format(time2, '%Y-%m-%d %h:%i') as time2, srcip, dstip, srcport, dstport, country, country_code from app_log.WAF where time2 > timestamp('"+ req.body.time_start+ "') and level like '%"+ req.body.level+ "%' and time2 < timestamp('"+ req.body.time_end+ "') and attackName like '%"+ req.body.attack_name +"%' and srcip like '%"+ req.body.source_ip+ "%' and dstip like '%"+ req.body.destination_ip + "%' and srcport like '"+ req.body.source_port+ "' and dstport like '"+ req.body.destination_port+ "' and country like '%" + req.body.country+ "%' order by time2 desc limit " + req.body.limit ;
+			}else{
+				var query_sql= "create view app_log.temp"+rand+" as select (select '"+req.body.eq+ "') as equip, level, attackname, date_format(time2, '%Y-%m-%d %h:%i') as time2, srcip, dstip, srcport, dstport, country, country_code from app_log."+ req.body.eq+" where time2 > timestamp('"+ req.body.time_start+ "') and level like '%"+ req.body.level+ "%' and time2 < timestamp('"+ req.body.time_end+ "') and attackName like '%"+ req.body.attack_name +"%' and srcip like '%"+ req.body.source_ip+ "%' and dstip like '%"+ req.body.destination_ip + "%' and srcport like '"+ req.body.source_port+ "' and dstport like '"+ req.body.destination_port+ "' and country like '%" + req.body.country+ "%' order by time2 desc limit " + req.body.limit;
+			}
 			connection.query(query_sql, function(err, results){
 				connection.release();
 
@@ -316,7 +370,7 @@ module.exports = function(app, passport){
 	});
 
 	app.post('/login', passport.authenticate('login', {
-		successRedirect: '/search_eq',
+		successRedirect: '/dashboard',
 		failureRedirect: '/login',
 		failureFlash : true
 	}));
@@ -401,69 +455,86 @@ module.exports = function(app, passport){
 		 });
 	});
 
-  	app.get('/bbs',isAuthenticated, function(req, res) {
+	app.get('/bbs',isAuthenticated, function(req, res) {
 	   res.render('template/bbs', {});
 	});
 
 	app.get('/honeypot',isAuthenticated, function(req, res) {
-
-		var url = 'http://192.168.33.26/cities.csv';
-//		var url = 'http://192.168.0.110/cities.csv';
-		request(url, function(error, response, html){
-		    if (error) {throw error};
-				fs.writeFile('public/cities.csv',html,encoding='utf8',function(err){
-				if(err){
-					throw err;
-				}
-			});
-		});
-
-		var report_file = require('./mysql2');
-		report_file.pool.getConnection(function(err, connection){
-			var query_sql= 'select ip, count(ip) as count from kippo.sessions group by ip order by count(ip) desc limit 10';
-			connection.query(query_sql, function(err, results){
-				var tmp= (JSON.stringify(results));
-				var tmp2= JSON.parse(tmp);
-				req.flash('table_data',tmp2);
-				connection.release();
-				report_file.pool.getConnection(function(err, connection){
-					var query_sql= 'select username, count(username) as count from kippo.auth group by username order by count(username) desc limit 10';
+		var dt = new Date();
+		var dDay = dt.toFormat('YYYY-MM-DD');
+		if (req.query.days != null){
+			var num= req.query.days;
+			num= num * -1;
+			var da= dt.addDays(num);
+			var sDay = da.toFormat('YYYY-MM-DD');
+		}
+		else{
+			var da= dt.addDays(-7);
+			var sDay = da.toFormat('YYYY-MM-DD');
+		}
+		async.series([
+			function (callback) {
+					report_file.pool.getConnection(function(err, connection){
+					var query_sql= "select country, country_code, count(country) as count from kippo.sessions where starttime >= '"+ sDay +"' and country not like 'null' group by country order by count(country) desc limit 20";
 					connection.query(query_sql, function(err, results){
-						var tmp= (JSON.stringify(results));
-						var tmp2= JSON.parse(tmp);
-						req.flash('table_data2',tmp2);
+						if (results != ''){req.flash('bar_data2', results);}
 						connection.release();
-						report_file.pool.getConnection(function(err, connection){
-							var query_sql= 'select password, count(password) as count from kippo.auth group by password order by count(username) desc limit 10';
-							connection.query(query_sql, function(err, results){
-								var tmp= (JSON.stringify(results));
-								var tmp2= JSON.parse(tmp);
-								req.flash('table_data3',tmp2);
-								connection.release();
-								report_file.pool.getConnection(function(err, connection){
-									var query_sql= 'SELECT username, password, COUNT(username) as count FROM kippo.auth WHERE username <> "" AND password <> "" GROUP BY username, password ORDER BY COUNT(username) DESC limit 10;';
-									connection.query(query_sql, function(err, results){
-										var tmp= (JSON.stringify(results));
-										var tmp2= JSON.parse(tmp);
-										req.flash('table_data4',tmp2);
-										connection.release();
-									});
-										report_file.pool.getConnection(function(err, connection){
-										var query_sql ='select attackName as attack_name, count(attackName) as number from app_log.IPS group by attackName order by count(attackName) desc limit 10';
-										connection.query(query_sql, function(err, results){
-											var tmp= (JSON.stringify(results));
-											var tmp2= JSON.parse(tmp);
-											res.render('template/honeypot', {table_data:req.flash('table_data'),table_data2:req.flash('table_data2'),table_data3:req.flash('table_data3'),table_data4:req.flash('table_data4'), donut_data:tmp2, html:req.flash('html')});
-											connection.release();
-										});
-									});
-								});
-							});
+						callback(null, '1');
 						});
 					});
+			},function (callback) {
+					report_file.pool.getConnection(function(err, connection){
+					var query_sql= "select country, ip as srcip, count(ip) as num from kippo.sessions where starttime >= '"+ sDay +"' group by country_code,ip having num >= 2 order by country_code,num desc";
+					connection.query(query_sql, function(err, results){
+						console.log(results);
+						if (results != ''){	req.flash('bar_data3', results);}
+						connection.release();
+						callback(null, '2');
+						});
+					});
+			},function (callback) {
+					report_file.pool.getConnection(function(err, connection){
+					var query_sql= "select country, country_code, count(country) as count from kippo.sessions where starttime >= '"+ sDay +"' and country not like 'null' group by country order by count(country) desc limit 20";
+					connection.query(query_sql, function(err, results){
+						if (results != ''){req.flash('bar_data4', results);}
+						connection.release();
+						callback(null, '1');
+						});
+					});
+			},function (callback) {
+					report_file.pool.getConnection(function(err, connection){
+					var query_sql= "select country, ip as srcip, count(ip) as num from kippo.sessions where starttime >= '"+ sDay +"' group by country_code,ip having num >= 2 order by country_code,num desc";
+					connection.query(query_sql, function(err, results){
+						console.log(results);
+						if (results != ''){	req.flash('bar_data5', results);}
+						connection.release();
+						callback(null, '2');
+						});
+					});
+				},function (callback) {
+				 report_file.pool.getConnection(function(err, connection){
+						 var query_sql= "select (unix_timestamp(date(starttime))*1000+32400000) as ts, count(starttime) as num from kippo.sessions group by ts";
+						 connection.query(query_sql, function(err, results){
+							 if (results != ''){req.flash('line_data',results);}
+							 connection.release();
+							 callback(null, '0');
+						 });
+				 });
+			 }
+		],
+		function (err, result) {
+				res.render('template/honeypot',{
+					'date':req.query.days,
+					'bar_data2':req.flash('bar_data2'),
+					'bar_data3':req.flash('bar_data3'),
+					'bar_data4':req.flash('bar_data4'),
+					'bar_data5':req.flash('bar_data5'),
+					'line_data':req.flash('line_data'),
+					level_data:req.flash('level_data'),
+					level_data2:req.flash('level_data2')
 				});
-			});
 		});
+
 	});
 
 	app.get('/report',isAuthenticated, function(req, res) {
@@ -519,7 +590,6 @@ module.exports = function(app, passport){
 
 	});
 	app.post('/bbs/update',isAuthenticated, function(req, res) {
-		// set the user's local credentials
 		var id = req.param('id');
 
 		Bbs.findById(id,function(err,bbs){
@@ -535,8 +605,6 @@ module.exports = function(app, passport){
 		})
 	});
 }
-	// As with any middleware it is quintessential to call next()
-	// if the user is authenticated
 	var isAuthenticated = function (req, res, next) {
 	  if (req.isAuthenticated())
 	    return next();

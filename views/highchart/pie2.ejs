@@ -1,19 +1,30 @@
+<style>
+.highcharts-title * {
+  font-family: "Dotum";
+}
+
+.highcharts-drilldown-data-label * {
+  fill: #aaa;
+}
+
+</style>
 
 <script src="highchart/drilldown.js"></script>
 
-<div id="container4" style="min-width: 350px; max-width: 610px; height: 320px; margin: 0 auto"></div>
+<div id="pie2" style="min-width: 320px; max-width: 610px; height: 320px; margin: 0 auto"></div>
 
 <!-- Data from www.netmarketshare.com. Select Browsers => Desktop share by version. Download as tsv. -->
 
 <script>
 
+
 document.addEventListener("DOMContentLoaded", function(event) {
-    $('#container4').highcharts({
+    $('#pie2').highcharts({
         chart: {
             type: 'pie'
         },
         title: {
-            text: 'APT 공격 단계별 분석'
+            text: 'APT공격 분석 결과'
         },
         subtitle: {
             text: ''
@@ -22,110 +33,120 @@ document.addEventListener("DOMContentLoaded", function(event) {
             series: {
                 dataLabels: {
                     enabled: true,
-                    format: '{point.name}: {point.y:.1f}%'
+                    format: '{point.name}'
                 }
             }
         },
 
         tooltip: {
             headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
-            pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y:.2f}%</b> of total<br/>'
+            pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y:f}</b>번의 공격 시도<br/>'
         },
+<% var data0=[]; var data1=[]; var data2=[]; var data3=[]; var data4=[]; var data5=[]; var data6=[];
+var a=0; var b=0; var c=0; var d=0; var e=0; var f=0; var g=0;
+for(var i in level_data2){
+    if(level_data2[i].level=='0'){ if(a<10){
+       data0.push([level_data2[i].attackname,level_data2[i].num]);
+   a++; }}
+   if(level_data2[i].level=='1'){ if(b<10){
+      data1.push([level_data2[i].attackname,level_data2[i].num]);
+   b++; }}
+   if(level_data2[i].level=='2'){ if(c<10){
+      data2.push([level_data2[i].attackname,level_data2[i].num]);
+   c++; }}
+   if(level_data2[i].level=='3'){ if(d<10){
+      data3.push([level_data2[i].attackname,level_data2[i].num]);
+   d++; }}
+   if(level_data2[i].level=='4'){ if(e<10){
+      data4.push([level_data2[i].attackname,level_data2[i].num]);
+   e++; }}
+   if(level_data2[i].level=='5'){ if(f<10){
+      data5.push([level_data2[i].attackname,level_data2[i].num]);
+   f++; }}
+   if(level_data2[i].level=='6'){ if(g<10){
+      data6.push([level_data2[i].attackname,level_data2[i].num]);
+   g++; }}
+}%>
         series: [{
-            name: 'IP',
+            name: 'APT 공격 단계',
             colorByPoint: true,
-            data: [{
-                name: '1',
-                y: 56.33,
-                drilldown: '1'
-            }, {
-                name: '2',
-                y: 24.03,
-                drilldown: '2'
-            }, {
-                name: '3',
-                y: 10.38,
-                drilldown: '3'
-            }, {
-                name: '5',
-                y: 4.77,
-                drilldown: '5'
-            }, {
-                name: '4',
-                y: 0.91,
-                drilldown: '4'
-            }, {
-                name: '6',
-                y: 0.2,
-                drilldown: null
-            }]
-        }],
+            data: [
+              <% for (i in level_data){ if(level_data[i].level != null){ %>
+              {
+                name: <% if(level_data[i].level == '0'){%>'기타'<%}else{%>'<%= level_data[i].level%>단계'<%}%>,
+                y: <%= level_data[i].num%>,
+                drilldown: '<%= level_data[i].level%>',
+              },
+              <%}}%>
+        ]}],
+
         drilldown: {
-            series: [{
+
+            series: [
+              {
+                name: '기타',
+                id: '0',
+                data: [
+                  <%for(var i=0; i<data0.length; i++ ){%>
+                    ['<%=data0[i][0]%>',<%=data0[i][1]%>],
+                  <%}%>
+                ]
+              },
+              {
                 name: '1',
                 id: '1',
                 data: [
-                    ['v11.0', 24.13],
-                    ['v8.0', 17.2],
-                    ['v9.0', 8.11],
-                    ['v10.0', 5.33],
-                    ['v6.0', 1.06],
-                    ['v7.0', 0.5],
+                  <%for(var i=0; i<data1.length; i++ ){%>
+                     ['<%=data1[i][0]%>',<%=data1[i][1]%>],
+                  <%}%>
                 ]
-            }, {
+              },
+              {
                 name: '2',
                 id: '2',
                 data: [
-                    ['v40.0', 5],
-                    ['v41.0', 4.32],
-                    ['v42.0', 3.68],
-                    ['v39.0', 2.96],
-                    ['v36.0', 2.53],
-                    ['v43.0', 1.45],
-                    ['v31.0', 1.24],
-                    ['v35.0', 0.85],
-                    ['v38.0', 0.6],
-                    ['v32.0', 0.55],
-                    ['v37.0', 0.38],
-                    ['v33.0', 0.19],
-                    ['v34.0', 0.14],
-                    ['v30.0', 0.14]
+                  <%for(var i=0; i<data2.length; i++ ){%>
+                     ['<%=data2[i][0]%>',<%=data2[i][1]%>],
+                  <%}%>
                 ]
-            }, {
+              },
+              {
                 name: '3',
                 id: '3',
                 data: [
-                    ['v35', 2.76],
-                    ['v36', 2.32],
-                    ['v37', 2.31],
-                    ['v34', 1.27],
-                    ['v38', 1.02],
-                    ['v31', 0.33],
-                    ['v33', 0.22],
-                    ['v32', 0.15]
+                  <%for(var i=0; i<data3.length; i++ ){%>
+                     ['<%=data3[i][0]%>',<%=data3[i][1]%>],
+                  <%}%>
                 ]
-            }, {
-                name: '5',
-                id: '5',
-                data: [
-                    ['v8.0', 2.56],
-                    ['v7.1', 0.77],
-                    ['v5.1', 0.42],
-                    ['v5.0', 0.3],
-                    ['v6.1', 0.29],
-                    ['v7.0', 0.26],
-                    ['v6.2', 0.17]
-                ]
-            }, {
+              },
+              {
                 name: '4',
                 id: '4',
                 data: [
-                    ['v12.x', 0.34],
-                    ['v28', 0.24],
-                    ['v27', 0.17],
-                    ['v29', 0.16]
+                  <%for(var i=0; i<data4.length; i++ ){%>
+                     ['<%=data4[i][0]%>',<%=data4[i][1]%>],
+                  <%}%>
                 ]
-            }]
+              },
+              {
+                name: '5',
+                id: '5',
+                data: [
+                  <%for(var i=0; i<data5.length; i++ ){%>
+                     ['<%=data5[i][0]%>',<%=data5[i][1]%>],
+                  <%}%>
+                ]
+              },
+              {
+                name: '6',
+                id: '6',
+                data: [
+                  <%for(var i=0; i<data6.length; i++ ){%>
+                     ['<%=data6[i][0]%>',<%=data6[i][1]%>],
+                  <%}%>
+                ]
+              }
+            ]
         }
     });
 });

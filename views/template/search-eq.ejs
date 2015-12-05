@@ -87,7 +87,7 @@ function submit3(){
             <div class="panel panel-default">
               <div class="panel-body">
                 <form id="aform1" role="form" action="/search_eq" method="post">
-                    <input type="hidden" name="eq" value="IPS">
+                    <input type="hidden" name="eq" value="ALL">
                     <div class="form-group input-group">
                         <span class="input-group-addon">공격명</span>
                         <input type="text" name="attack_name" class="form-control" placeholder="Default : %">
@@ -117,12 +117,16 @@ function submit3(){
                         <input class="form-control" name="time_end" type="text" placeholder="Default : 2015-12-31">
                     </div>
                     <div class="form-group input-group">
+                        <span class="input-group-addon">공격 단계</span>
+                        <input type="text" name="level" class="form-control" placeholder="Default : %">
+                    </div>
+                    <div class="form-group input-group">
                         <span class="input-group-addon">국가</span>
                         <input type="text" name="country" class="form-control" placeholder="Default : %">
                     </div>
                     <div class="form-group input-group">
                         <span class="input-group-addon">Limit</span>
-                        <input type="text" name="limit" class="form-control" placeholder="Default : 100">
+                        <input type="text" name="limit" class="form-control" placeholder="Default : 1000">
                     </div>
 
                     <a href="#"  onclick="submit1();" class="btn btn-default">Submit</a>
@@ -165,12 +169,16 @@ function submit3(){
                           <input class="form-control" name="time_end" type="text" placeholder="Default : 2015-12-31">
                       </div>
                       <div class="form-group input-group">
+                          <span class="input-group-addon">공격 단계</span>
+                          <input type="text" name="level" class="form-control" placeholder="Default : %">
+                      </div>
+                      <div class="form-group input-group">
                           <span class="input-group-addon">국가</span>
                           <input type="text" name="country" class="form-control" placeholder="Default : %">
                       </div>
                       <div class="form-group input-group">
                           <span class="input-group-addon">Limit</span>
-                          <input type="text" name="limit" class="form-control" placeholder="Default : 100">
+                          <input type="text" name="limit" class="form-control" placeholder="Default : 1000">
                       </div>
 
                       <a href="#" onclick="submit2();" class="btn btn-default">Submit</a>
@@ -213,12 +221,16 @@ function submit3(){
                             <input class="form-control" name="time_end" type="text" placeholder="Default : 2015-12-31">
                         </div>
                         <div class="form-group input-group">
+                            <span class="input-group-addon">공격 단계</span>
+                            <input type="text" name="level" class="form-control" placeholder="Default : %">
+                        </div>
+                        <div class="form-group input-group">
                             <span class="input-group-addon">국가</span>
                             <input type="text" name="country" class="form-control" placeholder="Default : %">
                         </div>
                         <div class="form-group input-group">
                             <span class="input-group-addon">Limit</span>
-                            <input type="text" name="limit" class="form-control" placeholder="Default : 100">
+                            <input type="text" name="limit" class="form-control" placeholder="Default : 1000">
                         </div>
 
                         <a href="#"  onclick="submit3();" class="btn btn-default">Submit</a>
@@ -241,7 +253,6 @@ function submit3(){
 <ul class="nav nav-tabs">
   <li class="active"><a aria-expanded="false" href="#visualize" data-toggle="tab">검색 결과 시각화</a></li>
   <li class=""><a aria-expanded="true" href="#table" data-toggle="tab">검색 결과 테이블</a></li>
-  <li class="disabled"><a>추가 예정</a></li>
 </ul>
 <div id="myTabContent" class="tab-content">
   <div class="tab-pane fade  " id="table">
@@ -264,8 +275,8 @@ function submit3(){
           <tbody>
             <% for(var i in table_data){%>
               <tr>
-                <td>TEMP</td>
-                <td>TEMP</td>
+                <td><%=table_data[i].equip%></td>
+                <td><%=table_data[i].level%></td>
                 <td><%=table_data[i].attackname%></td>
                 <td><%=table_data[i].time2%></td>
                 <td><a href='http://192.168.32.200:3000/search_ip?q=<%=table_data[i].srcip%>'><%=table_data[i].srcip%></a></td>
