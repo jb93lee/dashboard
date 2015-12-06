@@ -7,7 +7,9 @@
 a {
   color: #E0E0E3;
 }
-
+p {
+    margin: 0px 0px 1.5px;
+}
 .panel {
     background-color: #222;
     border-top-width: 0px;
@@ -47,6 +49,15 @@ a {
     min-width: 300px;
 }
 
+table.sortable th:hover {
+	cursor: pointer;}
+
+th.ascending, th.descending, table.sortable th:hover {
+	background-color: #cccccc;
+	color: #fff;
+  color: #000;
+}
+
 </style>
 <script>
 function submit1(){
@@ -73,7 +84,7 @@ function submit3(){
         <br>
     		<div class="row">
 
-<section class="col-lg-3 connectedSortable">
+<div class="col-lg-3">
 <ul class="nav nav-tabs">
   <li class="active"><a aria-expanded="false" href="#conv" data-toggle="tab">종합</a></li>
   <li class=""><a aria-expanded="true" href="#ips" data-toggle="tab">IPS</a></li>
@@ -239,15 +250,12 @@ function submit3(){
                   </div>
                 </div>
         </div>
-
-
+    </div>
 </div>
 
           <!--/div-->
 
-</section >
 
-<section class="col-lg-13 connectedSortable">
 
 <div class="col-lg-9">
 <ul class="nav nav-tabs">
@@ -255,28 +263,27 @@ function submit3(){
   <li class=""><a aria-expanded="true" href="#table" data-toggle="tab">검색 결과 테이블</a></li>
 </ul>
 <div id="myTabContent" class="tab-content">
-  <div class="tab-pane fade  " id="table">
-
-      <div class="panel-body">
-        <table class="table table-inverse table-bordered table-hover table-striped">
+  <div class="tab-pane fade" id="table">
+    <br>
+        <table class="sortable table-inverse table-bordered table-hover table-striped">
           <thead>
             <tr>
-              <th>탐지장비</th>
-              <th>공격단계</th>
-              <th>공격명</th>
-              <th>시간</th>
-              <th>출발지 IP</th>
-              <th>목적지 IP</th>
-              <th>출발지 Port</th>
-              <th>목적지 Port</th>
-              <th>국가</th>
+              <th data-sort="name">탐지장비</th>
+              <th data-sort="name">공격단계</th>
+              <th data-sort="name">공격명</th>
+              <th data-sort="name">시간</th>
+              <th data-sort="name">출발지 IP</th>
+              <th data-sort="name">목적지 IP</th>
+              <th data-sort="name">출발지 Port</th>
+              <th data-sort="name">목적지 Port</th>
+              <th data-sort="name">국가</th>
             </tr>
           </thead>
           <tbody>
             <% for(var i in table_data){%>
               <tr>
                 <td><%=table_data[i].equip%></td>
-                <td><%=table_data[i].level%></td>
+                <td><%if(table_data[i].level=='0'){table_data[i].level='기타';}%><%=table_data[i].level%></td>
                 <td><%=table_data[i].attackname%></td>
                 <td><%=table_data[i].time2%></td>
                 <td><a href='http://192.168.32.200:3000/search_ip?q=<%=table_data[i].srcip%>'><%=table_data[i].srcip%></a></td>
@@ -288,7 +295,6 @@ function submit3(){
             <%}%>
           </tbody>
         </table>
-      </div>
 
   </div>
           <div class="tab-pane fade active in" id="visualize">
@@ -298,7 +304,7 @@ function submit3(){
                 <% include ../highchart/bar2 %>
               </section>
               <section class="col-lg-6 connectedSortable">
-                <% include ../highchart/bar3 %>
+                <% include ../highchart/bar_drill2 %>
               </section>
             </div>
             <br>
@@ -315,7 +321,6 @@ function submit3(){
         </div>
       </div>
             <!--/div-->
-</section>
 
 
     		</div>
@@ -325,5 +330,4 @@ function submit3(){
 </div>
 <!-- /#page-wrapper -->
 <!-- script -->
-<script type="text/javascript" src="../d3/d3.v3.js"></script>
-<script type="text/javascript" src="../d3/d3.min.js"></script>
+<script src="../js/sortable.js"></script>

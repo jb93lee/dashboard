@@ -1,25 +1,9 @@
-letter	frequency
-13	0
-14	0
-15	0
-16	0
-17	0
-18	0
-19	0
-20	0
-21	0
-22	0
-23	0
-00	221
-01	65
-02	65
-03	136
-04	46
-05	55
-06	227
-07	89
-08	68
-09	147
-10	18
-11	60
-12	173
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
+<html><head>
+<title>404 Not Found</title>
+</head><body>
+<h1>Not Found</h1>
+<p>The requested URL /data.tsv was not found on this server.</p>
+<hr>
+<address>Apache Server at <a href="mailto:admin@localhost">192.168.33.26</a> Port 80</address>
+</body></html>

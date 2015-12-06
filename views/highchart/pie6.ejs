@@ -30,16 +30,24 @@ document.addEventListener("DOMContentLoaded", function(event) {
             text: ''
         },
         plotOptions: {
-            series: {
-                dataLabels: {
-                    enabled: true,
-                    format: '{point.name}'
-                }
-            }
+          series: {
+              dataLabels: {
+                  enabled: false,
+                  format: '{point.name}'
+              }
+          },
+          pie: {
+              allowPointSelect: true,
+              cursor: 'pointer',
+              dataLabels: {
+                  enabled: false
+              },
+              showInLegend: true
+          }
         },
 
         tooltip: {
-            headerFormat: '<span style="font-size:11px">{series.name}단계</span><br>',
+            headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
             pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y:f}</b>번의 공격 시도<br/>'
         },
 <% var data0=[]; var data1=[]; var data2=[]; var data3=[]; var data4=[]; var data5=[]; var data6=[];

@@ -118,15 +118,6 @@ module.exports = function(app, passport){
 							});
 					},function (callback) {
 							report_file.pool.getConnection(function(err, connection){
-							var query_sql= "select country, country_code, count(country) as count from app_log.IPS where time2 >= '"+ sDay +"' and country not like 'null' group by country order by count(country) desc limit 10";
-							connection.query(query_sql, function(err, results){
-								req.flash('bar_data2', results);
-								connection.release();
-								callback(null, '11');
-								});
-							});
-					},function (callback) {
-							report_file.pool.getConnection(function(err, connection){
 							var query_sql= "select level, count(level) as num from app_log.IPS where time2 >= '"+ sDay +"' group by level";
 							connection.query(query_sql, function(err, results){
 								if (results != ''){	req.flash('level_data', results);}
@@ -141,6 +132,15 @@ module.exports = function(app, passport){
 								if (results != ''){	req.flash('level_data2', results);}
 								connection.release();
 								callback(null, '13');
+								});
+							});
+					},function (callback) {
+							report_file.pool.getConnection(function(err, connection){
+							var query_sql= "select country, country_code, count(country) as count from app_log.IPS where time2 >= '"+ sDay +"' and country not like 'null' group by country order by count(country) desc limit 10";
+							connection.query(query_sql, function(err, results){
+								req.flash('bar_data2', results);
+								connection.release();
+								callback(null, '11');
 								});
 							});
 					},function (callback) {
@@ -275,7 +275,7 @@ module.exports = function(app, passport){
 	});
 
 	app.get('/search_eq',isAuthenticated, function(req, res) {
-			 res.render('template/search-eq',{table_data:{},ip_data:{},top_ip_data:{},top_cd_data:{}});
+			 res.render('template/search-eq',{table_data:{},ip_data:{},top_ip_data:{},top_cd_data:{},bar_data2:{},bar_data3:{}});
 	});
 
 	app.post('/search_eq', isAuthenticated, function(req,res){
@@ -337,17 +337,29 @@ module.exports = function(app, passport){
 												var tmp= (JSON.stringify(results));
 												var tmp2= JSON.parse(tmp);
 												connection.release();
-												if (results != ''){req.flash('top_cd_data',tmp2);}
+												if (results != ''){req.flash('bar_data2',tmp2);}
 
 												report_file.pool.getConnection(function(err, connection){
-													var query_sql= "drop view app_log.temp"+rand;
+													var query_sql= "select country, srcip, count(srcip) as num from app_log.temp"+rand+" group by country_code,srcip having num >= 1 order by country_code,num desc";
 													connection.query(query_sql, function(err, results){
+														var tmp= (JSON.stringify(results));
+														var tmp2= JSON.parse(tmp);
 														connection.release();
-														res.render('template/search-eq', {
-															table_data:req.flash('table_data'),
-															ip_data:req.flash('ip_data'),
-															top_ip_data:req.flash('top_ip_data'),
-															top_cd_data:req.flash('top_cd_data')
+														if (results != ''){req.flash('bar_data3',tmp2);}
+
+														report_file.pool.getConnection(function(err, connection){
+															var query_sql= "drop view app_log.temp"+rand;
+															connection.query(query_sql, function(err, results){
+																connection.release();
+																res.render('template/search-eq', {
+																	table_data:req.flash('table_data'),
+																	ip_data:req.flash('ip_data'),
+																	top_ip_data:req.flash('top_ip_data'),
+																	bar_data2:req.flash('bar_data2'),
+																	bar_data3:req.flash('bar_data3')
+
+																});
+															});
 														});
 													});
 												});

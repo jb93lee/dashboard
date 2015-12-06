@@ -32,9 +32,17 @@ document.addEventListener("DOMContentLoaded", function(event) {
         plotOptions: {
             series: {
                 dataLabels: {
-                    enabled: true,
+                    enabled: false,
                     format: '{point.name}'
                 }
+            },
+            pie: {
+                allowPointSelect: true,
+                cursor: 'pointer',
+                dataLabels: {
+                    enabled: false
+                },
+                showInLegend: true
             }
         },
 
@@ -46,13 +54,13 @@ document.addEventListener("DOMContentLoaded", function(event) {
             name: '공격명',
             colorByPoint: true,
             data: [
-              <% for (i in ip_data){ %>
+              <% for (i in ip_data){ if(ip_data[i].attackname != null){%>
               {
                 name: '<%= ip_data[i].attackname%>',
                 y: <%= ip_data[i].count%>,
                 drilldown: '<%= ip_data[i].attackname%>'
               },
-              <%}%>
+              <%}}%>
         ]}],
         drilldown: {
             series: [

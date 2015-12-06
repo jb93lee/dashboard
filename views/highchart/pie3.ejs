@@ -32,9 +32,17 @@ document.addEventListener("DOMContentLoaded", function(event) {
         plotOptions: {
             series: {
                 dataLabels: {
-                    enabled: true,
+                    enabled: false,
                     format: '{point.name}'
                 }
+            },
+            pie: {
+                allowPointSelect: true,
+                cursor: 'pointer',
+                dataLabels: {
+                    enabled: false
+                },
+                showInLegend: true
             }
         },
 

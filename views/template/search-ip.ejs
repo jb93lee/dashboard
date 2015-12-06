@@ -7,8 +7,11 @@
 a {
   color: #E0E0E3;
 }
+p {
+    margin: 0px 0px 1.5px;
+}
 .inner{
-text-align: center;
+text-align: left;
 }
 .panel {
     background-color: #222;
@@ -52,6 +55,14 @@ text-align: center;
     min-width: 80px;
 }
 
+table.sortable th:hover {
+	cursor: pointer;}
+
+th.ascending, th.descending, table.sortable th:hover {
+	background-color: #cccccc;
+	color: #fff;
+  color: #000;
+}
 </style>
 <script>
 function submit(){
@@ -80,8 +91,9 @@ function submit(){
                   <!-- small box -->
                   <div class="small-box bg-aqua">
                     <div class="inner">
-                      <h3> SUM : <% var a=0; for(var i in table_data){if (table_data[i].equip=='IPS' || table_data[i].equip=='WAF')a= a+1;}  %> <%=a%>
-                        </h3>
+                      <h3> <% var a=0; for(var i in table_data){if (table_data[i].equip=='IPS' || table_data[i].equip=='WAF')a= a+1;}  %> <%=a%>
+                      </h3><p>총 로그 건 수</p>
+
                     </div>
                   </div>
               </div><!-- ./col -->
@@ -89,8 +101,9 @@ function submit(){
                     <!-- small box -->
                     <div class="small-box bg-aqua">
                       <div class="inner">
-                        <h3> IPS : <% var a=0; for(var i in table_data){if (table_data[i].equip=='IPS')a= a+1;}  %> <%=a%>
-                        </h3>
+                        <h3> <% var a=0; for(var i in table_data){if (table_data[i].equip=='IPS')a= a+1;}  %> <%=a%>
+                       </h3><p>IPS 로그 건 수 </p>
+
                       </div>
                     </div>
                 </div><!-- ./col -->
@@ -98,8 +111,8 @@ function submit(){
                       <!-- small box -->
                       <div class="small-box bg-aqua">
                         <div class="inner">
-                          <h3> WAF : <% var a=0; for(var i in table_data){if (table_data[i].equip=='WAF')a= a+1;}  %> <%=a%>
-                             </h3>
+                          <h3> <% var a=0; for(var i in table_data){if (table_data[i].equip=='WAF')a= a+1;}  %> <%=a%>
+                          </h3><p>WAF 로그 건 수 </p>
                         </div>
                       </div>
                   </div><!-- ./col -->
@@ -107,8 +120,8 @@ function submit(){
                           <!-- small box -->
                           <div class="small-box bg-aqua">
                             <div class="inner">
-                              <h3><% var a='Country'; for(var i in table_data){a=table_data[0].country; break;}  %><%=a%>
-                              </h3>
+                              <h3><% var a='국가'; for(var i in table_data){a=table_data[0].country; break;}  %><%=a%>
+                              </h3><p>해당 국가명 </p>
                             </div>
                           </div>
                     </div><!-- ./col -->
@@ -142,27 +155,26 @@ function submit(){
 </ul>
 <div id="myTabContent" class="tab-content">
   <div class="tab-pane fade " id="visualization">
-
-      <div class="panel-body">
-        <table class="table table-inverse table-bordered table-hover table-striped">
+    <br>
+        <table class="sortable table table-inverse table-bordered table-hover table-striped">
           <thead>
             <tr>
-              <th>탐지장비</th>
-              <th>공격단계</th>
-              <th>공격명</th>
-              <th>시간</th>
-              <th>출발지 IP</th>
-              <th>목적지 IP</th>
-              <th>출발지 Port</th>
-              <th>목적지 Port</th>
-              <th>국가</th>
+              <th data-sort="name">탐지장비</th>
+              <th data-sort="name">공격단계</th>
+              <th data-sort="name">공격명</th>
+              <th data-sort="name">시간</th>
+              <th data-sort="name">출발지 IP</th>
+              <th data-sort="name">목적지 IP</th>
+              <th data-sort="name">출발지 Port</th>
+              <th data-sort="name">목적지 Port</th>
+              <th data-sort="name">국가</th>
             </tr>
           </thead>
           <tbody>
             <% for(var i in table_data){%>
               <tr>
                 <td><%=table_data[i].equip%></td>
-                <td>TEMP</td>
+                <td><%if(table_data[i].level=='0'){table_data[i].level='기타';}%><%=table_data[i].level%></td>
                 <td><%=table_data[i].attackName%></td>
                 <td><%=table_data[i].time2%></td>
                 <td><%=table_data[i].srcip%></td>
@@ -174,7 +186,6 @@ function submit(){
             <%}%>
           </tbody>
         </table>
-      </div>
 
   </div>
           <div class="tab-pane fade active in" id="table">
@@ -211,5 +222,4 @@ function submit(){
 </div>
 <!-- /#page-wrapper -->
 <!-- script -->
-<script type="text/javascript" src="../d3/d3.v3.js"></script>
-<script type="text/javascript" src="../d3/d3.min.js"></script>
+<script src="../js/sortable.js"></script>

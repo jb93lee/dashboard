@@ -1,11 +1,11 @@
 <style>
 .highcharts-data-labels  *{
   fill:#ccc;
-  text-shadow: 0px 0px 0px #ccc, 0px 0px 0px 
+  text-shadow: 0px 0px 0px #ccc, 0px 0px 0px
 }
 </style>
 <script src="highchart/highcharts.js"></script>
-<script src="https://code.highcharts.com/modules/heatmap.js"></script>
+<script src="highchart/heatmap.js"></script>
 
 
 <div id="heatmap" style="height: 400px; min-width: 700px; max-width: 700px; margin: 0 auto"></div>
@@ -37,7 +37,6 @@ $(function () {
         data2[count*7+<%=heat_data[i].level%>]
          = [count,<%=heat_data[i].level%>,<%=heat_data[i].num%>];
     <% } %>
-    console.log(data2);
 
 
     $('#heatmap').highcharts({
@@ -48,7 +47,6 @@ $(function () {
             marginBottom: 80,
             plotBorderWidth: 1
         },
-
 
         title: {
             text: '공격 단계별 히트맵'
@@ -80,19 +78,20 @@ $(function () {
 
         tooltip: {
             formatter: function () {
-                return '<b>' + this.series.xAxis.categories[this.point.x] + '</b> sold <br><b>' +
-                    this.point.value + '</b> items on <br><b>' + this.series.yAxis.categories[this.point.y] + '</b>';
+                return '<b>' + this.series.xAxis.categories[this.point.x] + '</b> <br><b>' +
+                    this.point.value + '</b>번의 공격 시도 <br>' + this.series.yAxis.categories[this.point.y] ;
             }
         },
 
         series: [{
-            name: 'Sales per employee',
+            name: '',
             borderWidth: 1,
             data: data2,
             dataLabels: {
                 enabled: true,
                 color: '#000000'
             }
+
         }]
 
     });

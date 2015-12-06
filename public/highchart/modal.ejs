@@ -1,0 +1,39 @@
+<style>
+.modal-backdrop.in {
+    opacity: 0.7;
+}
+.modal-backdrop {
+    position: fixed;
+    top: 0px;
+    right: 0px;
+    bottom: 0px;
+    left: 0px;
+    z-index: 0;
+    background-color: #000;
+}
+.modal {
+  background: transparent none;
+}
+.modal-content {
+  box-shadow: 10px 20px 20px #444;
+  background-color: #333;
+  fill: #000;border-radius: 1px;
+  color: #eee;
+}
+.modal-header {
+    border-bottom: 2px solid #444;
+}
+</style>
+
+<div class="modal-header">
+    <!-- 닫기(x) 버튼 -->
+  <button type="button" class="close" data-dismiss="modal">×</button>
+  <!-- header title -->
+  <h4 class="modal-title">제목</h4>
+</div>
+<!-- body -->
+<div class="modal-body">
+    내용
+</div>
+<!-- Footer -->
+</div>

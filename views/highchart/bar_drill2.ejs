@@ -8,7 +8,7 @@
 </style>
 
 <script src="highchart/drilldown.js"></script>
-<div id="bar_drill" style="min-width: 320px; height: 400px; margin: 0 auto"></div>
+<div id="bar_drill" style="min-width: 320px; height: 320px; margin: 0 auto"></div>
 
 <script>
 $(function () {
@@ -97,38 +97,9 @@ for(var i in bar_data3){
    if(bar_data3[i].country==bar_data2[9].country){ if(k<20){
       data9.push([bar_data3[i].srcip,bar_data3[i].num]);
    k++; }}
-   if(bar_data3[i].country==bar_data2[10].country){ if(l<20){
-      data10.push([bar_data3[i].srcip,bar_data3[i].num]);
-   l++; }}
-   if(bar_data3[i].country==bar_data2[11].country){ if(m<20){
-      data11.push([bar_data3[i].srcip,bar_data3[i].num]);
-   m++; }}
-   if(bar_data3[i].country==bar_data2[12].country){ if(n<20){
-      data12.push([bar_data3[i].srcip,bar_data3[i].num]);
-   n++; }}
-   if(bar_data3[i].country==bar_data2[13].country){ if(o<20){
-      data13.push([bar_data3[i].srcip,bar_data3[i].num]);
-   o++; }}
-   if(bar_data3[i].country==bar_data2[14].country){ if(p<20){
-      data14.push([bar_data3[i].srcip,bar_data3[i].num]);
-   p++; }}
-   if(bar_data3[i].country==bar_data2[15].country){ if(q<20){
-      data15.push([bar_data3[i].srcip,bar_data3[i].num]);
-   q++; }}
-   if(bar_data3[i].country==bar_data2[16].country){ if(r<20){
-      data16.push([bar_data3[i].srcip,bar_data3[i].num]);
-   r++; }}
-   if(bar_data3[i].country==bar_data2[17].country){ if(s<20){
-      data17.push([bar_data3[i].srcip,bar_data3[i].num]);
-   s++; }}
-   if(bar_data3[i].country==bar_data2[18].country){ if(t<20){
-      data18.push([bar_data3[i].srcip,bar_data3[i].num]);
-   t++; }}
-   if(bar_data3[i].country==bar_data2[19].country){ if(u<20){
-      data19.push([bar_data3[i].srcip,bar_data3[i].num]);
-   u++; }}
 }%>
-            series: [{
+            series: [<%for(var i in bar_data2){%>
+            {
               name: '<%=bar_data2[0].country%>',
               id: '0',
               data: [
@@ -217,97 +188,7 @@ for(var i in bar_data3){
                    ['<a href="http://192.168.32.200:3000/search_ip?q=<%=data9[i][0]%>"><%=data9[i][0]%></a>',<%=data9[i][1]%>],
                 <%}%>
               ]
-            },
-            {
-              name: '<%=bar_data2[10].country%>',
-              id: '10',
-              data: [
-                <%for(var i=0; i<data10.length; i++ ){%>
-                   ['<a href="http://192.168.32.200:3000/search_ip?q=<%=data10[i][0]%>"><%=data10[i][0]%></a>',<%=data10[i][1]%>],
-                <%}%>
-              ]
-            },
-            {
-              name: '<%=bar_data2[11].country%>',
-              id: '11',
-              data: [
-                <%for(var i=0; i<data11.length; i++ ){%>
-                   ['<a href="http://192.168.32.200:3000/search_ip?q=<%=data11[i][0]%>"><%=data11[i][0]%></a>',<%=data11[i][1]%>],
-                <%}%>
-              ]
-            },
-            {
-              name: '<%=bar_data2[12].country%>',
-              id: '12',
-              data: [
-                <%for(var i=0; i<data12.length; i++ ){%>
-                   ['<a href="http://192.168.32.200:3000/search_ip?q=<%=data12[i][0]%>"><%=data12[i][0]%></a>',<%=data12[i][1]%>],
-                <%}%>
-              ]
-            },
-            {
-              name: '<%=bar_data2[13].country%>',
-              id: '13',
-              data: [
-                <%for(var i=0; i<data13.length; i++ ){%>
-                   ['<a href="http://192.168.32.200:3000/search_ip?q=<%=data13[i][0]%>"><%=data13[i][0]%></a>',<%=data13[i][1]%>],
-                <%}%>
-              ]
-            },
-            {
-              name: '<%=bar_data2[14].country%>',
-              id: '14',
-              data: [
-                <%for(var i=0; i<data14.length; i++ ){%>
-                   ['<a href="http://192.168.32.200:3000/search_ip?q=<%=data14[i][0]%>"><%=data14[i][0]%></a>',<%=data14[i][1]%>],
-                <%}%>
-              ]
-            },
-            {
-              name: '<%=bar_data2[15].country%>',
-              id: '15',
-              data: [
-                <%for(var i=0; i<data15.length; i++ ){%>
-                   ['<a href="http://192.168.32.200:3000/search_ip?q=<%=data15[i][0]%>"><%=data15[i][0]%></a>',<%=data15[i][1]%>],
-                <%}%>
-              ]
-            },
-            {
-              name: '<%=bar_data2[16].country%>',
-              id: '16',
-              data: [
-                <%for(var i=0; i<data16.length; i++ ){%>
-                   ['<a href="http://192.168.32.200:3000/search_ip?q=<%=data16[i][0]%>"><%=data16[i][0]%></a>',<%=data16[i][1]%>],
-                <%}%>
-              ]
-            },
-            {
-              name: '<%=bar_data2[17].country%>',
-              id: '17',
-              data: [
-                <%for(var i=0; i<data17.length; i++ ){%>
-                   ['<a href="http://192.168.32.200:3000/search_ip?q=<%=data17[i][0]%>"><%=data17[i][0]%></a>',<%=data17[i][1]%>],
-                <%}%>
-              ]
-            },
-            {
-              name: '<%=bar_data2[18].country%>',
-              id: '18',
-              data: [
-                <%for(var i=0; i<data18.length; i++ ){%>
-                   ['<a href="http://192.168.32.200:3000/search_ip?q=<%=data18[i][0]%>"><%=data18[i][0]%></a>',<%=data18[i][1]%>],
-                <%}%>
-              ]
-            },
-            {
-              name: '<%=bar_data2[19].country%>',
-              id: '19',
-              data: [
-                <%for(var i=0; i<data19.length; i++ ){%>
-                   ['<a href="http://192.168.32.200:3000/search_ip?q=<%=data19[i][0]%>"><%=data19[i][0]%></a>',<%=data19[i][1]%>],
-                <%}%>
-              ]
-            }]
+            } <%break;}%>]
         }
     });
 });

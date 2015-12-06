@@ -11,7 +11,7 @@
 
 <script src="highchart/drilldown.js"></script>
 
-<div id="pie2" style="min-width: 320px; max-width: 610px; height: 320px; margin: 0 auto"></div>
+<div id="pie2" style="min-width: 320px; max-width: 610px; height: 350px; margin: 0 auto"></div>
 
 <!-- Data from www.netmarketshare.com. Select Browsers => Desktop share by version. Download as tsv. -->
 
@@ -32,9 +32,17 @@ document.addEventListener("DOMContentLoaded", function(event) {
         plotOptions: {
             series: {
                 dataLabels: {
-                    enabled: true,
+                    enabled: false,
                     format: '{point.name}'
                 }
+            },
+            pie: {
+                allowPointSelect: true,
+                cursor: 'pointer',
+                dataLabels: {
+                    enabled: false
+                },
+                showInLegend: true
             }
         },
 
