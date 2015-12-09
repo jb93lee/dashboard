@@ -10,6 +10,7 @@ a {
 p {
     margin: 0px 0px 1.5px;
 }
+
 .panel {
     background-color: #222;
     border-top-width: 0px;
@@ -47,6 +48,10 @@ p {
 .btn-default {
     background-color: #333;
     min-width: 300px;
+}
+
+.btn-default:hover{
+  color:#000;
 }
 
 table.sortable th:hover {
@@ -121,11 +126,11 @@ function submit3(){
                     </div>
                     <div class="form-group input-group">
                         <span class="input-group-addon">시작 날짜</span>
-                        <input class="form-control" name="time_start" type="text" placeholder="Default: 2015-01-01">
+                        <input class="form-control date" name="time_start" type="text" placeholder="Default: 2015-01-01">
                     </div>
                     <div class="form-group input-group">
                         <span class="input-group-addon">종료 날짜</span>
-                        <input class="form-control" name="time_end" type="text" placeholder="Default : 2015-12-31">
+                        <input class="form-control date" name="time_end" type="text" placeholder="Default : 2015-12-31">
                     </div>
                     <div class="form-group input-group">
                         <span class="input-group-addon">공격 단계</span>
@@ -137,7 +142,7 @@ function submit3(){
                     </div>
                     <div class="form-group input-group">
                         <span class="input-group-addon">Limit</span>
-                        <input type="text" name="limit" class="form-control" placeholder="Default : 1000">
+                        <input type="text" name="limit" class="form-control" placeholder="Default : 10000">
                     </div>
 
                     <a href="#"  onclick="submit1();" class="btn btn-default">Submit</a>
@@ -173,11 +178,11 @@ function submit3(){
                       </div>
                       <div class="form-group input-group">
                           <span class="input-group-addon">시작 날짜</span>
-                          <input class="form-control" name="time_start" type="text" placeholder="Default: 2015-01-01">
+                          <input class="form-control date" name="time_start" type="text" placeholder="Default: 2015-01-01">
                       </div>
                       <div class="form-group input-group">
                           <span class="input-group-addon">종료 날짜</span>
-                          <input class="form-control" name="time_end" type="text" placeholder="Default : 2015-12-31">
+                          <input class="form-control date" name="time_end" type="text" placeholder="Default : 2015-12-31">
                       </div>
                       <div class="form-group input-group">
                           <span class="input-group-addon">공격 단계</span>
@@ -189,7 +194,7 @@ function submit3(){
                       </div>
                       <div class="form-group input-group">
                           <span class="input-group-addon">Limit</span>
-                          <input type="text" name="limit" class="form-control" placeholder="Default : 1000">
+                          <input type="text" name="limit" class="form-control" placeholder="Default : 10000">
                       </div>
 
                       <a href="#" onclick="submit2();" class="btn btn-default">Submit</a>
@@ -225,11 +230,11 @@ function submit3(){
                         </div>
                         <div class="form-group input-group">
                             <span class="input-group-addon">시작 날짜</span>
-                            <input class="form-control" name="time_start" type="text" placeholder="Default: 2015-01-01">
+                            <input class="form-control date" name="time_start" type="text" placeholder="Default: 2015-01-01">
                         </div>
                         <div class="form-group input-group">
                             <span class="input-group-addon">종료 날짜</span>
-                            <input class="form-control" name="time_end" type="text" placeholder="Default : 2015-12-31">
+                            <input class="form-control date" name="time_end" type="text" placeholder="Default : 2015-12-31">
                         </div>
                         <div class="form-group input-group">
                             <span class="input-group-addon">공격 단계</span>
@@ -241,7 +246,7 @@ function submit3(){
                         </div>
                         <div class="form-group input-group">
                             <span class="input-group-addon">Limit</span>
-                            <input type="text" name="limit" class="form-control" placeholder="Default : 1000">
+                            <input type="text" name="limit" class="form-control" placeholder="Default : 10000">
                         </div>
 
                         <a href="#"  onclick="submit3();" class="btn btn-default">Submit</a>
@@ -286,7 +291,7 @@ function submit3(){
                 <td><%if(table_data[i].level=='0'){table_data[i].level='기타';}%><%=table_data[i].level%></td>
                 <td><%=table_data[i].attackname%></td>
                 <td><%=table_data[i].time2%></td>
-                <td><a href='http://192.168.32.200:3000/search_ip?q=<%=table_data[i].srcip%>'><%=table_data[i].srcip%></a></td>
+                <td><a href='http://192.168.32.197:3000/search_ip?q=<%=table_data[i].srcip%>'><%=table_data[i].srcip%></a></td>
                 <td><%=table_data[i].dstip%></td>
                 <td><%=table_data[i].srcport%></td>
                 <td><%=table_data[i].dstport%></td>
@@ -329,5 +334,8 @@ function submit3(){
     <!-- /.container-fluid -->
 </div>
 <!-- /#page-wrapper -->
+<link rel="stylesheet" href="bower_components/jquery/dist/jquery-ui.min.css" />
 <!-- script -->
 <script src="../js/sortable.js"></script>
+<script src="../js/init.js"></script>
+<script src="bower_components/jquery/dist/jquery-ui.min.js"></script>

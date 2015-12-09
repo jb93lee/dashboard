@@ -50,7 +50,7 @@ $(function () {
             name: 'Population',
             data: [
               <% for(var i in top_ip_data){%>
-              ['<a href="http://192.168.32.200:3000/search_ip?q=<%=top_ip_data[i].srcip%>"><%=top_ip_data[i].srcip%></a>　(<%=top_ip_data[i].country%>)',<%=top_ip_data[i].count%>],
+              ['<a href="http://192.168.32.197:3000/search_ip?q=<%=top_ip_data[i].srcip%>"><%=top_ip_data[i].srcip%></a>　(<%=top_ip_data[i].country%>)',<%=top_ip_data[i].count%>],
               <%}%>
             ],
             dataLabels: {

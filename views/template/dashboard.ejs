@@ -1,14 +1,152 @@
 <%layout('../layout')%>
 <style>
+/**********  ACCORDION **********/
+.accordion, .menu {
+  background-color: #3a3a3a;
+  margin: 0px;
+  padding: 0px;
+  overflow: auto;
+}
+
+.accordion-control {
+  background-color: #2a2a2a;
+  display: block;
+  width: 100%;
+  padding: 0.4em 0.5em 0.4em 0.5em;
+  margin: 0px;
+  border: 1px solid #666;
+  font-size: 18px;
+  font-family: "Dotum";
+  color:#fff;
+}
+
+.accordion-panel {
+  display: none;}
+
+.accordion-panel p {
+  margin: 20px;}
+
+.accordion-panel img {
+  display: block;
+  clear: left;}
+
 #page-wrapper {
   background-color: #222;
 }
 a {
   color: #e1e1e1;
 }
+.small-box p {
+    font-size: 20px;
+}
+.small-box.bg{
+margin-left: 35px;
+}
+
+.small-box.bq {
+    margin-left: 10px;
+}
+.small-box h3 {
+    font-family: "Dotum";
+    font-size: 25px;
+    font-weight: bold;
+    margin: 0px 0px 10px;
+    white-space: nowrap;
+    padding: 0px;
+    text-align: center;
+}
+.small-box{
+  box-shadow: 0px 0px 0px rgba(0, 0, 0, 0.1);
+  margin-bottom: 0px;
+}
+.bg-aq{
+    width: 228px;
+    text-align: center;
+}
+.bg{
+  width: 360px;
+  text-align: center;
+}
+.svg text{
+  fill: #3a3a3a;
+}
 </style>
+<script>
+$(".mod").click(function(){
+    $('.modal').modal({remote : 'modal.ejs'});
+})
+
+</script>
+<%
+function comma(str) {
+    return str.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+}
+%>
+<div class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+        <!-- remote ajax call이 되는영역 -->
+    </div>
+  </div>
+</div>
+</body>
+</html>
 <div id="page-wrapper">
   <br>
+  <ul class="accordion">
+          <button class="accordion-control">검색 기간 설정 및 통계</button>
+          <div class="accordion-panel">
+            <br><div class="col-lg-3 ">
+                  <!-- small box -->
+                  <div class="small-box bg">
+                    <div class="inner">
+                      <h3>로그 검색 기간
+                      </h3><p><%=sDay%> ~ <%=dDay%></p>
+                    </div>
+                  </div>
+              </div><!-- ./col -->
+
+            <div class="col-lg-2 col-xs-1">
+                  <!-- small box -->
+                  <div class="small-box bg-aq">
+                    <div class="inner">
+                      <h3>총 로그 건 수</h3><p><%var a=0; a= nums[0].num+ nums[1].num+ nums[2].num+ nums[3].num+ nums[4].num%><%=comma(a)%>
+          </p>
+
+                    </div>
+                  </div>
+              </div><!-- ./col -->
+              <div class="col-lg-2 col-xs-1">
+                    <!-- small box -->
+                    <div class="small-box bg-aq">
+                      <div class="inner">
+                        <h3>IPS 로그 건 수
+                       </h3><p><%=comma(nums[0].num)%></p>
+                      </div>
+                    </div>
+                </div><!-- ./col -->
+                <div class="col-lg-2 col-xs-1">
+                      <!-- small box -->
+                      <div class="small-box bg-aq">
+                        <div class="inner">
+                          <h3>WAF 로그 건 수
+                          </h3><p id='aa'><%=comma(nums[1].num)%> </p>
+                        </div>
+                      </div>
+                  </div><!-- ./col -->
+                  <div class="col-lg-2 col-xs-1">
+                        <!-- small box -->
+                        <div class="small-box bg-aq">
+                          <div class="inner">
+                            <h3>기타 로그 건 수</h3><p class='mod'><%var a=0; a=nums[2].num+ nums[3].num+ nums[4].num%><%=comma(a)%>
+           </p>
+                          </div>
+                        </div>
+                    </div><!-- ./col -->
+          </div>
+  </ul>
+  <br>
+
   <div class="row">
     <section class="col-lg-6 connectedSortable">
       <% include ../highchart/line1 %>
@@ -33,3 +171,4 @@ a {
 	<!-- /.row -->
 </div>
 <!-- d3 -->
+<script src="../js/accordion.js"></script>

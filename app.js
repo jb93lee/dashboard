@@ -37,7 +37,7 @@ require('./routes/index')(app, passport);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "http://192.168.32.175");
+  res.header("Access-Control-Allow-Origin", "http://192.168.32.204");
   res.header("Access-Control-Allow-Origin", "http://192.168.33.26");
   var err = new Error('Not Found');
   err.status = 404;
@@ -48,7 +48,7 @@ app.use(function(req, res, next) {
 // will print stacktrace
 if (app.get('env') === 'development') {
   app.use(function(err, req, res, next) {
-    res.header("Access-Control-Allow-Origin", "http://192.168.32.175");
+    res.header("Access-Control-Allow-Origin", "http://192.168.32.204");
     res.status(err.status || 500);
     res.render('error', {
       message: err.message,
@@ -70,7 +70,7 @@ Database.config(
 // production error handler
 // no stacktraces leaked to user
 app.use(function(err, req, res, next) {
-  res.header("Access-Control-Allow-Origin", "http://192.168.32.175");
+  res.header("Access-Control-Allow-Origin", "http://192.168.32.204");
   res.status(err.status || 500);
   res.render('error', {
     message: err.message,

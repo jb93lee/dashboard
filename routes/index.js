@@ -28,6 +28,16 @@ module.exports = function(app, passport){
 				async.series([
 					function (callback) {
 							report_file.pool.getConnection(function(err, connection){
+							var query_sql= "select (select 'IPS') as eq,count(*) as num from app_log.IPS where time2 >= '"+ sDay +"' and time2 <= '"+ dDay +"' union select (select 'WAF') as eq,count(*) as num from app_log.WAF where time2 >= '"+ sDay +"' and time2 <= '"+ dDay +"'  union select (select 'MX') as eq, count(*) as num from app_log.mail_log where date >= '"+ sDay +"' and date <= '"+ dDay +"'  union select (select 'syslog'),count(*) as num from app_log.syslog where time >= '"+ sDay +"' and time <= '"+ dDay +"'  union select (select 'WEB'),count(*) as num from app_log.web_access_log where time >= '"+ sDay +"' and time <= '"+ dDay +"'";
+							connection.query(query_sql, function(err, results){
+								if (results != ''){req.flash('nums', results);}
+								connection.release();
+								callback(null, '0');
+								});
+							});
+					},
+					function (callback) {
+							report_file.pool.getConnection(function(err, connection){
 							var query_sql= "select srcip, attackName as attack_name, count(attackName) as count from app_log.IPS where  time2 >= '"+ sDay + "' and time2 <= '"+ dDay +"' and srcip = (select srcip from app_log.IPS where time2 >= '"+ sDay +"' and time2 <= '"+ dDay +"' and srcip not like '192.168.%' and srcip not like '0.0.0.0' group by srcip order by count(srcip) desc limit 0,1) group by attackName order by count(attackName) desc limit 10";
 							connection.query(query_sql, function(err, results){
 								req.flash('attack1_data', results);
@@ -152,12 +162,24 @@ module.exports = function(app, passport){
 								callback(null, '14');
 								});
 							});
+					},function (callback) {
+							report_file.pool.getConnection(function(err, connection){
+							var query_sql= "select country_code as code, count(country) as value, country from app_log.IPS where time2 >= '"+ sDay +"' and time2 <= '"+ dDay +"' and country not like 'null' and country not like '%denied%' and country not like 'unknown' group by country_code order by count(country) desc";
+							console.log(query_sql);
+							connection.query(query_sql, function(err, results){
+								req.flash('map_data', results);
+								connection.release();
+								callback(null, '15');
+								});
+							});
 					}
 				],
 
 				function (err, result) {
 						connection.release();
-						res.render('template/dashboard',{'ip_data':results,
+						res.render('template/dashboard',{
+							'nums':req.flash('nums'),
+							'ip_data':results,
 							'attack1_data':req.flash('attack1_data'),
 							'attack2_data':req.flash('attack2_data'),
 							'attack3_data':req.flash('attack3_data'),
@@ -170,15 +192,41 @@ module.exports = function(app, passport){
 							'attack10_data':req.flash('attack10_data'),
 							'bar_data2':req.flash('bar_data2'),
 							'bar_data3':req.flash('bar_data3'),
+							'map_data':req.flash('map_data'),
 							'date':req.query.days,
 							level_data:req.flash('level_data'),
-							level_data2:req.flash('level_data2')
+							level_data2:req.flash('level_data2'),
+							'sDay':sDay,
+							'dDay':dDay
 						});
 				});
 			});
 		});
 	});
 
+	app.get('/search_ip_ajax',isAuthenticated, function(req, res) {
+		if (req.query.ip!= null && req.query.lv!= null && req.query.date!= null){
+			report_file.pool.getConnection(function(err, connection){
+			 var query_sql= "select (select 'IPS') as equip, attackName, date_format(time2, '%Y-%m-%d %h:%i') as time2, srcip, dstip, srcport, dstport, country_code, country, level from app_log.IPS where srcip like '"+ req.query.ip+ "' and level like '"+ req.query.lv+ "' and time2 like '"+ req.query.date+ "%' union select (select 'WAF') as equip, attackName, date_format(time2, '%Y-%m-%d %h:%i') as time2 , srcip, dstip, srcport, dstport, country_code, country, level from app_log.WAF where srcip like '"+ req.query.ip+ "' and level like '"+ req.query.lv+ "' and time2 like '"+ req.query.date+ "%' order by time2 desc";
+			 connection.query(query_sql, function(err, results){
+				 connection.release();
+				 res.render('template/search-ip-ajax',{table_data:results});
+			 });
+		 	});
+	 	}
+ 	});
+
+	app.get('/search_attack_ajax',isAuthenticated, function(req, res) {
+		if (req.query.ip!= null && req.query.lv!= null && req.query.date!= null){
+			report_file.pool.getConnection(function(err, connection){
+			 var query_sql= "select (select 'IPS') as equip, attackName, date_format(time2, '%Y-%m-%d %h:%i') as time2, srcip, dstip, srcport, dstport, country_code, country, level from app_log.IPS where srcip like '"+ req.query.ip+ "' and level like '"+ req.query.lv+ "' and time2 like '"+ req.query.date+ "%' union select (select 'WAF') as equip, attackName, date_format(time2, '%Y-%m-%d %h:%i') as time2 , srcip, dstip, srcport, dstport, country_code, country, level from app_log.WAF where srcip like '"+ req.query.ip+ "' and level like '"+ req.query.lv+ "' and time2 like '"+ req.query.date+ "%' order by time2 desc";
+			 connection.query(query_sql, function(err, results){
+				 connection.release();
+				 res.render('template/search-ip-ajax',{table_data:results});
+			 });
+			});
+		}
+	});
 
 	app.get('/search_ip',isAuthenticated, function(req, res) {
 		if (req.query.q!= null){
@@ -256,14 +304,14 @@ module.exports = function(app, passport){
 											var query_sql= "drop view app_log.temp_"+rand.toString();
 											connection.query(query_sql, function(err, results){
 											 	connection.release();
-												res.render('template/search-ip',
+													res.render('template/search-ip',
 												 {table_data:req.flash('table_data'),
 												 ip_data:req.flash('ip_data'),
 												 line_data:req.flash('line_data'),
 												 heat_data:req.flash('heat_data'),
 												 level_data:req.flash('level_data'),
 												 level_data2:req.flash('level_data2')
-												});
+											 });
 											});
 										});
 								});
@@ -280,7 +328,7 @@ module.exports = function(app, passport){
 
 	app.post('/search_eq', isAuthenticated, function(req,res){
 		if(req.body.limit == ''){
-				req.body.limit= '1000';
+				req.body.limit= '10000';
 		}
 		if(req.body.source_port == ''){
 				req.body.source_port= '%';
@@ -374,7 +422,6 @@ module.exports = function(app, passport){
 			});
 		});
 	});
-
 
 	 /* GET home page. */
 	app.get('/',isAuthenticated, function(req, res) {
@@ -506,7 +553,7 @@ module.exports = function(app, passport){
 					});
 			},function (callback) {
 					report_file.pool.getConnection(function(err, connection){
-					var query_sql= "select country, country_code, count(country) as count from kippo.sessions where starttime >= '"+ sDay +"' and country not like 'null' group by country order by count(country) desc limit 20";
+					var query_sql= "select country, country_code, count from kippo.kippo_ip where starttime >= '"+ sDay +"' and country not like 'null' group by country order by count(country) desc limit 10";
 					connection.query(query_sql, function(err, results){
 						if (results != ''){req.flash('bar_data4', results);}
 						connection.release();
@@ -515,7 +562,7 @@ module.exports = function(app, passport){
 					});
 			},function (callback) {
 					report_file.pool.getConnection(function(err, connection){
-					var query_sql= "select country, ip as srcip, count(ip) as num from kippo.sessions where starttime >= '"+ sDay +"' group by country_code,ip having num >= 2 order by country_code,num desc";
+					var query_sql= "select country, srcip, count as num from kippo.kippo_ip where starttime >= '"+ sDay +"' group by country_code,ip having num >= 2 order by country_code,num desc";
 					connection.query(query_sql, function(err, results){
 						console.log(results);
 						if (results != ''){	req.flash('bar_data5', results);}

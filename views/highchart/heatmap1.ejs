@@ -7,11 +7,21 @@
 <script src="highchart/highcharts.js"></script>
 <script src="highchart/heatmap.js"></script>
 
+<div class="modal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+        <!-- remote ajax call이 되는영역 -->
+    </div>
+  </div>
+</div>
 
 <div id="heatmap" style="height: 400px; min-width: 700px; max-width: 700px; margin: 0 auto"></div>
 <script>
 $(function () {
 
+    var ip='<% for(var i in table_data){%><%=table_data[0].srcip%><%break;}%>';
+    var lv='';
+    var date='';
     var data2 = [];
     var count = -1;
     var datearr = [];
@@ -47,6 +57,17 @@ $(function () {
             marginBottom: 80,
             plotBorderWidth: 1
         },
+        plotOptions: {
+            series: {
+                cursor: 'pointer',
+                events: {
+                  click: function () {
+var url = 'search_ip_ajax?ip='+ip+'&lv='+lv.toString()+'&date='+date;
+window.open(url, "_blank");
+                   }
+                }
+            }
+        },
 
         title: {
             text: '공격 단계별 히트맵'
@@ -78,6 +99,8 @@ $(function () {
 
         tooltip: {
             formatter: function () {
+                date= this.series.xAxis.categories[this.point.x];
+                lv=this.series.yAxis.categories[this.point.y][0];
                 return '<b>' + this.series.xAxis.categories[this.point.x] + '</b> <br><b>' +
                     this.point.value + '</b>번의 공격 시도 <br>' + this.series.yAxis.categories[this.point.y] ;
             }

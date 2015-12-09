@@ -63,132 +63,169 @@ $(function () {
         }],
         drilldown: {
 <% var data0=[]; var data1=[]; var data2=[]; var data3=[]; var data4=[]; var data5=[]; var data6=[];var data7=[]; var data8=[]; var data9=[];
-var data10=[]; var data11=[]; var data12=[]; var data13=[]; var data14=[]; var data15=[]; var data16=[];var data17=[]; var data18=[]; var data19=[];
 var a=0; var b=0; var c=0; var d=0; var e=0; var f=0; var g=0; var h=0; var j=0; var k=0;
-var l=0; var m=0; var n=0; var o=0; var p=0; var q=0; var r=0; var s=0; var t=0; var u=0;
 for(var i in bar_data3){
+  var len= bar_data2.length;
+  console.log(len);
     if(bar_data3[i].country==bar_data2[0].country){ if(a<20){
        data0.push([bar_data3[i].srcip,bar_data3[i].num]);
    a++; }}
+   lenf=1;
+   if(len == lenf){continue;}
    if(bar_data3[i].country==bar_data2[1].country){ if(b<20){
       data1.push([bar_data3[i].srcip,bar_data3[i].num]);
    b++; }}
+   lenf=2;
+   if(len == lenf){continue;}
    if(bar_data3[i].country==bar_data2[2].country){ if(c<20){
       data2.push([bar_data3[i].srcip,bar_data3[i].num]);
    c++; }}
+   lenf=3;
+   if(len == lenf){continue;}
    if(bar_data3[i].country==bar_data2[3].country){ if(d<20){
       data3.push([bar_data3[i].srcip,bar_data3[i].num]);
    d++; }}
+   lenf=4;
+   if(len == lenf){continue;}
    if(bar_data3[i].country==bar_data2[4].country){ if(e<20){
       data4.push([bar_data3[i].srcip,bar_data3[i].num]);
    e++; }}
+   lenf=5;
+   if(len == lenf){continue;}
    if(bar_data3[i].country==bar_data2[5].country){ if(f<20){
       data5.push([bar_data3[i].srcip,bar_data3[i].num]);
    f++; }}
+   lenf=6;
+   if(len == lenf){continue;}
    if(bar_data3[i].country==bar_data2[6].country){ if(g<20){
       data6.push([bar_data3[i].srcip,bar_data3[i].num]);
    g++; }}
+   lenf=7;
+   if(len == lenf){continue;}
    if(bar_data3[i].country==bar_data2[7].country){ if(h<20){
       data7.push([bar_data3[i].srcip,bar_data3[i].num]);
    h++; }}
+   lenf=8;
+   if(len == lenf){continue;}
    if(bar_data3[i].country==bar_data2[8].country){ if(j<20){
       data8.push([bar_data3[i].srcip,bar_data3[i].num]);
    j++; }}
+   lenf=9;
+   if(len == lenf){continue;}
    if(bar_data3[i].country==bar_data2[9].country){ if(k<20){
       data9.push([bar_data3[i].srcip,bar_data3[i].num]);
    k++; }}
 }%>
             series: [<%for(var i in bar_data2){%>
+<%for(var j in bar_data2[0]){%>
             {
               name: '<%=bar_data2[0].country%>',
               id: '0',
               data: [
                 <%for(var i=0; i<data0.length; i++ ){%>
-                  ['<a href="http://192.168.32.200:3000/search_ip?q=<%=data0[i][0]%>"><%=data0[i][0]%></a>',<%=data0[i][1]%>],
+                  ['<a href="http://192.168.32.197:3000/search_ip?q=<%=data0[i][0]%>"><%=data0[i][0]%></a>',<%=data0[i][1]%>],
                 <%}%>
               ]
             },
+<%break;}%>
+<%for(var j in bar_data2[1]){%>
             {
               name: '<%=bar_data2[1].country%>',
               id: '1',
               data: [
                 <%for(var i=0; i<data1.length; i++ ){%>
-                   ['<a href="http://192.168.32.200:3000/search_ip?q=<%=data1[i][0]%>"><%=data1[i][0]%></a>',<%=data1[i][1]%>],
+                   ['<a href="http://192.168.32.197:3000/search_ip?q=<%=data1[i][0]%>"><%=data1[i][0]%></a>',<%=data1[i][1]%>],
                 <%}%>
               ]
             },
+<%break;}%>
+<%for(var j in bar_data2[2]){%>
             {
               name: '<%=bar_data2[2].country%>',
               id: '2',
               data: [
                 <%for(var i=0; i<data2.length; i++ ){%>
-                  ['<a href="http://192.168.32.200:3000/search_ip?q=<%=data2[i][0]%>"><%=data2[i][0]%></a>',<%=data2[i][1]%>],
+                  ['<a href="http://192.168.32.197:3000/search_ip?q=<%=data2[i][0]%>"><%=data2[i][0]%></a>',<%=data2[i][1]%>],
                 <%}%>
               ]
             },
+<%break;}%>
+<%for(var j in bar_data2[3]){%>
             {
               name: '<%=bar_data2[3].country%>',
               id: '3',
               data: [
                 <%for(var i=0; i<data3.length; i++ ){%>
-                   ['<a href="http://192.168.32.200:3000/search_ip?q=<%=data3[i][0]%>"><%=data3[i][0]%></a>',<%=data3[i][1]%>],
+                   ['<a href="http://192.168.32.197:3000/search_ip?q=<%=data3[i][0]%>"><%=data3[i][0]%></a>',<%=data3[i][1]%>],
                 <%}%>
               ]
             },
+<%break;}%>
+<%for(var j in bar_data2[4]){%>
             {
               name: '<%=bar_data2[4].country%>',
               id: '4',
               data: [
                 <%for(var i=0; i<data4.length; i++ ){%>
-                   ['<a href="http://192.168.32.200:3000/search_ip?q=<%=data4[i][0]%>"><%=data4[i][0]%></a>',<%=data4[i][1]%>],
+                   ['<a href="http://192.168.32.197:3000/search_ip?q=<%=data4[i][0]%>"><%=data4[i][0]%></a>',<%=data4[i][1]%>],
                 <%}%>
               ]
             },
+<%break;}%>
+<%for(var j in bar_data2[5]){%>
             {
               name: '<%=bar_data2[5].country%>',
               id: '5',
               data: [
                 <%for(var i=0; i<data5.length; i++ ){%>
-                   ['<a href="http://192.168.32.200:3000/search_ip?q=<%=data5[i][0]%>"><%=data5[i][0]%></a>',<%=data5[i][1]%>],
+                   ['<a href="http://192.168.32.197:3000/search_ip?q=<%=data5[i][0]%>"><%=data5[i][0]%></a>',<%=data5[i][1]%>],
                 <%}%>
               ]
             },
+<%break;}%>
+<%for(var j in bar_data2[6]){%>
             {
               name: '<%=bar_data2[6].country%>',
               id: '6',
               data: [
                 <%for(var i=0; i<data6.length; i++ ){%>
-                   ['<a href="http://192.168.32.200:3000/search_ip?q=<%=data6[i][0]%>"><%=data6[i][0]%></a>',<%=data6[i][1]%>],
+                   ['<a href="http://192.168.32.197:3000/search_ip?q=<%=data6[i][0]%>"><%=data6[i][0]%></a>',<%=data6[i][1]%>],
                 <%}%>
               ]
             },
+<%break;}%>
+<%for(var j in bar_data2[7]){%>
             {
               name: '<%=bar_data2[7].country%>',
               id: '7',
               data: [
                 <%for(var i=0; i<data7.length; i++ ){%>
-                   ['<a href="http://192.168.32.200:3000/search_ip?q=<%=data7[i][0]%>"><%=data7[i][0]%></a>',<%=data7[i][1]%>],
+                   ['<a href="http://192.168.32.197:3000/search_ip?q=<%=data7[i][0]%>"><%=data7[i][0]%></a>',<%=data7[i][1]%>],
                 <%}%>
               ]
             },
+<%break;}%>
+<%for(var j in bar_data2[8]){%>
             {
               name: '<%=bar_data2[8].country%>',
               id: '8',
               data: [
                 <%for(var i=0; i<data8.length; i++ ){%>
-                   ['<a href="http://192.168.32.200:3000/search_ip?q=<%=data8[i][0]%>"><%=data8[i][0]%></a>',<%=data8[i][1]%>],
+                   ['<a href="http://192.168.32.197:3000/search_ip?q=<%=data8[i][0]%>"><%=data8[i][0]%></a>',<%=data8[i][1]%>],
                 <%}%>
               ]
             },
+<%break;}%>
+<%for(var j in bar_data2[9]){%>
             {
               name: '<%=bar_data2[9].country%>',
               id: '9',
               data: [
                 <%for(var i=0; i<data9.length; i++ ){%>
-                   ['<a href="http://192.168.32.200:3000/search_ip?q=<%=data9[i][0]%>"><%=data9[i][0]%></a>',<%=data9[i][1]%>],
+                   ['<a href="http://192.168.32.197:3000/search_ip?q=<%=data9[i][0]%>"><%=data9[i][0]%></a>',<%=data9[i][1]%>],
                 <%}%>
               ]
-            } <%break;}%>]
+            } <%break;}break;}%>]
         }
     });
 });

@@ -1,4 +1,5 @@
 document.addEventListener("DOMContentLoaded", function(event) {
+
 var compare = {                           // compare 객체를 생성한다
   name: function(a, b) {                  // name 메서드를 정의한다
     a = a.replace(/^the /i, '');          // 매개변수에서 the를 제거한다

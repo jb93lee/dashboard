@@ -39,6 +39,12 @@ document.addEventListener("DOMContentLoaded", function(event) {
             pie: {
                 allowPointSelect: true,
                 cursor: 'pointer',
+                events: {
+                  click: function () {
+    var url = '#table';
+    window.open(url,'_blank');
+                   }
+                },
                 dataLabels: {
                     enabled: false
                 },

@@ -10,6 +10,13 @@ a {
 p {
     margin: 0px 0px 1.5px;
 }
+.small-box p {
+    font-size: 20px;
+}
+.small-box h3 {
+    font-size: 26px;
+    font-family: "Dotum";
+}
 .inner{
 text-align: left;
 }
@@ -69,7 +76,11 @@ function submit(){
     document.forms["aform"].submit();
 }
 </script>
-
+<%
+function comma(str) {
+    return str.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+}
+%>
 <link rel="stylesheet" type="text/css" href="highchart/flags32.css" />
 
 <!-- Page Content -->
@@ -91,8 +102,8 @@ function submit(){
                   <!-- small box -->
                   <div class="small-box bg-aqua">
                     <div class="inner">
-                      <h3> <% var a=0; for(var i in table_data){if (table_data[i].equip=='IPS' || table_data[i].equip=='WAF')a= a+1;}  %> <%=a%>
-                      </h3><p>총 로그 건 수</p>
+                      <h3>총 로그 건 수</h3>
+                      <p> <% var a=0; for(var i in table_data){if (table_data[i].equip=='IPS' || table_data[i].equip=='WAF')a= a+1;}  %> <%=comma(a)%></p>
 
                     </div>
                   </div>
@@ -101,8 +112,8 @@ function submit(){
                     <!-- small box -->
                     <div class="small-box bg-aqua">
                       <div class="inner">
-                        <h3> <% var a=0; for(var i in table_data){if (table_data[i].equip=='IPS')a= a+1;}  %> <%=a%>
-                       </h3><p>IPS 로그 건 수 </p>
+                        <h3>IPS 로그 건 수
+                       </h3><p> <% var a=0; for(var i in table_data){if (table_data[i].equip=='IPS')a= a+1;}  %> <%=comma(a)%> </p>
 
                       </div>
                     </div>
@@ -111,8 +122,8 @@ function submit(){
                       <!-- small box -->
                       <div class="small-box bg-aqua">
                         <div class="inner">
-                          <h3> <% var a=0; for(var i in table_data){if (table_data[i].equip=='WAF')a= a+1;}  %> <%=a%>
-                          </h3><p>WAF 로그 건 수 </p>
+                          <h3> WAF 로그 건 수
+                          </h3><p><% var a=0; for(var i in table_data){if (table_data[i].equip=='WAF')a= a+1;}  %> <%=comma(a)%> </p>
                         </div>
                       </div>
                   </div><!-- ./col -->
@@ -120,8 +131,8 @@ function submit(){
                           <!-- small box -->
                           <div class="small-box bg-aqua">
                             <div class="inner">
-                              <h3><% var a='국가'; for(var i in table_data){a=table_data[0].country; break;}  %><%=a%>
-                              </h3><p>해당 국가명 </p>
+                              <h3>해당 국가명
+                              </h3><p><% var a='국가'; for(var i in table_data){a=table_data[0].country; break;}  %><%=comma(a)%></p>
                             </div>
                           </div>
                     </div><!-- ./col -->
