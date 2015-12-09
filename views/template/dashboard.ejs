@@ -21,10 +21,11 @@
 }
 
 .accordion-panel {
+  margin-top: 15px;
   display: none;}
 
 .accordion-panel p {
-  margin: 20px;}
+  margin: 15px;}
 
 .accordion-panel img {
   display: block;
@@ -43,9 +44,6 @@ a {
 margin-left: 35px;
 }
 
-.small-box.bq {
-    margin-left: 10px;
-}
 .small-box h3 {
     font-family: "Dotum";
     font-size: 25px;
@@ -62,46 +60,73 @@ margin-left: 35px;
 .bg-aq{
     width: 228px;
     text-align: center;
+    margin-left: -55px;
+
 }
 .bg{
-  width: 360px;
+  width: 380px;
   text-align: center;
 }
 .svg text{
   fill: #3a3a3a;
 }
+.form-control{
+    max-width: 120px;
+    max-height: 40px;
+    text-align: center;
+    background-color: #505050;
+    color:white;
+    font-size: 14px;
+    line-height: 1;
+    border-color: white;
+    border: 1px solid transparent;
+    border-radius: 4px;
+}
+.btn-default{
+  max-height: 40px;
+}
+.mod:hover{
+  font-weight: bold;
+  color: black;
+}
 </style>
 <script>
+document.addEventListener("DOMContentLoaded", function(event) {
 $(".mod").click(function(){
-    $('.modal').modal({remote : 'modal.ejs'});
+    $('.modal').modal({remote : '/modal?sd=<%=sDay%>&dd=<%=dDay%>'});
 })
-
+});
+function submit(){
+    document.forms["aform"].submit();
+}
 </script>
 <%
 function comma(str) {
     return str.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 }
 %>
-<div class="modal fade">
+<div class="modal">
   <div class="modal-dialog">
     <div class="modal-content">
         <!-- remote ajax call이 되는영역 -->
     </div>
   </div>
 </div>
-</body>
-</html>
 <div id="page-wrapper">
-  <br>
-  <ul class="accordion">
-          <button class="accordion-control">검색 기간 설정 및 통계</button>
+  <br><ul class="accordion">
+          <button class="accordion-control">검색 기간 설정 및 통계 정보</button>
           <div class="accordion-panel">
-            <br><div class="col-lg-3 ">
+            <div class="col-lg-4 ">
                   <!-- small box -->
                   <div class="small-box bg">
                     <div class="inner">
                       <h3>로그 검색 기간
-                      </h3><p><%=sDay%> ~ <%=dDay%></p>
+                      </h3><p><table><tr><form id="aform" role="form" action="/dashboard" method="post">
+                        <td><input type="text" name="start_date" class="form-control date" placeholder="<%=sDay%>"></td>
+                        <td>　~　</td>
+                        <td><input type="text" name="end_date" class="form-control date" placeholder="<%=dDay%>"></span></td>
+                        <td>　</td><td><a href="#"  onclick="submit();" class="btn btn-default">검색</a></form></td>
+                      </tr></table></p>
                     </div>
                   </div>
               </div><!-- ./col -->
@@ -110,9 +135,7 @@ function comma(str) {
                   <!-- small box -->
                   <div class="small-box bg-aq">
                     <div class="inner">
-                      <h3>총 로그 건 수</h3><p><%var a=0; a= nums[0].num+ nums[1].num+ nums[2].num+ nums[3].num+ nums[4].num%><%=comma(a)%>
-          </p>
-
+                      <h3>총 로그 건 수</h3><p><%var a=0; a= nums[0].num+ nums[1].num+ nums[2].num+ nums[3].num+ nums[4].num%><%=comma(a)%></p>
                     </div>
                   </div>
               </div><!-- ./col -->
@@ -138,8 +161,7 @@ function comma(str) {
                         <!-- small box -->
                         <div class="small-box bg-aq">
                           <div class="inner">
-                            <h3>기타 로그 건 수</h3><p class='mod'><%var a=0; a=nums[2].num+ nums[3].num+ nums[4].num%><%=comma(a)%>
-           </p>
+                            <h3 class='mod'>기타 로그 건 수</h3><p class='mod'><%var a=0; a=nums[2].num+ nums[3].num+ nums[4].num%><%=comma(a)%></p>
                           </div>
                         </div>
                     </div><!-- ./col -->
@@ -170,5 +192,8 @@ function comma(str) {
   <br><br>
 	<!-- /.row -->
 </div>
+<link rel="stylesheet" href="bower_components/jquery/dist/jquery-ui.min.css" />
 <!-- d3 -->
+<script src="../js/init.js"></script>
 <script src="../js/accordion.js"></script>
+<script src="bower_components/jquery/dist/jquery-ui.min.js"></script>

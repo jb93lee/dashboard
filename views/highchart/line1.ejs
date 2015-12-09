@@ -28,9 +28,31 @@
 <div id="container1" style="height: 400px; min-width: 310px"></div>
 <script>
 document.addEventListener("DOMContentLoaded", function(event) {
-       var seriesOptions = [],
-           seriesCounter = 0,
-           names = ['ips','waf'];
+      var seriesOptions = [],
+           seriesCounter = 0;
+
+      var ipsarr = [];
+      var wafarr = [];
+      var mailarr = [];
+      var webarr = [];
+
+      console.log(<%=line_data_dash.length%>);
+      <%for (var i = 0; i < line_data_dash.length; i++) {%>
+
+          <%if(line_data_dash[i].eq == "IPS") {%>
+                ipsarr.push([<%=line_data_dash[i].ts%>, <%=line_data_dash[i].num%>]);
+          <%} %>
+          <%if(line_data_dash[i].eq == "WAF") {%>
+                wafarr.push([<%=line_data_dash[i].ts%>, <%=line_data_dash[i].num%>]);
+          <%} %>
+          <%if(line_data_dash[i].eq == "mail") {%>
+                mailarr.push([<%=line_data_dash[i].ts%>, <%=line_data_dash[i].num%>]);
+          <%} %>
+          <%if(line_data_dash[i].eq == "web_access") {%>
+                webarr.push([<%=line_data_dash[i].ts%>, <%=line_data_dash[i].num%>]);
+          <%} %>
+      <%} %>
+
 
        /**
         * Create the chart when all data is loaded
@@ -71,26 +93,25 @@ document.addEventListener("DOMContentLoaded", function(event) {
                series: seriesOptions
            });
        }
+       seriesOptions[0] = {
+           name: "IPS",
+           data: ipsarr
+      };
+      seriesOptions[1] = {
+           name: "WAF",
+           data: wafarr
+      };
 
-       $.each(names, function (i, name) {
+      seriesOptions[2] = {
+           name: "web_access_log",
+           data: webarr
+      };
+      seriesOptions[3] = {
+           name: "mail",
+           data: mailarr
+      };
+       createChart();
 
-//           $.getJSON('https://www.highcharts.com/samples/data/jsonp.php?filename=' + name.toLowerCase() + '-c.json&callback=?',    function (data) {
-            $.getJSON('http://192.168.33.26/jsonp.php?filename=' + name.toLowerCase() + '.json&callback=?', function (data) {
-//          $.getJSON('http://192.168.0.110/project/jsonp.php?filename=' + name.toLowerCase() + '.json&callback=?', function (data) {
-              seriesOptions[i] = {
-                   name: name,
-                   data: data
-               };
-
-               // As we're loading the data asynchronously, we don't know what order it will arrive. So
-               // we keep a counter and create the chart when all the data is loaded.
-               seriesCounter += 1;
-
-               if (seriesCounter === names.length) {
-                   createChart();
-               }
-           });
-       });
 });
 </script>
 <script type="text/javascript" src="highchart/dark-unica.js"></script>

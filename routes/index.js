@@ -9,6 +9,18 @@ var report_file = require('./mysql2');
 
 module.exports = function(app, passport){
 
+	app.get('/modal',isAuthenticated, function(req, res) {
+		sDay=req.query.sd;dDay=req.query.dd;
+		report_file.pool.getConnection(function(err, connection){
+		 var query_sql= "select (select 'MX') as eq, count(*) as num from app_log.mail_log where date >= '"+ sDay +"' and date <= '"+ dDay +"' union select (select 'syslog'),count(*) as num from app_log.syslog where time >= '"+ sDay +"' and time <= '"+ dDay +"' union select (select 'WEB'),count(*) as num from app_log.web_access_log where time >= '"+ sDay +"' and time <= '"+ dDay +"'";
+		 connection.query(query_sql, function(err, results){
+			 console.log(results);
+			 connection.release();
+			 res.render('template/modal',{table_data:results});
+		 });
+		});
+	});
+
 	app.get('/dashboard',isAuthenticated, function(req, res) {
 		var dt = new Date();
 		var dDay = dt.toFormat('YYYY-MM-DD');
@@ -165,16 +177,23 @@ module.exports = function(app, passport){
 					},function (callback) {
 							report_file.pool.getConnection(function(err, connection){
 							var query_sql= "select country_code as code, count(country) as value, country from app_log.IPS where time2 >= '"+ sDay +"' and time2 <= '"+ dDay +"' and country not like 'null' and country not like '%denied%' and country not like 'unknown' group by country_code order by count(country) desc";
-							console.log(query_sql);
 							connection.query(query_sql, function(err, results){
 								req.flash('map_data', results);
 								connection.release();
 								callback(null, '15');
 								});
 							});
+					},function (callback) {
+							report_file.pool.getConnection(function(err, connection){
+							var query_sql= "select (select 'IPS') as eq, (unix_timestamp(date(app_log.IPS.time2))*1000+32400000) as ts, count(app_log.IPS.time2) as num from app_log.IPS where app_log.IPS.srcip not like '192.168.0.1' group by ts union select (select 'WAF') as eq, (unix_timestamp(date(app_log.WAF.time2))*1000+32400000) as ts, count(app_log.WAF.time2) as num from app_log.WAF where app_log.WAF.srcip not like '192.168.0.1' group by ts union select (select 'mail') as eq, (unix_timestamp(date(app_log.mail_log.date))*1000+32400000) as ts, count(app_log.mail_log.date) as num from app_log.mail_log group by ts union select (select 'web_access') as eq, (unix_timestamp(date(app_log. web_access_log.time))*1000+32400000) as ts, count(app_log. web_access_log.time) as num from app_log.web_access_log group by ts";
+							connection.query(query_sql, function(err, results){
+								req.flash('line_data_dash', results);
+								connection.release();
+								callback(null, '16');
+								});
+							});
 					}
 				],
-
 				function (err, result) {
 						connection.release();
 						res.render('template/dashboard',{
@@ -197,11 +216,211 @@ module.exports = function(app, passport){
 							level_data:req.flash('level_data'),
 							level_data2:req.flash('level_data2'),
 							'sDay':sDay,
-							'dDay':dDay
+							'dDay':dDay,
+							line_data_dash:req.flash('line_data_dash')
 						});
 				});
 			});
 		});
+	});
+
+	app.post('/dashboard',isAuthenticated, function(req, res) {
+		var dt = new Date();
+		if(req.body.start_date == ''){
+			var da= dt.addDays(-7);
+			var sDay = da.toFormat('YYYY-MM-DD');
+		}
+		else if(req.body.end_date == ''){
+			var dDay = dt.toFormat('YYYY-MM-DD');
+		}
+		else{
+				sDay=req.body.start_date;
+				dDay=req.body.end_date+'24';
+		}
+		if(sDay>=dDay){
+			res.render('template/blank2',{});
+		}
+		else{
+		report_file.pool.getConnection(function(err, connection){
+			var query_sql= "select srcip, count(srcip) as count, country from app_log.IPS where time2 >= '"+ sDay +"' and time2 <= '"+ dDay +"' and srcip not like '192.168.%' and srcip not like '0.0.0.0' group by srcip order by count(srcip) desc limit 10";
+			connection.query(query_sql, function(err, results){
+				async.series([
+					function (callback) {
+							report_file.pool.getConnection(function(err, connection){
+							var query_sql= "select (select 'IPS') as eq,count(*) as num from app_log.IPS where time2 >= '"+ sDay +"' and time2 <= '"+ dDay +"' union select (select 'WAF') as eq,count(*) as num from app_log.WAF where time2 >= '"+ sDay +"' and time2 <= '"+ dDay +"'  union select (select 'MX') as eq, count(*) as num from app_log.mail_log where date >= '"+ sDay +"' and date <= '"+ dDay +"'  union select (select 'syslog'),count(*) as num from app_log.syslog where time >= '"+ sDay +"' and time <= '"+ dDay +"'  union select (select 'WEB'),count(*) as num from app_log.web_access_log where time >= '"+ sDay +"' and time <= '"+ dDay +"'";
+							connection.query(query_sql, function(err, results){
+								if (results != ''){req.flash('nums', results);}
+								else{ res.render('template/blank3',{})}
+								connection.release();
+								callback(null, '0');
+								});
+							});
+					},
+					function (callback) {
+							report_file.pool.getConnection(function(err, connection){
+							var query_sql= "select srcip, attackName as attack_name, count(attackName) as count from app_log.IPS where  time2 >= '"+ sDay + "' and time2 <= '"+ dDay +"' and srcip = (select srcip from app_log.IPS where time2 >= '"+ sDay +"' and time2 <= '"+ dDay +"' and srcip not like '192.168.%' and srcip not like '0.0.0.0' group by srcip order by count(srcip) desc limit 0,1) group by attackName order by count(attackName) desc limit 10";
+							connection.query(query_sql, function(err, results){
+								if (results != ''){req.flash('attack1_data', results);}
+								connection.release();
+								callback(null, '1');
+								});
+							});
+					},function (callback) {
+							report_file.pool.getConnection(function(err, connection){
+							var query_sql= "select srcip, attackName as attack_name, count(attackName) as count from app_log.IPS where  time2 >= '"+ sDay +"' and time2 <= '"+ dDay +"' and srcip = (select srcip from app_log.IPS where time2 >= '"+ sDay +"' and time2 <= '"+ dDay +"' and srcip not like '192.168.%' and srcip not like '0.0.0.0' group by srcip order by count(srcip) desc limit 1,1) group by attackName order by count(attackName) desc limit 10";
+							connection.query(query_sql, function(err, results){
+								if (results != ''){req.flash('attack2_data', results);}
+								connection.release();
+								callback(null, '2');
+								});
+							});
+					},function (callback) {
+							report_file.pool.getConnection(function(err, connection){
+							var query_sql= "select srcip, attackName as attack_name, count(attackName) as count from app_log.IPS where time2 >= '"+ sDay +"' and time2 <= '"+ dDay +"' and srcip = (select srcip from app_log.IPS where time2 >= '"+ sDay +"' and time2 <= '"+ dDay +"' and srcip not like '192.168.%' and srcip not like '0.0.0.0' group by srcip order by count(srcip) desc limit 2,1) group by attackName order by count(attackName) desc limit 10";
+							connection.query(query_sql, function(err, results){
+								if (results != ''){req.flash('attack3_data', results);}
+								connection.release();
+								callback(null, '3');
+								});
+							});
+					},function (callback) {
+							report_file.pool.getConnection(function(err, connection){
+							var query_sql= "select srcip, attackName as attack_name, count(attackName) as count from app_log.IPS where time2 >= '"+ sDay +"' and time2 <= '"+ dDay +"' and srcip = (select srcip from app_log.IPS where time2 >= '"+ sDay +"' and time2 <= '"+ dDay +"' and srcip not like '192.168.%' and srcip not like '0.0.0.0' group by srcip order by count(srcip) desc limit 3,1) group by attackName order by count(attackName) desc limit 10";
+							connection.query(query_sql, function(err, results){
+								if (results != ''){req.flash('attack4_data', results);}
+								connection.release();
+								callback(null, '4');
+								});
+							});
+					},function (callback) {
+							report_file.pool.getConnection(function(err, connection){
+							var query_sql= "select srcip, attackName as attack_name, count(attackName) as count from app_log.IPS where time2 >= '"+ sDay +"' and time2 <= '"+ dDay +"' and srcip = (select srcip from app_log.IPS where time2 >= '"+ sDay +"' and time2 <= '"+ dDay +"' and srcip not like '192.168.%' and srcip not like '0.0.0.0' group by srcip order by count(srcip) desc limit 4,1) group by attackName order by count(attackName) desc limit 10";
+							connection.query(query_sql, function(err, results){
+								if (results != ''){req.flash('attack5_data', results);}
+								connection.release();
+								callback(null, '5');
+								});
+							});
+					},function (callback) {
+							report_file.pool.getConnection(function(err, connection){
+							var query_sql= "select srcip, attackName as attack_name, count(attackName) as count from app_log.IPS where time2 >= '"+ sDay +"' and time2 <= '"+ dDay +"' and srcip = (select srcip from app_log.IPS where time2 >= '"+ sDay +"' and time2 <= '"+ dDay +"' and srcip not like '192.168.%' and srcip not like '0.0.0.0' group by srcip order by count(srcip) desc limit 5,1) group by attackName order by count(attackName) desc limit 10";
+							connection.query(query_sql, function(err, results){
+								if (results != ''){req.flash('attack6_data', results);}
+								connection.release();
+								callback(null, '6');
+								});
+							});
+					},function (callback) {
+							report_file.pool.getConnection(function(err, connection){
+							var query_sql= "select srcip, attackName as attack_name, count(attackName) as count from app_log.IPS where time2 >= '"+ sDay +"' and time2 <= '"+ dDay +"' and srcip = (select srcip from app_log.IPS where time2 >= '"+ sDay +"' and time2 <= '"+ dDay +"' and srcip not like '192.168.%' and srcip not like '0.0.0.0' group by srcip order by count(srcip) desc limit 6,1) group by attackName order by count(attackName) desc limit 10";
+							connection.query(query_sql, function(err, results){
+								if (results != ''){req.flash('attack7_data', results);}
+								connection.release();
+								callback(null, '7');
+								});
+							});
+					},function (callback) {
+							report_file.pool.getConnection(function(err, connection){
+							var query_sql= "select srcip, attackName as attack_name, count(attackName) as count from app_log.IPS where time2 >= '"+ sDay +"' and time2 <= '"+ dDay +"' and srcip = (select srcip from app_log.IPS where time2 >= '"+ sDay +"' and time2 <= '"+ dDay +"' and srcip not like '192.168.%' and srcip not like '0.0.0.0' group by srcip order by count(srcip) desc limit 7,1) group by attackName order by count(attackName) desc limit 10";
+							connection.query(query_sql, function(err, results){
+								if (results != ''){req.flash('attack8_data', results);}
+								connection.release();
+								callback(null, '8');
+								});
+							});
+					},function (callback) {
+							report_file.pool.getConnection(function(err, connection){
+							var query_sql= "select srcip, attackName as attack_name, count(attackName) as count from app_log.IPS where time2 >= '"+ sDay +"' and time2 <= '"+ dDay +"' and srcip = (select srcip from app_log.IPS where time2 >= '"+ sDay +"' and time2 <= '"+ dDay +"' and srcip not like '192.168.%' and srcip not like '0.0.0.0' group by srcip order by count(srcip) desc limit 8,1) group by attackName order by count(attackName) desc limit 10";
+							connection.query(query_sql, function(err, results){
+								if (results != ''){req.flash('attack9_data', results);}
+								connection.release();
+								callback(null, '9');
+								});
+							});
+					},function (callback) {
+							report_file.pool.getConnection(function(err, connection){
+							var query_sql= "select srcip, attackName as attack_name, count(attackName) as count from app_log.IPS where time2 >= '"+ sDay +"' and time2 <= '"+ dDay +"' and srcip = (select srcip from app_log.IPS where time2 >= '"+ sDay +"' and time2 <= '"+ dDay +"' and srcip not like '192.168.%' and srcip not like '0.0.0.0' group by srcip order by count(srcip) desc limit 9,1) group by attackName order by count(attackName) desc limit 10";
+							connection.query(query_sql, function(err, results){
+								if (results != ''){req.flash('attack10_data', results);}
+								connection.release();
+								callback(null, '10');
+								});
+							});
+					},function (callback) {
+							report_file.pool.getConnection(function(err, connection){
+							var query_sql= "select level, count(level) as num from app_log.IPS where time2 >= '"+ sDay +"' and time2 <= '"+ dDay +"' group by level";
+							connection.query(query_sql, function(err, results){
+								if (results != ''){	req.flash('level_data', results);}
+								connection.release();
+								callback(null, '12');
+								});
+							});
+					},function (callback) {
+							report_file.pool.getConnection(function(err, connection){
+							var query_sql= "select level, attackname, count(attackname) as num from app_log.IPS where time2 >= '"+ sDay +"' and time2 <= '"+ dDay +"' group by level,attackname order by level,num desc";
+							connection.query(query_sql, function(err, results){
+								if (results != ''){	req.flash('level_data2', results);}
+								connection.release();
+								callback(null, '13');
+								});
+							});
+					},function (callback) {
+							report_file.pool.getConnection(function(err, connection){
+							var query_sql= "select country, country_code, count(country) as count from app_log.IPS where time2 >= '"+ sDay +"' and time2 <= '"+ dDay +"' and country not like 'null' group by country order by count(country) desc limit 10";
+							connection.query(query_sql, function(err, results){
+								if (results != ''){req.flash('bar_data2', results);}
+								connection.release();
+								callback(null, '11');
+								});
+							});
+					},function (callback) {
+							report_file.pool.getConnection(function(err, connection){
+							var query_sql= "select country, srcip, count(srcip) as num from app_log.IPS where time2 >=  '"+ sDay +"' and time2 <= '"+ dDay +"' group by country_code,srcip having num >= 2 order by country_code,num desc";
+							connection.query(query_sql, function(err, results){
+								if (results != ''){	req.flash('bar_data3', results);}
+								connection.release();
+								callback(null, '14');
+								});
+							});
+					},function (callback) {
+							report_file.pool.getConnection(function(err, connection){
+							var query_sql= "select country_code as code, count(country) as value, country from app_log.IPS where time2 >= '"+ sDay +"' and time2 <= '"+ dDay +"' and country not like 'null' and country not like '%denied%' and country not like 'unknown' group by country_code order by count(country) desc";
+							connection.query(query_sql, function(err, results){
+								if (results != ''){req.flash('map_data', results);}
+								connection.release();
+								callback(null, '15');
+								});
+							});
+					}
+				],
+				function (err, result) {
+						connection.release();
+						if(results==''){res.render('template/blank3',{});}
+						res.render('template/dashboard',{
+							'nums':req.flash('nums'),
+							'ip_data':results,
+							'attack1_data':req.flash('attack1_data'),
+							'attack2_data':req.flash('attack2_data'),
+							'attack3_data':req.flash('attack3_data'),
+							'attack4_data':req.flash('attack4_data'),
+							'attack5_data':req.flash('attack5_data'),
+							'attack6_data':req.flash('attack6_data'),
+							'attack7_data':req.flash('attack7_data'),
+							'attack8_data':req.flash('attack8_data'),
+							'attack9_data':req.flash('attack9_data'),
+							'attack10_data':req.flash('attack10_data'),
+							'bar_data2':req.flash('bar_data2'),
+							'bar_data3':req.flash('bar_data3'),
+							'map_data':req.flash('map_data'),
+							'date':req.query.days,
+							level_data:req.flash('level_data'),
+							level_data2:req.flash('level_data2'),
+							'sDay':sDay,
+							'dDay':req.body.end_date
+					});
+				});
+			});
+		});}
 	});
 
 	app.get('/search_ip_ajax',isAuthenticated, function(req, res) {
@@ -405,7 +624,6 @@ module.exports = function(app, passport){
 																	top_ip_data:req.flash('top_ip_data'),
 																	bar_data2:req.flash('bar_data2'),
 																	bar_data3:req.flash('bar_data3')
-
 																});
 															});
 														});
@@ -605,64 +823,6 @@ module.exports = function(app, passport){
 	});
 
 
-	app.get('/bbs/list',isAuthenticated, function(req, res) {
-		 Bbs.find({},
-	      function(err, bbs) {
-	        // In case of any error, return using the done method
-	        if (err)
-	          return done(err);
-	        // Username does not exist, log error & redirect back
-	        res.send(bbs);
-	      }
-	    );
-	});
-
-	app.post('/bbs/create',isAuthenticated, function(req, res) {
-
-		var newBbs = new Bbs();
-		// set the user's local credentials
-		newBbs.content = req.param('content');
-		newBbs.vote = 0;
-		newBbs.username = req.user.username;
-
-		// save the user
-		newBbs.save(function(err) {
-			if (err){
-			  console.log('Error in Saving bbs: '+err);
-			  res.send({"result":false});
-			}
-			res.send({"result":true});
-		});
-	});
-
-	app.post('/bbs/delete',isAuthenticated, function(req, res) {
-		// set the user's local credentials
-		var id = req.param('id');
-		Bbs.findByIdAndRemove(id,function(err){
-			if (err){
-			  console.log('Error in Saving bbs: '+err);
-			  res.send({"result":false});
-			}
-			res.send({"result":true});
-		})
-
-
-	});
-	app.post('/bbs/update',isAuthenticated, function(req, res) {
-		var id = req.param('id');
-
-		Bbs.findById(id,function(err,bbs){
-			if (err){
-			  console.log('Error in Saving bbs: '+err);
-			  res.send({"result":false});
-			}
-			bbs.vote +=1;
-			bbs.save(function(){
-				res.send({"result":true});
-			})
-
-		})
-	});
 }
 	var isAuthenticated = function (req, res, next) {
 	  if (req.isAuthenticated())

@@ -29,11 +29,18 @@
     <!-- 닫기(x) 버튼 -->
   <button type="button" class="close" data-dismiss="modal">×</button>
   <!-- header title -->
-  <h4 class="modal-title">제목</h4>
+  <h4 class="modal-title">기타 로그 테이블</h4>
 </div>
 <!-- body -->
 <div class="modal-body">
-    내용
+    <table><thead><tr><th data-sort="name">장비명</th><th data-sort="name">로그 건 수</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>Syslog</td><td><%=nums[2].num%></td></tr><tr>
+          <td>Mail Server</td><td><%=nums[0].num%></td></tr><tr>
+          <td>Web Server</td><td><%=nums[1].num%></td>
+        </tr></tbody></table>
 </div>
 <!-- Footer -->
 </div>
+<script src="../js/sortable.js"></script>

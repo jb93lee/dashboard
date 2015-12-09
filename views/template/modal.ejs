@@ -1,18 +1,69 @@
-<div class="modal-body">
-  <table class="sortable table table-inverse table-bordered table-hover table-striped">
-    <thead>
-      <tr>
-        <th data-sort="name">탐지장비</th>
-        <th data-sort="name">탐지횟수</th>
-      </tr>
-    </thead>
-    <tbody>
-        <tr>
-          <td>MAIL</td><td><%=nums[2].num%></td>
-</tr><tr>
-          <td>syslog</td><td><%=nums[3].num%></td>
-</tr><tr>	  <td>WEB</td><td><%=nums[4].num%></td>
-</tr>
-    </tbody>
-  </table>
+<style>
+.modal.in .modal-dialog {
+    transform: translate(-250px, 0px);
+}
+
+a {
+  color: #E0E0E3;
+}
+p {
+    margin: 0px 0px 1.5px;
+}
+.navbar-brand{
+  color: #ffffff;
+}
+.modal-backdrop.in {
+    opacity: 0.7;
+}
+.modal-backdrop {
+    position: fixed;
+    top: 0px;
+    right: 0px;
+    bottom: 0px;
+    left: 0px;
+    z-index: 0;
+    background-color: #000;
+}
+.modal {
+  background: transparent none;
+}
+.modal-content {
+  box-shadow: 10px 20px 20px #444;
+  background-color: #333;
+  fill: #000;
+  border-radius: 1px;
+  color: #eee;
+  width: 1100px;
+}
+.modal-header {
+    border-bottom: 2px solid #444;
+}
+
+table.sortable th:hover {
+	cursor: pointer;}
+
+th.ascending, th.descending, table.sortable th:hover {
+	background-color: #cccccc;
+	color: #fff;
+  color: #000;
+}
+</style>
+
+<div class="modal-header">
+    <!-- 닫기(x) 버튼 -->
+  <button type="button" class="close" data-dismiss="modal">×</button>
+  <!-- header title -->
+  <h4 class="modal-title">기타 로그 테이블</h4>
 </div>
+<!-- body -->
+<div class="modal-body">
+    <table><thead><tr><th data-sort="name">장비명</th><th data-sort="name">로그 건 수</th></tr></thead>
+      <tbody><tr>
+          <td>Syslog</td><td><%=table_data[1].num%></td></tr><tr>
+          <td>Mail Server</td><td><%=table_data[0].num%></td></tr><tr>
+          <td>Web Server</td><td><%=table_data[2].num%></td>
+      </tr></tbody></table>
+</div>
+<!-- Footer -->
+</div>
+<script src="../js/sortable.js"></script>
