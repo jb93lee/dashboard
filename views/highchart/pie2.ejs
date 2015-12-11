@@ -19,6 +19,7 @@
 
 
 document.addEventListener("DOMContentLoaded", function(event) {
+var ip='';
     $('#pie2').highcharts({
         chart: {
             type: 'pie'
@@ -34,7 +35,15 @@ document.addEventListener("DOMContentLoaded", function(event) {
                 dataLabels: {
                     enabled: false,
                     format: '{point.name}'
-                }
+                },
+                events: {
+                    click: function () {
+                        if(an != '1단계' && an != '2단계'&& an != '3단계'&& an != '4단계'&& an != '5단계'&& an != '6단계'&& an != '기타'){
+                        var url = 'search_ip_ajax?ip='+ip+'&an='+an+'&sD=<%=sDay%>&dD=<%=dDay%>';
+                        window.open(url,'_blank');
+                        }
+                     },
+                  },
             },
             pie: {
                 allowPointSelect: true,
@@ -46,9 +55,11 @@ document.addEventListener("DOMContentLoaded", function(event) {
             }
         },
 
-        tooltip: {
-            headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
-            pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y:f}</b>번의 공격 시도<br/>'
+        tooltip:{
+          formatter: function () {
+              an=this.point.options.name;
+              return '<span style="font-size:12px">'+this.point.series.name+ '단계</span><br>'+'<span style="color:{point.color}">'+this.point.options.name+'</span>: <b>'+this.point.options.y+'</b>번의 공격 시도<br/>';
+          }
         },
 <% var data0=[]; var data1=[]; var data2=[]; var data3=[]; var data4=[]; var data5=[]; var data6=[];
 var a=0; var b=0; var c=0; var d=0; var e=0; var f=0; var g=0;
@@ -76,7 +87,7 @@ for(var i in level_data2){
    g++; }}
 }%>
         series: [{
-            name: 'APT 공격 단계',
+            name: 'APT 공격 ',
             colorByPoint: true,
             data: [
               <% for (i in level_data){ if(level_data[i].level != null){ %>

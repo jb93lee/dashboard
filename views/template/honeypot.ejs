@@ -6,8 +6,75 @@
 a {
   color: #e1e1e1;
 }
+.highcharts-drilldown-axis-label{
+    color: #aaa;
+    cursor: pointer;
+    font-size: 11px;
+    fill: #aaa;
+    width: 88px;
+    text-overflow: clip;
+    font-weight: bold;
+    text-decoration: none;
+}
+.highcharts-drilldown-data-label *{
+  fill: #aaa;
+}
+.svg text{
+  fill: #3a3a3a;
+}
 </style>
 <div id="page-wrapper">
+  <br>
+  <ul class="accordion">
+          <button class="accordion-control">검색 기간 설정 및 통계 정보</button>
+          <div class="accordion-panel">
+        <div class="col-lg-1"></div>
+            <div class="col-lg-4">
+                  <!-- small box -->
+                  <div class="small-box bg1">
+                    <div class="inner">
+                      <h3>로그 검색 기간
+                      </h3><p><table><tr><form id="aform" role="form" action="/dashboard" method="post">
+                        <td><input type="text" name="start_date" class="form-control date" placeholder="<%=sDay%>"></td>
+                        <td>　~　</td>
+                        <td><input type="text" name="end_date" class="form-control date" placeholder="<%=dDay%>"></span></td>
+                        <td>　</td><td><a href="#"  onclick="submit();" class="btn btn-default">검색</a></form></td>
+                      </tr></table></p>
+                    </div>
+                  </div>
+              </div><!-- ./col -->
+
+            <div class="col-lg-2 col-xs-1">
+                  <!-- small box -->
+                  <div class="small-box bg-aq1">
+                    <div class="inner">
+                      <h3>총 로그 건 수</h3>
+                      <p>0</p>
+                    </div>
+                  </div>
+              </div><!-- ./col -->
+              <div class="col-lg-2 col-xs-1">
+                    <!-- small box -->
+                    <div class="small-box bg-aq1">
+                      <div class="inner">
+                        <h3>전체 공격자 수
+                       </h3><p>0</p>
+                      </div>
+                    </div>
+                </div><!-- ./col -->
+                <div class="col-lg-3 col-xs-1">
+                      <!-- small box -->
+                      <div class="small-box bg-aq2">
+                        <div class="inner">
+                          <h3>내부 장비 침입 시도자 수
+                          </h3>
+                          <p><%a=0; for(i in bar_data4){a=a+bar_data4[i].count}%><%=a%></p>
+                        </div>
+                      </div>
+                  </div><!-- ./col -->
+
+          </div>
+  </ul>
   <br>
   <div class="row">
     <section class="col-lg-6 ">
@@ -20,13 +87,14 @@ a {
   <br>
   <div class="row">
     <section class="col-lg-6 connectedSortable">
-      <% include ../highchart/bar_drill4 %>
+      <% include ../highchart/bar_drill3 %>
     </section>
       <section class="col-lg-6 connectedSortable">
-        <% include ../highchart/bar_drill3 %>
+      <% include ../highchart/bar_drill4 %>
       </section>
   </div>
   <br><br>
 	<!-- /.row -->
 </div>
 <!-- d3 -->
+<script src="../js/accordion.js"></script>

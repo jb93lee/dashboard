@@ -78,8 +78,8 @@ th.ascending, th.descending, table.sortable th:hover {
           <td><%if(table_data[i].level=='0'){table_data[i].level='기타';}%><%=table_data[i].level%></td>
           <td><%=table_data[i].attackName%></td>
           <td><%=table_data[i].time2%></td>
-          <td><%=table_data[i].srcip%></td>
-          <td><%=table_data[i].dstip%></td>
+          <td><a href='http://192.168.33.26:3000/search_ip?q=<%=table_data[i].srcip%>'><%=table_data[i].srcip%></a></td>
+          <td><a href='http://192.168.33.26:3000/search_ip?q=<%=table_data[i].dstip%>'><%=table_data[i].dstip%></a></td>
           <td><%=table_data[i].srcport%></td>
           <td><%=table_data[i].dstport%></td>
           <td><%=table_data[i].country_code%></td>

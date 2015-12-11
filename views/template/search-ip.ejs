@@ -132,7 +132,7 @@ function comma(str) {
                           <div class="small-box bg-aqua">
                             <div class="inner">
                               <h3>해당 국가명
-                              </h3><p><% var a='국가'; for(var i in table_data){a=table_data[0].country; break;}  %><%=comma(a)%></p>
+                              </h3><p><% var a='국가'; for(var i in table_data){a=table_data[0].country; break;}  %><%=a%></p>
                             </div>
                           </div>
                     </div><!-- ./col -->
@@ -158,7 +158,7 @@ function comma(str) {
           <!--/div-->
 </div>
 <section class="col-lg-13 connectedSortable">
-
+<br>
 <div class="col-lg-13">
 <ul class="nav nav-tabs">
   <li class="active"><a aria-expanded="false" href="#table" data-toggle="tab">검색 결과 시각화</a></li>
@@ -189,7 +189,7 @@ function comma(str) {
                 <td><%=table_data[i].attackName%></td>
                 <td><%=table_data[i].time2%></td>
                 <td><%=table_data[i].srcip%></td>
-                <td><%=table_data[i].dstip%></td>
+                <td><a href='http://192.168.33.26:3000/search_ip?q=<%=table_data[i].dstip%>'><%=table_data[i].dstip%></a></td>
                 <td><%=table_data[i].srcport%></td>
                 <td><%=table_data[i].dstport%></td>
                 <td><%=table_data[i].country_code%></td>

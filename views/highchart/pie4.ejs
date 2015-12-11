@@ -9,75 +9,163 @@
 
 </style>
 
-<script src="highchart/highstock.js"></script>
 <script src="highchart/drilldown.js"></script>
 
-<div id="pie4" style="min-width: 517px; max-width: 700px; height: 320px; margin: 0 auto"></div>
+<div id="pie2" style="min-width: 320px; max-width: 610px; height: 350px; margin: 0 auto"></div>
 
 <!-- Data from www.netmarketshare.com. Select Browsers => Desktop share by version. Download as tsv. -->
 
-<div class="modal">
-  <div class="modal-dialog">
-    <div class="modal-content">
-        <!-- remote ajax call이 되는영역 -->
-    </div>
-  </div>
-</div>
-
 <script>
 
+
 document.addEventListener("DOMContentLoaded", function(event) {
-    $('#pie4').highcharts({
+var ip='';
+
+    $('#pie2').highcharts({
         chart: {
             type: 'pie'
         },
         title: {
-            text: 'IP 및 공격 분석 결과'
+            text: 'APT공격 분석 결과'
         },
         subtitle: {
             text: ''
         },
         plotOptions: {
             series: {
+                cursor: 'pointer',
+                events: {
+                  click: function () {
+                      if(an != '1단계' && an != '2단계'&& an != '3단계'&& an != '4단계'&& an != '5단계'&& an != '6단계'&& an != '기타'){
+                      var url = 'search_ip_ajax?ip='+ip+'&an='+an;
+                      window.open(url,'_blank');
+                      }
+                   },
+                },
                 dataLabels: {
                     enabled: false,
                     format: '{point.name}'
                 }
             },
             pie: {
-                allowPointSelect: false,
+                allowPointSelect: true,
                 cursor: 'pointer',
-                events: {
-                    click: function () {
-                         $('.modal').modal({remote : 'highchart/modal.ejs'});
-                       }
-                },
                 dataLabels: {
                     enabled: false
                 },
                 showInLegend: true
             }
         },
-
-        tooltip: {
-            headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
-            pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y:f}</b>번의 공격 시도<br/>'
+        tooltip:{
+          formatter: function () {
+              an=this.point.options.name;
+              return '<span style="font-size:12px">'+this.point.series.name+ '단계</span><br>'+'<span style="color:{point.color}">'+this.point.options.name+'</span>: <b>'+this.point.options.y+'</b>번의 공격 시도<br/>';
+          }
         },
+<% var data0=[]; var data1=[]; var data2=[]; var data3=[]; var data4=[]; var data5=[]; var data6=[];
+var a=0; var b=0; var c=0; var d=0; var e=0; var f=0; var g=0;
+for(var i in level_data2){
+    if(level_data2[i].level=='0'){ if(a<10){
+       data0.push([level_data2[i].attackname,level_data2[i].num]);
+   a++; }}
+   if(level_data2[i].level=='1'){ if(b<10){
+      data1.push([level_data2[i].attackname,level_data2[i].num]);
+   b++; }}
+   if(level_data2[i].level=='2'){ if(c<10){
+      data2.push([level_data2[i].attackname,level_data2[i].num]);
+   c++; }}
+   if(level_data2[i].level=='3'){ if(d<10){
+      data3.push([level_data2[i].attackname,level_data2[i].num]);
+   d++; }}
+   if(level_data2[i].level=='4'){ if(e<10){
+      data4.push([level_data2[i].attackname,level_data2[i].num]);
+   e++; }}
+   if(level_data2[i].level=='5'){ if(f<10){
+      data5.push([level_data2[i].attackname,level_data2[i].num]);
+   f++; }}
+   if(level_data2[i].level=='6'){ if(g<10){
+      data6.push([level_data2[i].attackname,level_data2[i].num]);
+   g++; }}
+}%>
         series: [{
-            name: 'IP',
+            name: 'APT 공격 ',
             colorByPoint: true,
             data: [
-              <% for (i in ip_data){ %>
+              <% for (i in level_data){ if(level_data[i].level != null){ %>
               {
-                name: '<%= ip_data[i].attackname%>',
-                y: <%= ip_data[i].count%>,
-                drilldown: '<%= ip_data[i].attackname%>'
+                name: <% if(level_data[i].level == '0'){%>'기타'<%}else{%>'<%= level_data[i].level%>단계'<%}%>,
+                y: <%= level_data[i].num%>,
+                drilldown: '<%= level_data[i].level%>',
               },
-              <%}%>
+              <%}}%>
         ]}],
+
         drilldown: {
+
             series: [
-        
+              {
+                name: '기타',
+                id: '0',
+                data: [
+                  <%for(var i=0; i<data0.length; i++ ){%>
+                    ['<%=data0[i][0]%>',<%=data0[i][1]%>],
+                  <%}%>
+                ]
+              },
+              {
+                name: '1',
+                id: '1',
+                data: [
+                  <%for(var i=0; i<data1.length; i++ ){%>
+                     ['<%=data1[i][0]%>',<%=data1[i][1]%>],
+                  <%}%>
+                ]
+              },
+              {
+                name: '2',
+                id: '2',
+                data: [
+                  <%for(var i=0; i<data2.length; i++ ){%>
+                     ['<%=data2[i][0]%>',<%=data2[i][1]%>],
+                  <%}%>
+                ]
+              },
+              {
+                name: '3',
+                id: '3',
+                data: [
+                  <%for(var i=0; i<data3.length; i++ ){%>
+                     ['<%=data3[i][0]%>',<%=data3[i][1]%>],
+                  <%}%>
+                ]
+              },
+              {
+                name: '4',
+                id: '4',
+                data: [
+                  <%for(var i=0; i<data4.length; i++ ){%>
+                     ['<%=data4[i][0]%>',<%=data4[i][1]%>],
+                  <%}%>
+                ]
+              },
+              {
+                name: '5',
+                id: '5',
+                data: [
+                  <%for(var i=0; i<data5.length; i++ ){%>
+                     ['<%=data5[i][0]%>',<%=data5[i][1]%>],
+                  <%}%>
+                ]
+              },
+              {
+                name: '6',
+                id: '6',
+                data: [
+                  <%for(var i=0; i<data6.length; i++ ){%>
+                     ['<%=data6[i][0]%>',<%=data6[i][1]%>],
+                  <%}%>
+                ]
+              }
             ]
         }
     });

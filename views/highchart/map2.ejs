@@ -24,78 +24,62 @@
 <script src="highchart/highcharts.js"></script>
 <script type="text/javascript" src="highchart/maps.js"></script>
 <script src="highchart/mapdata.js"></script>
-<!--script src="highchart/mapexporting.js"></script-->
 <script src="highchart/world.js"></script>
 
 <!-- Flag sprites service provided by Martijn Lafeber, https://github.com/lafeber/world-flags-sprite/blob/master/LICENSE -->
-<link rel="stylesheet" type="text/css" href="highchart/flag32.css" />
 
 
 <div id="container3"></div>
 <script>
 document.addEventListener("DOMContentLoaded", function(event) {
 
-//  $.getJSON('http://www.highcharts.com/samples/data/jsonp.php?filename=world-population-density.json&callback=?', function (data) {
-  $.getJSON('http://192.168.33.26/jsonp.php?filename=world-attacker-density-<%=date%>.json&callback=?', function (data) {
-//    $.getJSON('http://192.168.0.110/project/jsonp.php?filename=world-attacker-density-<%=date%>.json&callback=?', function (data) {
+  $(function () {
 
+  //  $.getJSON('http://192.168.33.26/jsonp.php?filename=world-attacker-density-<%=date%>.json&callback=?', function (data) {
+          var data2 = [];
+          console.log(<%=kippo_map_data.length%>);
+          <% for (var i = 0; i < kippo_map_data.length; i++) {%>
+            data2.push({"code":"<%=kippo_map_data[i].code%>","value" : <%=kippo_map_data[i].value%>, "name" : "<%=kippo_map_data[i].country%>"});
+          <% } %>
         // Add lower case codes to the data set for inclusion in the tooltip.pointFormat
-        $.each(data, function () {
+        $.each(data2, function () {
             this.flag = this.code.replace('UK', 'GB').toLowerCase();
         });
 
         // Initiate the chart
         $('#container3').highcharts('Map', {
 
-            title: {
-                text: '국가별 공격 시도 분석 결과'
-            },
+          title : {
+              text : '국가별 공격 시도 분석 결과'
+          },
 
-            legend: {
-                title: {
-                    text: '공격시도 빈도',
-                    style: {
-                        color: (Highcharts.theme && Highcharts.theme.textColor) || 'black'
-                    }
-                }
-            },
+          mapNavigation: {
+              enabled: true,
+              buttonOptions: {
+                  verticalAlign: 'bottom'
+              }
+          },
 
-            mapNavigation: {
-                enabled: true,
-                buttonOptions: {
-                    verticalAlign: 'bottom'
-                }
-            },
+          colorAxis: {
+              min: 1,
+              max: 1000,
+              type: 'logarithmic'
+          },
 
-            tooltip: {
-                backgroundColor: 'none',
-                borderWidth: 0,
-                shadow: false,
-                useHTML: true,
-                padding: 0,
-                pointFormat: '<br> <a href="http://192.168.32.167:3000/search?c={point.code}"> {point.name}</a>: <b>{point.value}</b>',
-                positioner: function () {
-                    return { x: 0, y: 250 };
-                }
-            },
-
-            colorAxis: {
-                min: 1,
-                max: 1000,
-                type: 'logarithmic'
-            },
-
-            series : [{
-                data : data,
-                mapData: Highcharts.maps['custom/world'],
-                joinBy: ['iso-a2', 'code'],
-                name: '공격시도 횟수',
-                states: {
-                    hover: {
-                        color: '#BADA55'
-                    }
-                }
-            }]
+          series : [{
+              data : data2,
+              mapData: Highcharts.maps['custom/world'],
+              joinBy: ['iso-a2', 'code'],
+              name: '공격 시도 횟수',
+              states: {
+                  hover: {
+                      color: '#BADA55'
+                  }
+              },
+              tooltip: {
+                  valueSuffix: '번의 공격 시도'
+              }
+          }]
         });
     });
 });

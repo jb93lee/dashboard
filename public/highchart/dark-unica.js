@@ -111,7 +111,7 @@ Highcharts.theme = {
 	},
 	credits: {
 		style: {
-			color: '#666'
+			color: '#3e3e3e'
 		}
 	},
 	labels: {

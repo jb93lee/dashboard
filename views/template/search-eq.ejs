@@ -91,15 +91,15 @@ function submit3(){
 
 <div class="col-lg-3">
 <ul class="nav nav-tabs">
-  <li class="active"><a aria-expanded="false" href="#conv" data-toggle="tab">종합</a></li>
-  <li class=""><a aria-expanded="true" href="#ips" data-toggle="tab">IPS</a></li>
+  <!--li class=""><a aria-expanded="false" href="#conv" data-toggle="tab">종합</a></li-->
+  <li class="active"><a aria-expanded="true" href="#ips" data-toggle="tab">IPS</a></li>
   <li class=""><a aria-expanded="true" href="#waf" data-toggle="tab">WAF</a></li>
   <li class="disabled"><a>예정</a></li>
 </ul>
           <!--div class="col-lg-3"-->
 
 <div id="myTabContent" class="tab-content">
-  <div class="tab-pane fade active in" id="conv">
+  <!--div class="tab-pane fade active in" id="conv">
             <div class="panel panel-default">
               <div class="panel-body">
                 <form id="aform1" role="form" action="/search_eq" method="post">
@@ -150,8 +150,8 @@ function submit3(){
                 </form>
               </div>
             </div>
-    </div>
-    <div class="tab-pane fade " id="ips">
+    </div-->
+    <div class="tab-pane fade active in" id="ips">
               <div class="panel panel-default">
                 <div class="panel-body">
                   <form id="aform2" role="form" action="/search_eq " method="post">
@@ -261,8 +261,8 @@ function submit3(){
           <!--/div-->
 
 
-
-<div class="col-lg-9">
+<section class="col-lg-9 connectedSortable">
+<div class="col-lg-13">
 <ul class="nav nav-tabs">
   <li class="active"><a aria-expanded="false" href="#visualize" data-toggle="tab">검색 결과 시각화</a></li>
   <li class=""><a aria-expanded="true" href="#table" data-toggle="tab">검색 결과 테이블</a></li>
@@ -270,7 +270,7 @@ function submit3(){
 <div id="myTabContent" class="tab-content">
   <div class="tab-pane fade" id="table">
     <br>
-        <table class="sortable table-inverse table-bordered table-hover table-striped">
+      <table class="sortable table table-inverse table-bordered table-hover table-striped">
           <thead>
             <tr>
               <th data-sort="name">탐지장비</th>
@@ -291,8 +291,8 @@ function submit3(){
                 <td><%if(table_data[i].level=='0'){table_data[i].level='기타';}%><%=table_data[i].level%></td>
                 <td><%=table_data[i].attackname%></td>
                 <td><%=table_data[i].time2%></td>
-                <td><a href='http://192.168.32.197:3000/search_ip?q=<%=table_data[i].srcip%>'><%=table_data[i].srcip%></a></td>
-                <td><%=table_data[i].dstip%></td>
+                <td><a href='http://192.168.33.26:3000/search_ip?q=<%=table_data[i].srcip%>'><%=table_data[i].srcip%></a></td>
+                <td><a href='http://192.168.33.26:3000/search_ip?q=<%=table_data[i].dstip%>'><%=table_data[i].dstip%></a></td>
                 <td><%=table_data[i].srcport%></td>
                 <td><%=table_data[i].dstport%></td>
                 <td><%=table_data[i].country_code%></td>
@@ -300,7 +300,6 @@ function submit3(){
             <%}%>
           </tbody>
         </table>
-
   </div>
           <div class="tab-pane fade active in" id="visualize">
             <br>
@@ -326,6 +325,7 @@ function submit3(){
         </div>
       </div>
             <!--/div-->
+</section>
 
 
     		</div>

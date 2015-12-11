@@ -24,11 +24,9 @@
 <script src="highchart/highcharts.js"></script>
 <script type="text/javascript" src="highchart/maps.js"></script>
 <script src="highchart/mapdata.js"></script>
-<!--script src="highchart/mapexporting.js"></script-->
 <script src="highchart/world.js"></script>
 
 <!-- Flag sprites service provided by Martijn Lafeber, https://github.com/lafeber/world-flags-sprite/blob/master/LICENSE -->
-<link rel="stylesheet" type="text/css" href="highchart/flags32.css" />
 
 
 <div id="container2"></div>
@@ -37,7 +35,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
   $(function () {
 
-  //  $.getJSON('http://192.168.33.26/jsonp.php?filename=world-attacker-density-<%=date%>.json&callback=?', function (data) {
   var data2 = [];
   <% for (var i = 0; i < map_data.length; i++) {%>
   data2.push({"code":"<%=map_data[i].code%>","value" : <%=map_data[i].value%>, "name" : "<%=map_data[i].country%>"});

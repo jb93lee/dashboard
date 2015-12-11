@@ -19,6 +19,8 @@
 <script>
 
 document.addEventListener("DOMContentLoaded", function(event) {
+var ip='<% for(var i in table_data){%><%=table_data[0].srcip%><%break;}%>';
+var an='';
     $('#pie5').highcharts({
         chart: {
             type: 'pie'
@@ -29,11 +31,18 @@ document.addEventListener("DOMContentLoaded", function(event) {
         subtitle: {
             text: ''
         },
+        tooltip:{
+          formatter: function () {
+              an=this.point.options.name;
+              return '<span style="font-size:12px">'+this.point.series.name+ '</span><br>'+'<span style="color:'+this.point.options.color+'">'+this.point.options.name+'</span>: <b>'+this.point.options.y+'</b>번의 공격 시도<br/>';
+          }
+        },
         plotOptions: {
             series: {
                 dataLabels: {
                     enabled: false,
                     format: '{point.name}'
+
                 }
             },
             pie: {
@@ -41,20 +50,15 @@ document.addEventListener("DOMContentLoaded", function(event) {
                 cursor: 'pointer',
                 events: {
                   click: function () {
-    var url = '#table';
-    window.open(url,'_blank');
-                   }
+                      var url = 'search_ip_ajax?ip='+ip+'&an='+an;
+                      window.open(url,'_blank');
+                   },
                 },
                 dataLabels: {
                     enabled: false
                 },
                 showInLegend: true
             }
-        },
-
-        tooltip: {
-            headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
-            pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y}</b>번의 공격 시도<br/>'
         },
         series: [{
             name: '공격명',
