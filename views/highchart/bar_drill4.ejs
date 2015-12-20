@@ -16,17 +16,17 @@ $(function () {
             type: 'column'
         },
         title: {
-            text: '국가별 공격 현황 통계'
+            text: '내부 장비 공격 시도 IP'
         },
         subtitle: {
-            text: '내부 장비 공격 시도 IP'
+            text: '국가별 공격 시도 분석 결과'
         },
         xAxis: {
             type: 'category'
         },
         yAxis: {
             title: {
-                text: '전체 공격시도 횟수'
+                text: '전체 공격자 IP 수'
             }
 
         },
@@ -45,7 +45,7 @@ $(function () {
 
         tooltip: {
             headerFormat: ' ',
-            pointFormat: '<span style="color:{point.color}">{point.name}</span> : <b>{point.y}</b>번의 공격시도<br/>'
+            pointFormat: '<span style="color:{point.color}">{point.name}</span> : <b>{point.y}</b><br/>'
         },
 
         series: [{

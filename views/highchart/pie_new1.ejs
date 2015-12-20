@@ -23,7 +23,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
             type: 'pie'
         },
         title: {
-            text: 'IP 및 공격 분석 결과'
+            text: '공격자 TOP 10 분석 결과'
         },
         subtitle: {
             text: ''
@@ -50,7 +50,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
             pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y:f}</b>번의 공격 시도<br/>'
         },
         series: [{
-            name: 'IP',
+            name: 'IP 및 공격 횟수',
             colorByPoint: true,
             data: [
               <% for (i in ip_data){ %>

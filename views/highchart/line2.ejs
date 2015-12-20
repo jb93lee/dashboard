@@ -1,7 +1,7 @@
 <style>
 #container2 {
     height: 400px;
-    width: 700px;
+    width: 100%;
     margin: 0 auto;
 }
 
@@ -25,7 +25,7 @@
 <script src="highchart/exporting.js"></script>
 
 
-<div id="container2" style="height: 400px; min-width: 310px"></div>
+<div id="container2" style="height: 400px; width: 100%;"></div>
 <script>
 document.addEventListener("DOMContentLoaded", function(event) {
        var seriesOptions = [],
@@ -81,7 +81,7 @@ var data2=[];
 <% }} %>
 
               seriesOptions[0] = {
-                   name: '1',
+                   name: '로그 탐지 수',
                    data: data2
                };
 

@@ -12,7 +12,7 @@
 <script src="highchart/highstock.js"></script>
 <script src="highchart/drilldown.js"></script>
 
-<div id="container3" style="min-width: 320px; max-width: 610px; height: 350px; margin: 0 auto"></div>
+<div id="container3" style="width: 100%; height: 350px; margin: 0 auto"></div>
 
 <!-- Data from www.netmarketshare.com. Select Browsers => Desktop share by version. Download as tsv. -->
 
@@ -52,7 +52,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
             pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y:f}</b>번의 공격 시도<br/>'
         },
         series: [{
-            name: 'IP',
+            name: 'IP 및 공격 횟수',
             colorByPoint: true,
             data: [
               <% for (i in top_ip_data){ %>

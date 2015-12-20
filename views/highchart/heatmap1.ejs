@@ -15,7 +15,7 @@
   </div>
 </div>
 
-<div id="heatmap" style="height: 400px; min-width: 700px; max-width: 700px; margin: 0 auto"></div>
+<div id="heatmap" style="height: 400px; width: 100%; margin: 0 auto"></div>
 <script>
 $(function () {
     var ip='<% for(var i in table_data){%><%=table_data[0].srcip%><%break;}%>';
@@ -60,6 +60,7 @@ $(function () {
                 cursor: 'pointer',
                 events: {
                   click: function () {
+                    if(lv=='기'){lv='0';}
 var url = 'search_ip_ajax?ip='+ip+'&lv='+lv.toString()+'&date='+date;
 window.open(url, "_blank");
                    }

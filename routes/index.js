@@ -225,16 +225,23 @@ module.exports = function(app, passport){
 
 	app.post('/dashboard',isAuthenticated, function(req, res) {
 		var dt = new Date();
-		if(req.body.start_date == ''){
+		if(req.body.start_date == '' && req.body.end_date != ''){
+			var da= dt.addDays(-7);
+			var sDay = da.toFormat('YYYY-MM-DD');
+			var dDay=req.body.end_date+'24';
+		}
+		else if(req.body.end_date == '' && req.body.start_date == ''){
+			var dDay = dt.toFormat('YYYY-MM-DD')+'24';
 			var da= dt.addDays(-7);
 			var sDay = da.toFormat('YYYY-MM-DD');
 		}
-		else if(req.body.end_date == ''){
-			var dDay = dt.toFormat('YYYY-MM-DD');
+		else if(req.body.end_date == '' && req.body.start_date != ''){
+			var sDay=req.body.start_date;
+			var dDay = dt.toFormat('YYYY-MM-DD')+'24';
 		}
 		else{
-				sDay=req.body.start_date;
-				dDay=req.body.end_date+'24';
+			var sDay=req.body.start_date;
+			var dDay=req.body.end_date+'24';
 		}
 		if(sDay>=dDay){
 			res.render('template/blank2',{});
@@ -356,7 +363,7 @@ module.exports = function(app, passport){
 							});
 					},function (callback) {
 							report_file.pool.getConnection(function(err, connection){
-							var query_sql= "select level, attackname, count(attackname) as num from app_log.IPS where time2 >= '"+ sDay +"' and time2 <= '"+ dDay +"' group by level,attackname order by level,num desc";
+							var query_sql= "select level, attackname, count(attackname) as num from app_log.IPS where time2 >= '"+ sDay +"' and time2 <= '"+ dDay +"' group by level,attackname union select level, attackname, count(attackname) as num from app_log.WAF where time2 >= '"+ sDay +"' and time2 <= '"+ dDay +"' group by level,attackname order by level,num desc";
 							connection.query(query_sql, function(err, results){
 								if (results != ''){	req.flash('level_data2', results);}
 								connection.release();
@@ -425,7 +432,7 @@ module.exports = function(app, passport){
 							level_data:req.flash('level_data'),
 							level_data2:req.flash('level_data2'),
 							'sDay':sDay,
-							'dDay':req.body.end_date
+							'dDay':dDay.split('24')[0]
 					});
 				});
 			});
@@ -435,7 +442,7 @@ module.exports = function(app, passport){
 	app.get('/search_ip_ajax',isAuthenticated, function(req, res) {
 		if (req.query.ip!= null && req.query.lv!= null && req.query.date!= null){
 			report_file.pool.getConnection(function(err, connection){
-			 var query_sql= "select (select 'IPS') as equip, attackName, date_format(time2, '%Y-%m-%d %h:%i') as time2, srcip, dstip, srcport, dstport, country_code, country, level from app_log.IPS where srcip like '"+ req.query.ip+ "' and level like '"+ req.query.lv+ "' and time2 like '"+ req.query.date+ "%' union select (select 'WAF') as equip, attackName, date_format(time2, '%Y-%m-%d %h:%i') as time2 , srcip, dstip, srcport, dstport, country_code, country, level from app_log.WAF where srcip like '"+ req.query.ip+ "' and level like '"+ req.query.lv+ "' and time2 like '"+ req.query.date+ "%' order by time2 desc";
+			 var query_sql= "select (select 'IPS') as equip, attackName, date_format(time2, '%Y-%m-%d %H:%i:%s') as time2, srcip, dstip, srcport, dstport, country_code, country, level from app_log.IPS where srcip like '"+ req.query.ip+ "' and level like '"+ req.query.lv+ "' and time2 like '"+ req.query.date+ "%' union select (select 'WAF') as equip, attackName, date_format(time2, '%Y-%m-%d %H:%i:%s') as time2 , srcip, dstip, srcport, dstport, country_code, country, level from app_log.WAF where srcip like '"+ req.query.ip+ "' and level like '"+ req.query.lv+ "' and time2 like '"+ req.query.date+ "%' order by time2 desc";
 			 connection.query(query_sql, function(err, results){
 				 connection.release();
 				 res.render('template/search-ip-ajax',{table_data:results});
@@ -445,7 +452,7 @@ module.exports = function(app, passport){
 		if (req.query.sD!= null && req.query.an!= null && req.query.dD!= null){
 			req.query.ip = '%';
 			report_file.pool.getConnection(function(err, connection){
-			 var query_sql= "select (select 'IPS') as equip, attackName, date_format(time2, '%Y-%m-%d %h:%i') as time2, srcip, dstip, srcport, dstport, country_code, country, level from app_log.IPS where srcip like '"+ req.query.ip+ "' and attackname like '%"+ req.query.an+ "%' and time2 >='"+ req.query.sD +"' and time2 <= '"+ req.query.dD+ "' union select (select 'WAF') as equip, attackName, date_format(time2, '%Y-%m-%d %h:%i') as time2 , srcip, dstip, srcport, dstport, country_code, country, level from app_log.WAF where srcip like '"+ req.query.ip+ "' and attackname like '%"+ req.query.an+ "%' and time2 >= '"+ req.query.sD +"' and time2 <= '"+ req.query.dD+ "' order by time2 desc";
+			 var query_sql= "select (select 'IPS') as equip, attackName, date_format(time2, '%Y-%m-%d %H:%i:%s') as time2, srcip, dstip, srcport, dstport, country_code, country, level from app_log.IPS where srcip like '"+ req.query.ip+ "' and attackname like '%"+ req.query.an+ "%' and time2 >='"+ req.query.sD +"' and time2 <= '"+ req.query.dD+ "24' union select (select 'WAF') as equip, attackName, date_format(time2, '%Y-%m-%d %H:%i:%s') as time2 , srcip, dstip, srcport, dstport, country_code, country, level from app_log.WAF where srcip like '"+ req.query.ip+ "' and attackname like '%"+ req.query.an+ "%' and time2 >= '"+ req.query.sD +"' and time2 <= '"+ req.query.dD+ "24' order by time2 desc";
 			 connection.query(query_sql, function(err, results){
 				 connection.release();
 				 res.render('template/search-ip-ajax',{table_data:results});
@@ -457,7 +464,7 @@ module.exports = function(app, passport){
 				req.query.ip = '%';
 			}
 			report_file.pool.getConnection(function(err, connection){
-			 var query_sql= "select (select 'IPS') as equip, attackName, date_format(time2, '%Y-%m-%d %h:%i') as time2, srcip, dstip, srcport, dstport, country_code, country, level from app_log.IPS where srcip like '"+ req.query.ip+ "' and attackname like '%"+ req.query.an+ "%' union select (select 'WAF') as equip, attackName, date_format(time2, '%Y-%m-%d %h:%i') as time2 , srcip, dstip, srcport, dstport, country_code, country, level from app_log.WAF where srcip like '"+ req.query.ip+ "' and attackname like '%"+ req.query.an+ "%' order by time2 desc";
+			 var query_sql= "select (select 'IPS') as equip, attackName, date_format(time2, '%Y-%m-%d %H:%i:%s') as time2, srcip, dstip, srcport, dstport, country_code, country, level from app_log.IPS where srcip like '"+ req.query.ip+ "' and attackname like '%"+ req.query.an+ "%' union select (select 'WAF') as equip, attackName, date_format(time2, '%Y-%m-%d %H:%i:%s') as time2 , srcip, dstip, srcport, dstport, country_code, country, level from app_log.WAF where srcip like '"+ req.query.ip+ "' and attackname like '%"+ req.query.an+ "%' order by time2 desc";
 			 connection.query(query_sql, function(err, results){
 				 connection.release();
 				 res.render('template/search-ip-ajax',{table_data:results});
@@ -470,7 +477,7 @@ module.exports = function(app, passport){
 	app.get('/search_attack_ajax',isAuthenticated, function(req, res) {
 		if (req.query.ip!= null && req.query.lv!= null && req.query.date!= null){
 			report_file.pool.getConnection(function(err, connection){
-			 var query_sql= "select (select 'IPS') as equip, attackName, date_format(time2, '%Y-%m-%d %h:%i') as time2, srcip, dstip, srcport, dstport, country_code, country, level from app_log.IPS where srcip like '"+ req.query.ip+ "' and level like '"+ req.query.lv+ "' and time2 like '"+ req.query.date+ "%' union select (select 'WAF') as equip, attackName, date_format(time2, '%Y-%m-%d %h:%i') as time2 , srcip, dstip, srcport, dstport, country_code, country, level from app_log.WAF where srcip like '"+ req.query.ip+ "' and level like '"+ req.query.lv+ "' and time2 like '"+ req.query.date+ "%' order by time2 desc";
+			 var query_sql= "select (select 'IPS') as equip, attackName, date_format(time2, '%Y-%m-%d %H:%i:%s') as time2, srcip, dstip, srcport, dstport, country_code, country, level from app_log.IPS where srcip like '"+ req.query.ip+ "' and level like '"+ req.query.lv+ "' and time2 like '"+ req.query.date+ "%' union select (select 'WAF') as equip, attackName, date_format(time2, '%Y-%m-%d %H:%i:%s') as time2 , srcip, dstip, srcport, dstport, country_code, country, level from app_log.WAF where srcip like '"+ req.query.ip+ "' and level like '"+ req.query.lv+ "' and time2 like '"+ req.query.date+ "%' order by time2 desc";
 			 connection.query(query_sql, function(err, results){
 				 connection.release();
 				 res.render('template/search-ip-ajax',{table_data:results});
@@ -483,7 +490,7 @@ module.exports = function(app, passport){
 		if (req.query.q!= null){
 			var rand = Math.floor(Math.random() * 1000);
 			report_file.pool.getConnection(function(err, connection){
-			 var query_sql= "create view app_log.temp_"+rand.toString()+" as select (select 'IPS') as equip, attackName, date_format(time2, '%Y-%m-%d %h:%i') as time2, srcip, dstip, srcport, dstport, country_code, country, level from app_log.IPS where srcip like '"+ req.query.q+ "' union select (select 'WAF') as equip, attackName, date_format(time2, '%Y-%m-%d %h:%i') as time2 , srcip, dstip, srcport, dstport, country_code, country, level from app_log.WAF where  srcip like '"+ req.query.q+ "' order by time2 desc";
+			 var query_sql= "create view app_log.temp_"+rand.toString()+" as select (select 'IPS') as equip, attackName, date_format(time2, '%Y-%m-%d %H:%i:%s') as time2, srcip, dstip, srcport, dstport, country_code, country, level from app_log.IPS where srcip like '"+ req.query.q+ "' union select (select 'WAF') as equip, attackName, date_format(time2, '%Y-%m-%d %H:%i:%s') as time2 , srcip, dstip, srcport, dstport, country_code, country, level from app_log.WAF where  srcip like '"+ req.query.q+ "' order by time2 desc";
 			 connection.query(query_sql, function(err, results){
 					async.series([
 									function (callback) {
@@ -574,7 +581,7 @@ module.exports = function(app, passport){
 	});
 
 	app.get('/search_eq',isAuthenticated, function(req, res) {
-			 res.render('template/search-eq',{table_data:{},ip_data:{},top_ip_data:{},top_cd_data:{},bar_data2:{},bar_data3:{},level_data:{},level_data2:{},attack1_data:{},attack2_data:{},attack3_data:{},attack4_data:{},attack5_data:{},attack6_data:{},attack7_data:{},attack8_data:{},attack9_data:{},attack10_data:{}});
+			 res.render('template/search-eq',{table_data:{},ip_data:{},top_ip_data:{},top_cd_data:{},bar_data2:{},bar_data3:{},level_data:{},level_data2:{},attack1_data:{},attack2_data:{},attack3_data:{},attack4_data:{},attack5_data:{},attack6_data:{},attack7_data:{},attack8_data:{},attack9_data:{},attack10_data:{},sDay:{},dDay:{}});
 	});
 
 	app.post('/search_eq', isAuthenticated, function(req,res){
@@ -597,11 +604,12 @@ module.exports = function(app, passport){
 				req.body.level= '%';
 		}
 		var rand = Math.floor(Math.random() * 1000);
+		req.body.time_end=req.body.time_end+'24';
 		report_file.pool.getConnection(function(err, connection){
 			if(req.body.eq == 'ALL'){
-				var query_sql= "create view app_log.temp"+rand+" as select (select 'IPS') as equip, level, attackname, date_format(time2, '%Y-%m-%d %h:%i') as time2, srcip, dstip, srcport, dstport, country, country_code from app_log.IPS where time2 > timestamp('"+ req.body.time_start+ "') and level like '%"+ req.body.level+ "%' and time2 < timestamp('"+ req.body.time_end+ "') and attackName like '%"+ req.body.attack_name +"%' and srcip like '%"+ req.body.source_ip+ "%' and dstip like '%"+ req.body.destination_ip + "%' and srcport like '"+ req.body.source_port+ "' and dstport like '"+ req.body.destination_port+ "' and country like '%" + req.body.country+ "%' union select (select 'WAF') as equip, level, attackname, date_format(time2, '%Y-%m-%d %h:%i') as time2, srcip, dstip, srcport, dstport, country, country_code from app_log.WAF where time2 > timestamp('"+ req.body.time_start+ "') and level like '%"+ req.body.level+ "%' and time2 < timestamp('"+ req.body.time_end+ "') and attackName like '%"+ req.body.attack_name +"%' and srcip like '%"+ req.body.source_ip+ "%' and dstip like '%"+ req.body.destination_ip + "%' and srcport like '"+ req.body.source_port+ "' and dstport like '"+ req.body.destination_port+ "' and country like '%" + req.body.country+ "%' order by time2 desc limit " + req.body.limit ;
+				var query_sql= "create view app_log.temp"+rand+" as select (select 'IPS') as equip, level, attackname, date_format(time2, '%Y-%m-%d %H:%i:%s') as time2, srcip, dstip, srcport, dstport, country, country_code from app_log.IPS where time2 >= '"+ req.body.time_start+ "' and level like '%"+ req.body.level+ "%' and time2 <= '"+ req.body.time_end+ "' and attackName like '%"+ req.body.attack_name +"%' and srcip like '%"+ req.body.source_ip+ "%' and dstip like '%"+ req.body.destination_ip + "%' and srcport like '"+ req.body.source_port+ "' and dstport like '"+ req.body.destination_port+ "' and country like '%" + req.body.country+ "%' union select (select 'WAF') as equip, level, attackname, date_format(time2, '%Y-%m-%d %H:%i:%s') as time2, srcip, dstip, srcport, dstport, country, country_code from app_log.WAF where time2 >= '"+ req.body.time_start+ "' and level like '%"+ req.body.level+ "%' and time2 <= '"+ req.body.time_end+ "' and attackName like '%"+ req.body.attack_name +"%' and srcip like '%"+ req.body.source_ip+ "%' and dstip like '%"+ req.body.destination_ip + "%' and srcport like '"+ req.body.source_port+ "' and dstport like '"+ req.body.destination_port+ "' and country like '%" + req.body.country+ "%' order by time2 desc" ;
 			}else{
-				var query_sql= "create view app_log.temp"+rand+" as select (select '"+req.body.eq+ "') as equip, level, attackname, date_format(time2, '%Y-%m-%d %h:%i') as time2, srcip, dstip, srcport, dstport, country, country_code from app_log."+ req.body.eq+" where time2 > timestamp('"+ req.body.time_start+ "') and level like '%"+ req.body.level+ "%' and time2 < timestamp('"+ req.body.time_end+ "') and attackName like '%"+ req.body.attack_name +"%' and srcip like '%"+ req.body.source_ip+ "%' and dstip like '%"+ req.body.destination_ip + "%' and srcport like '"+ req.body.source_port+ "' and dstport like '"+ req.body.destination_port+ "' and country like '%" + req.body.country+ "%' order by time2 desc limit " + req.body.limit;
+				var query_sql= "create view app_log.temp"+rand+" as select (select '"+req.body.eq+ "') as equip, level, attackname, date_format(time2, '%Y-%m-%d %H:%i:%s') as time2, srcip, dstip, srcport, dstport, country, country_code from app_log."+ req.body.eq+" where time2 > '"+ req.body.time_start+ "' and level like '%"+ req.body.level+ "%' and time2 <= '"+ req.body.time_end+ "' and attackName like '%"+ req.body.attack_name +"%' and srcip like '%"+ req.body.source_ip+ "%' and dstip like '%"+ req.body.destination_ip + "%' and srcport like '"+ req.body.source_port+ "' and dstport like '"+ req.body.destination_port+ "' and country like '%" + req.body.country+ "%' order by time2 desc limit " + req.body.limit;
 			}
 			connection.query(query_sql, function(err, results){
 				connection.release();
@@ -618,7 +626,7 @@ module.exports = function(app, passport){
 						},
 						function (callback) {
 								report_file.pool.getConnection(function(err, connection){
-								var query_sql= "select srcip, attackName as attack_name, count(attackName) as count from app_log.temp"+rand+" srcip = (select srcip from app_log.temp"+rand+" group by srcip order by count(srcip) desc limit 0,1) group by attackName order by count(attackName) desc limit 10";
+								var query_sql= "select srcip, attackName as attack_name, count(attackName) as count from app_log.temp"+rand+" where srcip = (select srcip from app_log.temp"+rand+" group by srcip order by count(srcip) desc limit 0,1) group by attackName order by count(attackName) desc limit 10";
 								connection.query(query_sql, function(err, results){
 									if (results != ''){req.flash('attack1_data', results);}
 									connection.release();
@@ -627,7 +635,7 @@ module.exports = function(app, passport){
 								});
 						},function (callback) {
 								report_file.pool.getConnection(function(err, connection){
-								var query_sql= "select srcip, attackName as attack_name, count(attackName) as count from app_log.temp"+rand+"   srcip = (select srcip from app_log.temp"+rand+"  group by srcip order by count(srcip) desc limit 1,1) group by attackName order by count(attackName) desc limit 10";
+								var query_sql= "select srcip, attackName as attack_name, count(attackName) as count from app_log.temp"+rand+" where srcip = (select srcip from app_log.temp"+rand+"  group by srcip order by count(srcip) desc limit 1,1) group by attackName order by count(attackName) desc limit 10";
 								connection.query(query_sql, function(err, results){
 									if (results != ''){req.flash('attack2_data', results);}
 									connection.release();
@@ -787,7 +795,9 @@ module.exports = function(app, passport){
 								bar_data2:req.flash('bar_data2'),
 								bar_data3:req.flash('bar_data3'),
 								level_data:req.flash('level_data'),
-								level_data2:req.flash('level_data2')
+								level_data2:req.flash('level_data2'),
+								dDay:req.body.time_end.split('24')[0],
+								sDay:req.body.time_start
 							});
 						}
 				);
@@ -905,8 +915,9 @@ module.exports = function(app, passport){
 			}
 			async.series([
 				function (callback) {
+						// starttime >= '"+ sDay +"' and
 						report_file.pool.getConnection(function(err, connection){
-						var query_sql= "select country, country_code, count(country) as count from kippo.sessions where starttime >= '"+ sDay +"' and country not like 'null' group by country order by count(country) desc limit 20";
+						var query_sql= "select country, country_code, count(country) as count from kippo.sessions where country not like 'null' group by country order by count(country) desc limit 10";
 						connection.query(query_sql, function(err, results){
 							if (results != ''){req.flash('bar_data2', results);}
 							connection.release();
@@ -914,10 +925,10 @@ module.exports = function(app, passport){
 							});
 						});
 				},function (callback) {
+					// where starttime >= '"+ sDay +"'
 						report_file.pool.getConnection(function(err, connection){
-						var query_sql= "select country, ip as srcip, count(ip) as num from kippo.sessions where starttime >= '"+ sDay +"' group by country_code,ip having num >= 2 order by country_code,num desc";
+						var query_sql= "select country, ip as srcip, count(ip) as num from kippo.sessions group by country_code,ip having num >= 2 order by country_code,num desc";
 						connection.query(query_sql, function(err, results){
-							console.log(results);
 							if (results != ''){	req.flash('bar_data3', results);}
 							connection.release();
 							callback(null, '2');
@@ -927,7 +938,6 @@ module.exports = function(app, passport){
 						report_file.pool.getConnection(function(err, connection){
 						var query_sql= "select country, country_code, count(srcip) as count from kippo.kippo_ip where country not like 'null' group by country order by count desc limit 10";
 						connection.query(query_sql, function(err, results){
-							console.log("bar_data4",results);
 							if (results != ''){req.flash('bar_data4', results);}
 							connection.release();
 							callback(null, '3');
@@ -937,7 +947,6 @@ module.exports = function(app, passport){
 						report_file.pool.getConnection(function(err, connection){
 						var query_sql= "select country, srcip, count as num from kippo.kippo_ip group by country_code,srcip having num >= 2 order by country_code,num desc";
 						connection.query(query_sql, function(err, results){
-							console.log(results);
 							if (results != ''){	req.flash('bar_data5', results);}
 							connection.release();
 							callback(null, '4');
@@ -953,10 +962,10 @@ module.exports = function(app, passport){
 							 });
 					 });
 				 },function (callback) {
+					// starttime >=  '"+ sDay +"' and starttime <= '"+ dDay +"' and
 					report_file.pool.getConnection(function(err, connection){
-					var query_sql= "select kippo.sessions.country_code as code, count(kippo.sessions.country) as value, kippo.sessions.country from kippo.sessions where starttime >=  '"+ sDay +"' and starttime <= '"+ dDay +"' and kippo.sessions.country not like 'null' and kippo.sessions.country not like '%denied%' and kippo.sessions.country not like 'unknown' group by kippo.sessions.country_code order by count(kippo.sessions.country) desc";
+					var query_sql= "select kippo.sessions.country_code as code, count(kippo.sessions.country) as value, kippo.sessions.country from kippo.sessions where kippo.sessions.country not like 'null' and kippo.sessions.country not like '%denied%' and kippo.sessions.country not like 'unknown' group by kippo.sessions.country_code order by count(kippo.sessions.country) desc";
 					connection.query(query_sql, function(err, results){
-						console.log("kippo_map_data",results);
 						if (results != ''){
 							req.flash('kippo_map_data', results);
 						}
