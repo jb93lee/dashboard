@@ -171,39 +171,20 @@ body.calc #loading {
 }
 
 </style>
+  <br>
   <div id="cy"></div>
   <div id="loading">
     <span class="fa fa-refresh fa-spin"></span>
   </div>
 
   <script src="http://cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.3/fastclick.min.js"></script>
-  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
-
   <script src="http://cytoscape.github.io/cytoscape.js/api/cytoscape.js-latest/cytoscape.min.js"></script>
-  <!--<script src="../cytoscape.js/build/cytoscape.js"></script>-->
-
-  <script src="http://cdnjs.cloudflare.com/ajax/libs/qtip2/2.2.0/jquery.qtip.min.js"></script>
-  <link href="http://cdnjs.cloudflare.com/ajax/libs/qtip2/2.2.0/jquery.qtip.min.css" rel="stylesheet" type="text/css" />
-  <script src="https://cdn.rawgit.com/cytoscape/cytoscape.js-qtip/2.2.3/cytoscape-qtip.js"></script>
 
   <script src="http://cdnjs.cloudflare.com/ajax/libs/bluebird/1.2.2/bluebird.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/typeahead.js/0.10.4/typeahead.bundle.js"></script>
-  <script src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/3.0.2/handlebars.min.js"></script>
-
-
-  <!--div id="filters">
-    <strong>Cheese</strong>
-    <input id="soft" type="checkbox" checked></input><label for="soft">Soft</label><br />
-    <input id="semi-soft" type="checkbox" checked></input><label for="semi-soft">Semi-soft</label><br />
-    <input id="na" type="checkbox" checked></input><label for="na">N/A</label><br />
-    <input id="semi-hard" type="checkbox" checked></input><label for="semi-hard">Semi-hard</label><br />
-    <input id="hard" type="checkbox" checked></input><label for="hard">Hard</label>
-
-    <hr />
-
-    <strong>Drink</strong>
-    <input id="white" type="checkbox" checked></input><label for="white">White wine</label><br />
-    <input id="red" type="checkbox" checked></input><label for="red">Red wine</label><br />
-  </div-->
-
+  <script src="http://cdnjs.cloudflare.com/ajax/libs/handlebars.js/3.0.2/handlebars.min.js"></script>
+<div class="tmp" style="z-index:999;">
+  <div class="map"></div>
+  <% include ../d3/map3 %>
+</div>
 <script src="/Cytoscape/Cytoscape.js"></script>
